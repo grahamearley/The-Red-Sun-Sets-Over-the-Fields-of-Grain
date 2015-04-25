@@ -92,6 +92,7 @@ class Plot: SKNode, Touchable {
 		colorNode.position = CGPoint(x: 0, y: -size.height/4)
 		colorNode.strokeColor = SKColor.clearColor()
 		let color : SKColor
+
 		
 		switch self.contents {
 		case .DeadBody:
@@ -99,12 +100,33 @@ class Plot: SKNode, Touchable {
 		case .Empty:
 			color = SKColor.clearColor()
 		case .Corn:
+            
+            // Seed the generator
+            srand(10)
 			
 			for i in -3...3 {
 				let corn = SKSpriteNode(imageNamed: "Corn")
-				corn.setScale(3)
+                
+                // Because it takes 3 turns to grow
+                let progress = min(1, CGFloat(age) / 3.0)
+                
+                let randomYOffset = CGFloat (rand() % 20)
+                
+                let maxHeight = (size.height / 4) - 10 + randomYOffset
+                let maxWidth = size.width / 2
+                
+                // Gray if unripe
+                if progress < 1 {
+                    let colorize = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.8, duration: 0)
+                    corn.runAction(colorize)
+                }
+                
+                corn.size = CGSize(width: maxWidth * progress, height: maxHeight * progress)
 				corn.name = "corn"
-				corn.position = CGPoint(x: CGFloat(i)*35, y: -self.size.height/7)
+                
+                let randomXOffset = Int (rand() % 20)
+                
+				corn.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: ((-self.size.height * 0.32) + corn.size.height/2))
 				
 				self.addChild(corn)
 				self.fieldNodes.append(corn)
