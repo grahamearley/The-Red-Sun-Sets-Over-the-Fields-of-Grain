@@ -16,6 +16,7 @@ enum PlotContent : String {
 	case Corn = "Corn"
 	case Carrot = "Carrot"
 	case Wheat = "Wheat"
+	case Pumpkin = "Pumpkin"
 	
 	case Windmill = "Windmill"
 	
@@ -88,13 +89,6 @@ class Plot: SKNode, Touchable {
 			fieldItem.removeFromParent()
 		}
 		
-		//plants
-		var colorNode = SKShapeNode(rectOfSize: CGSize(width: size.width/4, height: size.height/4))
-		colorNode.position = CGPoint(x: 0, y: -size.height/4)
-		colorNode.strokeColor = SKColor.clearColor()
-		let color : SKColor
-
-		
 		switch self.contents {
 		case .DeadBody:
 			let bump = SKSpriteNode(imageNamed: "BodyLump")
@@ -103,28 +97,23 @@ class Plot: SKNode, Touchable {
 			bump.name = "bodyBump"
 			self.addChild(bump)
 			self.fieldNodes.append(bump)
-			
-			color = SKColor.clearColor()
 		case .Empty:
-			color = SKColor.clearColor()
+			break
 		case .Carrot:
 			self.addContentForVegitable(growTime: 2, deathTime: 3, amount: 2, imageAssetNamed: "Carrot")
-			
-			color = SKColor.clearColor()
 		case .Corn:
 			self.addContentForVegitable(growTime: 3, deathTime: 7, amount: 6, imageAssetNamed: "Corn")
-			
-			color = SKColor.clearColor()
+		case .Wheat:
+			self.addContentForVegitable(growTime: 3, deathTime: 5, amount: 10, imageAssetNamed: "Wheat")
+		case .Pumpkin:
+			self.addContentForVegitable(growTime: 5, deathTime: 9, amount: 1, imageAssetNamed: "Pumpkin")
 		case .House:
 			let house = SKSpriteNode(imageNamed: "House")
 			house.name = "house"
 			house.setScale(5)
 			house.position = CGPoint(x: -size.width * 0.4, y: -size.height/8)
 			self.addChild(house)
-			
 			self.fieldNodes.append(house)
-			
-			color = SKColor.clearColor()
 		case .Tractor:
 			let hull = SKSpriteNode(imageNamed: "TractorBody")
 			hull.name = "hull"
@@ -140,10 +129,6 @@ class Plot: SKNode, Touchable {
 			
 			self.fieldNodes.append(hull)
 			self.fieldNodes.append(wheel)
-			
-			color = SKColor.clearColor()
-		case .Wheat:
-			color = SKColor.greenColor()
 		case .Windmill:
 			let millBase = SKSpriteNode(imageNamed: "windturbineturbine")	//image is named wrong...
 			millBase.name = "millBase"
@@ -163,15 +148,7 @@ class Plot: SKNode, Touchable {
 			//anim
 			let gentleRotate = SKAction.repeatActionForever(SKAction.rotateByAngle(6.28, duration: 6))
 			millTurbine.runAction(gentleRotate)
-			
-			color = SKColor.clearColor()
 		}
-		
-		colorNode.name = "colorNode"
-		colorNode.fillColor = color
-		self.fieldNodes.append(colorNode)
-		
-		self.addChild(colorNode)
 		
 		//update button
 		if let button = self.childNodeWithName("button") as? Button {
@@ -207,59 +184,27 @@ class Plot: SKNode, Touchable {
 		var buttonAction : AnyObject?->Void = {(sender: AnyObject?)->() in return}
 		
 		if self.contents == .Corn {
-			if age >= 3 && age <= 7 {
-				//harvestable corn:
-				buttonTitle = "Harvest"
-				buttonAction = { (sender:AnyObject?) in
-					//harvest the corn:
-					GameProfile.sharedInstance.money += 7 + self.getBonus()
-					self.contents = .Empty
-					self.age = 0
-                    self.updateNodeContent()
-                    
-                    // Gettin money
-                    if let farmScene = sender as? FarmScene {
-                        farmScene.updateMoney()
-                    }
-				}
-			} else {
-				//dead or not grown corn:
-				buttonTitle = "Remove"
-				buttonAction = { (sender:AnyObject?) in
-					//remove the corn:
-					self.contents = .Empty
-					self.age = 0
-                    self.updateNodeContent()
-				}
-			}
+			let info = self.getButtonInfoForPlant(growAge: 3, dieAge: 7, baseYield: 5)
+			buttonTitle = info.0
+			buttonAction = info.1
 		}
 		
 		if self.contents == .Carrot {
-			if age >= 2 && age <= 3 {
-				//harvestable corn:
-				buttonTitle = "Harvest"
-				buttonAction = { (sender:AnyObject?) in
-					//harvest the corn:
-					GameProfile.sharedInstance.money += 3 + self.getBonus()
-					self.contents = .Empty
-					self.age = 0
-					self.updateNodeContent()
-					
-					// Gettin money
-					if let farmScene = sender as? FarmScene {
-						farmScene.updateMoney()
-					}
-				}
-			} else {
-				//dead or not grown corn:
-				buttonTitle = "Remove"
-				buttonAction = { (sender:AnyObject?) in
-					//remove the corn:
-					self.contents = .Empty
-					self.age = 0
-					self.updateNodeContent()
-				}
-			}
+			let info = self.getButtonInfoForPlant(growAge: 2, dieAge: 3, baseYield: 3)
+			buttonTitle = info.0
+			buttonAction = info.1
+		}
+		
+		if self.contents == .Wheat {
+			let info = self.getButtonInfoForPlant(growAge: 3, dieAge: 8, baseYield: 7)
+			buttonTitle = info.0
+			buttonAction = info.1
+		}
+		
+		if self.contents == .Pumpkin {
+			let info = self.getButtonInfoForPlant(growAge: 5, dieAge: 9, baseYield: 12)
+			buttonTitle = info.0
+			buttonAction = info.1
 		}
 		
 		if self.contents == .Empty {
@@ -326,6 +271,39 @@ class Plot: SKNode, Touchable {
 		return (buttonTitle, buttonAction)
 	}
 	
+	func getButtonInfoForPlant(#growAge:Int, dieAge:Int, baseYield: Int) -> (String, AnyObject?->()) {
+		var buttonTitle : String = ""
+		var buttonAction : AnyObject?->Void = {(sender: AnyObject?)->() in return}
+		
+		if age >= growAge && age <= dieAge {
+			//harvestable corn:
+			buttonTitle = "Harvest"
+			buttonAction = { (sender:AnyObject?) in
+				//harvest the corn:
+				GameProfile.sharedInstance.money += baseYield + self.getBonus()
+				self.contents = .Empty
+				self.age = 0
+				self.updateNodeContent()
+				
+				// Gettin money
+				if let farmScene = sender as? FarmScene {
+					farmScene.updateMoney()
+				}
+			}
+		} else {
+			//dead or not grown corn:
+			buttonTitle = "Remove"
+			buttonAction = { (sender:AnyObject?) in
+				//remove the corn:
+				self.contents = .Empty
+				self.age = 0
+				self.updateNodeContent()
+			}
+		}
+		
+		return (buttonTitle, buttonAction)
+	}
+	
 	func getBonus() -> Int {
 		let allPlots = GameProfile.sharedInstance.plots
 		if index == 0 || index >= allPlots.count-1 {
@@ -339,7 +317,7 @@ class Plot: SKNode, Touchable {
 		var totalBonus = 0
 		
 		if contents == .Corn {
-			if leftwardPlots[0].contents == .Corn && rightwardPlots[0].contents == .Corn {
+			if leftwardPlots[0].contents == .Carrot && rightwardPlots[0].contents == .Carrot {
 				totalBonus += 4
 			}
 		}
@@ -350,8 +328,35 @@ class Plot: SKNode, Touchable {
 			}
 		}
 		
+		if contents == .Wheat {
+			if leftwardPlots[0].contents == .Corn && rightwardPlots[0].contents == .Corn {
+				totalBonus += 4
+			}
+		}
+		
+		if contents == .Pumpkin {
+			var conditionsSatisfied = false
+			if rightwardPlots.count > 1 {
+				//check far right
+				if leftwardPlots[0].contents == .Empty && rightwardPlots[0].contents == .Pumpkin && rightwardPlots[1].contents == .Empty {
+					conditionsSatisfied = true
+				}
+			}
+			
+			if leftwardPlots.count > 1 {
+				//check far left
+				if rightwardPlots[0].contents == .Empty && leftwardPlots[0].contents == .Pumpkin && leftwardPlots[1].contents == .Empty {
+					conditionsSatisfied = true
+				}
+			}
+			
+			if conditionsSatisfied {
+				totalBonus += 8
+			}
+		}
+		
 		//vegies
-		if contents == .Corn || contents == .Carrot || contents == .Wheat {
+		if contents == .Corn || contents == .Carrot || contents == .Wheat || contents == .Pumpkin {
 			//Windmill check
 			var nearWindmill = false
 			if leftwardPlots[0].contents == .Windmill || leftwardPlots[0].contents == .Windmill {
@@ -381,8 +386,6 @@ class Plot: SKNode, Touchable {
 		age += byAmount
 	}
 	
-	//MARK: - Reuseable Impl.
-	
 	func getStore() -> StoreMenu {
 		let cornBag = StoreItem(imageNamed: "CornBag", cost: 3, time: 3) { (sender: AnyObject?) in
 			//onAction:
@@ -402,9 +405,46 @@ class Plot: SKNode, Touchable {
 			}
 		}
 		
+		let wheatBag = StoreItem(imageNamed: "WheatBag", cost: 5, time: 3) { (sender: AnyObject?) in
+			//onAction:
+			//add some wheat:
+			self.contents = .Wheat
+			self.age = 0
+			self.updateNodeContent()
+			
+			// Gettin money
+			if let farmScene = sender as? FarmScene {
+				farmScene.updateMoney()
+			}
+			
+			// reset locking
+			if let farmScene = sender as? FarmScene {
+				farmScene.setStoreLocks(false)
+			}
+		}
+		
+		let pumpkinBag = StoreItem(imageNamed: "PumpkinBag", cost: 8, time: 5) { (sender: AnyObject?) in
+			//onAction:
+			//add some pumpkins:
+			self.contents = .Pumpkin
+			self.age = 0
+			self.updateNodeContent()
+			
+			// Gettin money
+			if let farmScene = sender as? FarmScene {
+				farmScene.updateMoney()
+			}
+			
+			// reset locking
+			if let farmScene = sender as? FarmScene {
+				farmScene.setStoreLocks(false)
+			}
+		}
+
+		
 		let carrotBag = StoreItem(imageNamed: "CarrotBag", cost: 1, time: 2) { (sender: AnyObject?) in
 			//onAction:
-			//add some corn:
+			//add some carrot:
 			self.contents = .Carrot
 			self.age = 0
 			self.updateNodeContent()
@@ -425,7 +465,7 @@ class Plot: SKNode, Touchable {
 		}
 
 		let menuSize = CGSize(width: size.width * 1, height: size.height * 0.8)
-		let seedPage = StorePage(buttons: [cornBag,carrotBag], size: menuSize)
+		let seedPage = StorePage(buttons: [cornBag,carrotBag,wheatBag,pumpkinBag], size: menuSize)
 		let buildingPage = StorePage(buttons: [myButton], size: menuSize)
 		
 		let storeMenu = StoreMenu(pages: [seedPage,buildingPage], size: menuSize)
