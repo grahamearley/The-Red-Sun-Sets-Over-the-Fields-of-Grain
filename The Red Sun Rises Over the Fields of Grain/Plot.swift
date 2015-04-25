@@ -32,6 +32,8 @@ class Plot: SKNode, Touchable {
 	var size : CGSize!
 	var index : Int
 	
+	var fieldNodes = [SKNode]()
+	
 	init(contents: PlotContent, index: Int) {
 		self.contents = contents
 		self.index = index
@@ -74,10 +76,9 @@ class Plot: SKNode, Touchable {
 	func updateNodeContent() {
 		
 		//remove old plants
-		self.enumerateChildNodesWithName("field", usingBlock: {
-			(node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
-			node.removeFromParent()
-		})
+		for fieldItem in fieldNodes {
+			fieldItem.removeFromParent()
+		}
 		
 		//plants
 		var colorNode = SKShapeNode(rectOfSize: CGSize(width: size.width/4, height: size.height/4))
@@ -95,7 +96,22 @@ class Plot: SKNode, Touchable {
 		case .House:
 			color = SKColor.redColor()
 		case .Tractor:
-			color = SKColor.purpleColor()
+			let hull = SKSpriteNode(imageNamed: "TractorBody")
+			hull.name = "hull"
+			hull.size = CGSize(width: self.size.width, height: self.size.height/2)
+			hull.position = CGPoint(x: self.size.width/4, y: 0)
+			self.addChild(hull)
+			
+			let wheel = SKSpriteNode(imageNamed: "TractorWheel")
+			wheel.position = CGPoint(x: 0, y: -self.size.height/5)
+			wheel.setScale(5)
+			wheel.name = "wheel"
+			self.addChild(wheel)
+			
+			self.fieldNodes.append(hull)
+			self.fieldNodes.append(wheel)
+			
+			color = SKColor.clearColor()
 		case .Wheat:
 			color = SKColor.greenColor()
 		case .Windmill:
@@ -165,11 +181,20 @@ class Plot: SKNode, Touchable {
 			buttonAction = { (sender:AnyObject?) in
 				//expand the farm by one plot, essencially adding another tractor plot
 				//and setting this plot to be empty
-				if let farmScene = sender as? FarmScene {
-					GameProfile.sharedInstance.money -= 20
-					farmScene.extendFarm()
-					self.contents = .Empty
-					self.updateNodeContent()
+				if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
+					let rotate = SKAction.rotateByAngle(-6.28, duration: 4)
+					let move = SKAction.moveByX(self.size.width, y: 0, duration: 4)
+					let group = SKAction.group([rotate,move])
+					wheel.runAction(group)
+					hull.runAction(move) {
+						//on completion:
+						if let farmScene = sender as? FarmScene {
+							GameProfile.sharedInstance.money -= 20
+							farmScene.extendFarm()
+							self.contents = .Empty
+							self.updateNodeContent()
+						}
+					}
 				}
 			}
 		}
