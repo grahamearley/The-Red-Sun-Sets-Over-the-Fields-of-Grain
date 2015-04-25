@@ -9,17 +9,19 @@
 import SpriteKit
 
 class MurderScene: SKScene {
+    
+    var moments = [SKNode]()
 
     //Init Scene here
     override init(size: CGSize) {
         super.init(size: size)
         
         let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
-        
         self.addChild(houseInTheDistanceMoment)
-        houseInTheDistanceMoment.runAction(SKAction.fadeOutWithDuration(4))
-
-//        self.addChild(self.getHouseUpCloseMoment(size))
+        moments.append(houseInTheDistanceMoment)
+        
+        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
+        moments.append(houseUpCloseMoment)
         
     }
     
@@ -38,6 +40,7 @@ class MurderScene: SKScene {
         ground.position = CGPoint(x: parentSize.width/2, y: 0)
         
         let house = SKSpriteNode(imageNamed: "House")
+        house.name = "distant house"
         house.setScale(3)
         house.position = CGPoint(x: parentSize.width - 20, y: ground.size.height/2)
         
@@ -74,29 +77,39 @@ class MurderScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //Create Gesture Recognizers Here
-    override func didMoveToView(view: SKView) {
-        let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeLeft")
-        swipeLeftGestureRecognizer.direction = .Left
-        self.view?.addGestureRecognizer(swipeLeftGestureRecognizer)
-        
-        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeRight")
-        swipeRightGestureRecognizer.direction = .Right
-        self.view?.addGestureRecognizer(swipeRightGestureRecognizer)
-    }
+//    //Create Gesture Recognizers Here
+//    override func didMoveToView(view: SKView) {
+//        let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeLeft")
+//        swipeLeftGestureRecognizer.direction = .Left
+//        self.view?.addGestureRecognizer(swipeLeftGestureRecognizer)
+//        
+//        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeRight")
+//        swipeRightGestureRecognizer.direction = .Right
+//        self.view?.addGestureRecognizer(swipeRightGestureRecognizer)
+//    }
     
-    //Remove Gesture Recognizers
-    override func willMoveFromView(view: SKView) {
-        self.view?.gestureRecognizers?.removeAll(keepCapacity: false)
-    }
+//    //Remove Gesture Recognizers
+//    override func willMoveFromView(view: SKView) {
+//        self.view?.gestureRecognizers?.removeAll(keepCapacity: false)
+//    }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         //touches
+        for touch in touches {
+            let location = (touch as! UITouch).locationInNode(self)
+            if (self.nodeAtPoint(location).name == "distant house") {
+                moments[0].runAction(SKAction.fadeOutWithDuration(4))
+                self.addChild(moments[1])
+                moments[1].alpha = 0.0
+                moments[1].runAction(SKAction.fadeInWithDuration(3))
+                moments.removeAtIndex(0)
+            }
+        }
     }
-    
-    override func update(currentTime: CFTimeInterval) {
-        //called every 60 seconds
-    }
+            
+//    override func update(currentTime: CFTimeInterval) {
+//        //called every 60 seconds
+//    }
 
 	
 }
