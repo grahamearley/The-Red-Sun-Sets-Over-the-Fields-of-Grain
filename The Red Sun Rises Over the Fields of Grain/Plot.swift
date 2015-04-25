@@ -14,6 +14,7 @@ enum PlotContent : String {
 	case Empty = "Empty"
 	
 	case Corn = "Corn"
+	case Carrot = "Carrot"
 	case Wheat = "Wheat"
 	
 	case Windmill = "Windmill"
@@ -106,66 +107,12 @@ class Plot: SKNode, Touchable {
 			color = SKColor.clearColor()
 		case .Empty:
 			color = SKColor.clearColor()
-		case .Corn:
-            
-            // Seed the generator
-            srand(10)
-            
-            let growTime = 3
-            let deathTime = 7
+		case .Carrot:
+			self.addContentForVegitable(growTime: 2, deathTime: 3, amount: 2, imageAssetNamed: "Carrot")
 			
-			for i in -3...3 {
-                
-                if age == 0 {
-                    
-                    var seed = SKShapeNode(circleOfRadius: 2)
-                    seed.zPosition = 1
-                    seed.fillColor = SKColor.brownColor()
-                    seed.lineWidth = 0
-                    let randomXOffset = Int (rand() % 20)
-                    seed.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: (-self.size.height * 0.32))
-                    
-                    self.addChild(seed)
-                    self.fieldNodes.append(seed)
-                    
-                } else {
-                    
-                    var corn = SKSpriteNode(imageNamed: "Corn")
-                    
-                    let randomYOffset = CGFloat (rand() % 20)
-                    
-                    let maxHeight = (size.height / 4) - 10 + randomYOffset
-                    let maxWidth = size.width / 2
-                    
-                    // Gray if unripe or approaching death
-                    if age < growTime {
-                        let colorize = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.8, duration: 0)
-                        corn.runAction(colorize)
-                    }
-                    
-                    // Red if approaching death
-                    if age == deathTime {
-                        let colorize = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 0.5, duration: 0)
-                        corn.runAction(colorize)
-                    }
-                    
-                    // Gray more if dead
-                    if age > deathTime {
-                        let colorize = SKAction.colorizeWithColor(SKColor.blackColor(), colorBlendFactor: 0.8, duration: 0)
-                        corn.runAction(colorize)
-                    }
-                    
-                    let progress = CGFloat(min(1, Float(age) / Float(growTime)))
-                    corn.size = CGSize(width: maxWidth * progress, height: maxHeight * progress)
-                    corn.name = "corn"
-                    
-                    let randomXOffset = Int (rand() % 20)
-                    corn.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: ((-self.size.height * 0.32) + corn.size.height/2))
-                    
-                    self.addChild(corn)
-                    self.fieldNodes.append(corn)
-                }
-			}
+			color = SKColor.clearColor()
+		case .Corn:
+			self.addContentForVegitable(growTime: 3, deathTime: 7, amount: 6, imageAssetNamed: "Corn")
 			
 			color = SKColor.clearColor()
 		case .House:
@@ -237,6 +184,8 @@ class Plot: SKNode, Touchable {
 				button.hidden = false
 			}
 		}
+		
+		lightUpdate()
 	}
 	
 	///Call everytime the person 
@@ -284,6 +233,35 @@ class Plot: SKNode, Touchable {
 				}
 			}
 		}
+		
+		if self.contents == .Carrot {
+			if age >= 2 && age <= 3 {
+				//harvestable corn:
+				buttonTitle = "Harvest"
+				buttonAction = { (sender:AnyObject?) in
+					//harvest the corn:
+					GameProfile.sharedInstance.money += Int(3 * self.getMultiplier())
+					self.contents = .Empty
+					self.age = 0
+					self.updateNodeContent()
+					
+					// Gettin money
+					if let farmScene = sender as? FarmScene {
+						farmScene.updateMoney()
+					}
+				}
+			} else {
+				//dead or not grown corn:
+				buttonTitle = "Remove"
+				buttonAction = { (sender:AnyObject?) in
+					//remove the corn:
+					self.contents = .Empty
+					self.age = 0
+					self.updateNodeContent()
+				}
+			}
+		}
+		
 		if self.contents == .Empty {
 			buttonTitle = "Plant"
 			buttonAction = { (sender:AnyObject?) in
@@ -356,8 +334,14 @@ class Plot: SKNode, Touchable {
 		var totalMultiplier : Float = 1.0
 		
 		if contents == .Corn {
-			if leftwardPlots[0].contents == PlotContent.Corn && rightwardPlots[0].contents == PlotContent.Corn {
-				totalMultiplier += 2
+			if leftwardPlots[0].contents == .Corn && rightwardPlots[0].contents == .Corn {
+				totalMultiplier += 1.8
+			}
+		}
+		
+		if contents == .Carrot {
+			if leftwardPlots[0].contents == .Carrot && rightwardPlots[0].contents == .Carrot {
+				totalMultiplier += 1.3
 			}
 		}
 		
@@ -368,7 +352,66 @@ class Plot: SKNode, Touchable {
 	func ageContent(byAmount:Int = 1) {
 		age += byAmount
 	}
+	
+	//MARK: - Reuseable Impl.
+	
+	func addContentForVegitable(#growTime: Int, deathTime: Int, amount: Int, imageAssetNamed: String) {
+		srand(10)
+		let density = Int(amount/2)
 		
+		for i in -density...density {
+			
+			if age == 0 {
+				
+				var seed = SKShapeNode(circleOfRadius: 2)
+				seed.zPosition = 1
+				seed.fillColor = SKColor.brownColor()
+				seed.lineWidth = 0
+				let randomXOffset = Int (rand() % 20)
+				seed.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: (-self.size.height * 0.32))
+				
+				self.addChild(seed)
+				self.fieldNodes.append(seed)
+				
+			} else {
+				var vegi = SKSpriteNode(imageNamed: imageAssetNamed)
+				
+				let randomYOffset = CGFloat (rand() % 20)
+				
+				let maxHeight = (size.height / 4) - 10 + randomYOffset
+				let maxWidth = size.width / 2
+				
+				// Gray if unripe or approaching death
+				if age < growTime {
+					let colorize = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.8, duration: 0)
+					vegi.runAction(colorize)
+				}
+				
+				// Red if approaching death
+				if age == deathTime {
+					let colorize = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 0.5, duration: 0)
+					vegi.runAction(colorize)
+				}
+				
+				// Gray more if dead
+				if age > deathTime {
+					let colorize = SKAction.colorizeWithColor(SKColor.blackColor(), colorBlendFactor: 0.8, duration: 0)
+					vegi.runAction(colorize)
+				}
+				
+				let progress = CGFloat(min(1, Float(age) / Float(growTime)))
+				vegi.size = CGSize(width: maxWidth * progress, height: maxHeight * progress)
+				vegi.name = imageAssetNamed.lowercaseString
+				
+				let randomXOffset = Int (rand() % 20)
+				vegi.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: ((-self.size.height * 0.32) + vegi.size.height/2))
+				
+				self.addChild(vegi)
+				self.fieldNodes.append(vegi)
+			}
+		}
+	}
+	
 	//MARK: - Save/Load
 	
 	func toDictionary() -> [String:AnyObject] {

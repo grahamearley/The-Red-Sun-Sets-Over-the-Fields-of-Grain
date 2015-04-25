@@ -31,7 +31,7 @@ class FarmScene: SKScene {
 		
 		//test
 		let plot1 = Plot(contents: .House, index: 0)
-		let plot2 = Plot(contents: .Windmill, index: 1)
+		let plot2 = Plot(contents: .Carrot, index: 1)
 		let plot3 = Plot(contents: .Tractor, index: 2)
 		
 		profile.plots.append(plot1)
