@@ -16,17 +16,19 @@ class GameViewController: UIViewController {
 
 		// Configure the view.
 		let skView = self.view as! SKView
-        
-        // testing: just show my scene instead of the real first scene
-		let scene = FarmScene(size: skView.bounds.size)
-		skView.showsFPS = true
-		skView.showsNodeCount = true
 		skView.ignoresSiblingOrder = true
 		
-		/* Set the scale mode to scale to fit the window */
-		scene.scaleMode = .AspectFill
-		
-		skView.presentScene(scene)
+		let scene : SKScene
+        // testing: just show my scene instead of the real first scene
+		if GameProfile.sharedInstance.committedMurder {
+			let scene = FarmScene(size: skView.bounds.size)
+			scene.scaleMode = .AspectFill
+			skView.presentScene(scene)
+		} else {
+			let scene = MurderScene(size: skView.bounds.size)
+			scene.scaleMode = .AspectFill
+			skView.presentScene(scene)
+		}
     }
 
     override func shouldAutorotate() -> Bool {
