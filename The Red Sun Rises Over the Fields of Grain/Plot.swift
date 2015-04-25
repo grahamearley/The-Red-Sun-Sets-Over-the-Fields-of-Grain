@@ -266,10 +266,7 @@ class Plot: SKNode, Touchable {
 			buttonTitle = "Plant"
 			buttonAction = { (sender:AnyObject?) in
 				if let farmScene = sender as? FarmScene {
-					farmScene.scrollLock = true
-				}
-				if let button = self.childNodeWithName("button") as? Button {
-					button.enabled = false
+					farmScene.setStoreLocks(true)
 				}
 				
 				let storeMenu = self.getStore()
@@ -367,6 +364,11 @@ class Plot: SKNode, Touchable {
 			if let farmScene = sender as? FarmScene {
 				farmScene.updateMoney()
 			}
+			
+			// reset locking
+			if let farmScene = sender as? FarmScene {
+				farmScene.setStoreLocks(false)
+			}
 		}
 		
 		let carrotBag = StoreItem(imageNamed: "CarrotBag", cost: 1, time: 2) { (sender: AnyObject?) in
@@ -379,6 +381,11 @@ class Plot: SKNode, Touchable {
 			// Gettin money
 			if let farmScene = sender as? FarmScene {
 				farmScene.updateMoney()
+			}
+			
+			// reset locking
+			if let farmScene = sender as? FarmScene {
+				farmScene.setStoreLocks(false)
 			}
 		}
 		

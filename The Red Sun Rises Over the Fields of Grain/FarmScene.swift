@@ -168,10 +168,25 @@ class FarmScene: SKScene {
     
     func updateMoney() {
         if let label = self.childNodeWithName("Money Label") as? SKLabelNode {
-            
             label.text = String(profile.money)
         }
     }
+	
+	///locks interaction to solely the open store window
+	///and also is in charge of unlocking this on store window close
+	func setStoreLocks(locksOn: Bool) {
+		self.scrollLock = locksOn
+		
+		let currentPlot = GameProfile.sharedInstance.plots[self.currentPlotIndex]
+		if let button = currentPlot.childNodeWithName("button") as? Button {
+			button.enabled = !locksOn
+		}
+		if let menu = self.childNodeWithName("//storeMenu") {
+			if !locksOn {
+				menu.removeFromParent()
+			}
+		}
+	}
 	
 	func extendFarm() {
 		let newPlot = Plot(contents: .Tractor, index: profile.plots.count)

@@ -18,6 +18,8 @@ class StoreMenu: SKNode, Touchable {
 		self.pages = pages
 		super.init()
 		
+		self.name = "storeMenu"
+		
 		let backing = SKSpriteNode(imageNamed: "MenuBase")
 		backing.size = size
 		backing.zPosition = -2
@@ -57,6 +59,16 @@ class StoreMenu: SKNode, Touchable {
 		self.addChild(plantButton)
 		self.addChild(buildingButton)
 		
+		let ex = Button(imageNamed: "TheEx") { (sender:AnyObject?) -> Void in
+			//onAction:
+			// reset locking
+			if let farmScene = sender as? FarmScene {
+				farmScene.setStoreLocks(false)
+			}
+		}
+		ex.getUnderlyingSprite()?.setScale(2)
+		ex.position = CGPoint(x: size.width/2, y: size.height/2)
+		self.addChild(ex)
 	}
 	
 	func updateDisplayedPage() {
