@@ -162,11 +162,6 @@ class Plot: SKNode, Touchable {
 					self.contents = .Empty
 					self.age = 0
                     self.updateNodeContent()
-                    
-                    // Gettin money
-                    if let farmScene = sender as? FarmScene {
-                        farmScene.updateMoney()
-                    }
 				}
 			}
 		}
@@ -208,6 +203,7 @@ class Plot: SKNode, Touchable {
 						//on completion:
 						if let farmScene = sender as? FarmScene {
 							GameProfile.sharedInstance.money -= 20
+							farmScene.updateMoney()
 							farmScene.extendFarm()
 							self.contents = .Empty
 							self.updateNodeContent()
