@@ -76,6 +76,12 @@ class MurderScene: SKScene {
         return houseUpCloseMoment
     }
     
+    func getWindowMoment(parentSize: CGSize) -> SKNode {
+        let windowMoment = SKNOde()
+        
+        return windowMoment
+    }
+    
     func getPitchforkGrabMoment(parentSize: CGSize) -> SKNode {
         let pitchforkGrabMoment = SKNode()
         
@@ -119,25 +125,26 @@ class MurderScene: SKScene {
         
     }
     
+    func getDoorOpenMoment(parentSize: CGSize) -> SKNode {
+        let doorOpenMoment = SKNode()
+        
+        return doorOpenMoment
+    }
+    
+    func getStabMoment(parentSize: CGSize) -> SKNode {
+        let stabMoment = SKNode()
+        
+        return stabMoment
+    }
+    
+    func stab() {
+        
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    //Create Gesture Recognizers Here
-//    override func didMoveToView(view: SKView) {
-//        let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeLeft")
-//        swipeLeftGestureRecognizer.direction = .Left
-//        self.view?.addGestureRecognizer(swipeLeftGestureRecognizer)
-//        
-//        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeRight")
-//        swipeRightGestureRecognizer.direction = .Right
-//        self.view?.addGestureRecognizer(swipeRightGestureRecognizer)
-//    }
-    
-//    //Remove Gesture Recognizers
-//    override func willMoveFromView(view: SKView) {
-//        self.view?.gestureRecognizers?.removeAll(keepCapacity: false)
-//    }
+
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         //touches
