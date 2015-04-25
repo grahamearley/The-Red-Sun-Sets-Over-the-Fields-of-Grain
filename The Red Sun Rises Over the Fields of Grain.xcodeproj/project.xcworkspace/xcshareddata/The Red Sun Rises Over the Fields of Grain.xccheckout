@@ -7,34 +7,34 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>59D6F858-5DEE-4D12-ABCD-902950745DA3</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>The Red Sun Rises Over the Fields of Grain</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>F518DD10D21C8827F1AEFF115C7B467D4A1E9D65</key>
+		<key>6701BDA30D8496E4E95CB78BDF753A80A68B3D4B</key>
 		<string>https://github.com/grahamearley/The-Red-Sun-Rises-Over-the-Fields-of-Grain.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>The Red Sun Rises Over the Fields of Grain/The Red Sun Rises Over the Fields of Grain.xcodeproj/project.xcworkspace</string>
+	<string>The Red Sun Rises Over the Fields of Grain.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>F518DD10D21C8827F1AEFF115C7B467D4A1E9D65</key>
-		<string>../../..</string>
+		<key>6701BDA30D8496E4E95CB78BDF753A80A68B3D4B</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/grahamearley/The-Red-Sun-Rises-Over-the-Fields-of-Grain.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>F518DD10D21C8827F1AEFF115C7B467D4A1E9D65</string>
+	<string>6701BDA30D8496E4E95CB78BDF753A80A68B3D4B</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>F518DD10D21C8827F1AEFF115C7B467D4A1E9D65</string>
+			<string>6701BDA30D8496E4E95CB78BDF753A80A68B3D4B</string>
 			<key>IDESourceControlWCCName</key>
-			<string>The-Red-Sun-Rises-Over-the-Fields-of-Grain</string>
+			<string>Red%20Sun%20Sets</string>
 		</dict>
 	</array>
 </dict>

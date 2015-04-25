@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D205ADF41AEB349F00F27ABD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D205ADF31AEB349F00F27ABD /* AppDelegate.swift */; };
-		D205ADF61AEB349F00F27ABD /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D205ADF51AEB349F00F27ABD /* GameScene.sks */; };
 		D205ADF81AEB349F00F27ABD /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D205ADF71AEB349F00F27ABD /* GameScene.swift */; };
 		D205ADFA1AEB349F00F27ABD /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D205ADF91AEB349F00F27ABD /* GameViewController.swift */; };
 		D205ADFD1AEB349F00F27ABD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D205ADFB1AEB349F00F27ABD /* Main.storyboard */; };
@@ -31,7 +30,6 @@
 		D205ADEE1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of Grain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Red Sun Rises Over the Fields of Grain.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D205ADF21AEB349F00F27ABD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D205ADF31AEB349F00F27ABD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D205ADF51AEB349F00F27ABD /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D205ADF71AEB349F00F27ABD /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D205ADF91AEB349F00F27ABD /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		D205ADFC1AEB349F00F27ABD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -82,7 +80,6 @@
 			isa = PBXGroup;
 			children = (
 				D205ADF31AEB349F00F27ABD /* AppDelegate.swift */,
-				D205ADF51AEB349F00F27ABD /* GameScene.sks */,
 				D205ADF71AEB349F00F27ABD /* GameScene.swift */,
 				D205ADF91AEB349F00F27ABD /* GameViewController.swift */,
 				D205ADFB1AEB349F00F27ABD /* Main.storyboard */,
@@ -167,6 +164,7 @@
 				TargetAttributes = {
 					D205ADED1AEB349F00F27ABD = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = WNZEWX34Q6;
 					};
 					D205AE061AEB349F00F27ABD = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -200,7 +198,6 @@
 			files = (
 				D205AE021AEB349F00F27ABD /* LaunchScreen.xib in Resources */,
 				D205ADFF1AEB349F00F27ABD /* Images.xcassets in Resources */,
-				D205ADF61AEB349F00F27ABD /* GameScene.sks in Resources */,
 				D205ADFD1AEB349F00F27ABD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,6 +345,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "The Red Sun Rises Over the Fields of Grain/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -358,6 +356,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "The Red Sun Rises Over the Fields of Grain/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -417,6 +416,7 @@
 				D205AE131AEB349F00F27ABD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D205AE141AEB349F00F27ABD /* Build configuration list for PBXNativeTarget "The Red Sun Rises Over the Fields of GrainTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +425,7 @@
 				D205AE161AEB349F00F27ABD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
