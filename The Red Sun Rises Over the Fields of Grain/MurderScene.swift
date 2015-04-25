@@ -9,47 +9,76 @@
 import SpriteKit
 
 class MurderScene: SKScene {
-    
-    var moments = [SKNode]()
-
+	
+	enum MurderMoment {
+		case HouseInDistance
+		case HouseUpClose
+		case Window
+		case Pitchfork
+		case DoorClosed
+		case DoorOpened
+		case Stabs
+	}
+	
+	var currentMoment : MurderMoment
+	var currentMomentNode : SKNode?
+	var inTransition : Bool = false
 	let worldLightingBitmask : UInt32 = 0x1 << 1
 	
     //Init Scene here
     override init(size: CGSize) {
+		currentMoment = .HouseInDistance
         super.init(size: size)
-        
-        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
-        self.addChild(houseInTheDistanceMoment)
-        moments.append(houseInTheDistanceMoment)
-        
-        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
-        moments.append(houseUpCloseMoment)
-        
-        let windowMoment = self.getWindowMoment(size)
-        moments.append(windowMoment)
-        
-        let pitchforkGrabMoment = self.getPitchforkGrabMoment(size)
-        moments.append(pitchforkGrabMoment)
-        
-        let doorClosedMoment = self.getDoorClosedMoment(size)
-        moments.append(doorClosedMoment)
-        
-        let doorOpenMoment = self.getDoorOpenMoment(size)
-        moments.append(doorOpenMoment)
-        
-        let stabMoment = self.getStabMoment(size)
-        moments.append(stabMoment)
-        
+		currentMomentNode = getHouseInTheDistanceMoment()
+		self.addChild(currentMomentNode!)
     }
-    
+	
+	func transitionToMoment(nextMoment: MurderMoment) {
+		if inTransition {
+			return	//wait your damn turn
+		}
+		
+		var nextMomentNode : SKNode
+		switch nextMoment {
+		case .HouseInDistance:
+			nextMomentNode = getHouseInTheDistanceMoment()
+		case .HouseUpClose:
+			nextMomentNode = getHouseUpCloseMoment()
+		case .Window:
+			nextMomentNode = getWindowMoment()
+		case .Pitchfork:
+			nextMomentNode = getPitchforkGrabMoment()
+		case .DoorClosed:
+			nextMomentNode = getDoorClosedMoment()
+		case .DoorOpened:
+			nextMomentNode = getDoorOpenMoment()
+		case .Stabs:
+			nextMomentNode = getStabMoment()
+		}
+		
+		//anim to next moment
+		inTransition = true
+		let fadeOutAndRemove = SKAction.sequence([SKAction.fadeOutWithDuration(1), SKAction.removeFromParent()])
+		currentMomentNode?.runAction(fadeOutAndRemove) {
+			//onCompletion:
+			self.inTransition = false
+		}
+		
+		nextMomentNode.alpha = 0
+		self.addChild(nextMomentNode)
+		let fadeIn = SKAction.fadeInWithDuration(1)
+		nextMomentNode.runAction(fadeIn)
+		currentMoment = nextMoment
+		currentMomentNode = nextMomentNode
+	}
     
     // MARK: Moments (not quite scenes!)
-    func getHouseInTheDistanceMoment(parentSize: CGSize) -> SKNode {
+    func getHouseInTheDistanceMoment() -> SKNode {
         let houseInTheDistanceMoment = SKNode()
         
         let background = SKSpriteNode(imageNamed: "BackgroundNight")
-        background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
-        background.size.height = parentSize.height
+        background.position = CGPoint(x: size.width/2, y:size.height/2)
+        background.size.height = size.height
         houseInTheDistanceMoment.addChild(background)
 		
 		let pointLight = SKLightNode()
@@ -59,16 +88,16 @@ class MurderScene: SKScene {
 		houseInTheDistanceMoment.addChild(pointLight)
 		
 		let sparkedBacking = SKSpriteNode(imageNamed: "BackgroundNightLightning")
-		sparkedBacking.position = CGPoint(x: parentSize.width/2, y: parentSize.height/2)
-		sparkedBacking.size.height = parentSize.height
-		sparkedBacking.size.width = parentSize.width * 4
+		sparkedBacking.position = CGPoint(x: size.width/2, y: size.height/2)
+		sparkedBacking.size.height = size.height
+		sparkedBacking.size.width = size.width * 4
 		houseInTheDistanceMoment.addChild(sparkedBacking)
 		let sparks = self.getSparkLayerForSparkedBackground(sparkedBacking)
 		houseInTheDistanceMoment.addChild(sparks)
         
         let ground = SKSpriteNode(imageNamed: "GroundNight")
-        ground.size = CGSize(width: parentSize.width * 2, height: 300)
-        ground.position = CGPoint(x: parentSize.width/2, y: 0)
+        ground.size = CGSize(width: size.width * 2, height: 300)
+        ground.position = CGPoint(x: size.width/2, y: 0)
 		ground.zPosition = 1
 		ground.lightingBitMask = worldLightingBitmask
         
@@ -76,7 +105,7 @@ class MurderScene: SKScene {
         house.name = "distant house"
         house.setScale(3)
 		house.zPosition = 1
-        house.position = CGPoint(x: parentSize.width - 20, y: ground.size.height/2)
+        house.position = CGPoint(x: size.width - 20, y: ground.size.height/2)
 		house.lightingBitMask = worldLightingBitmask
         
         house.runAction(self.getBlinkAction())
@@ -119,18 +148,16 @@ class MurderScene: SKScene {
 		
 		//hide both spark layer and the backing
 		spark.enabled = false
-		//backing.alpha = 0
+		backing.alpha = 0
 		
 		let wait = SKAction.waitForDuration(1.2)
 		let shortWait = SKAction.waitForDuration(0.4)
 		let longWait = SKAction.waitForDuration(2)
 		let flash = SKAction.runBlock { () -> Void in
-			//backing.alpha = 1
 			spark.enabled = true
 		}
 		let frameBreak = SKAction.waitForDuration(0.06)
 		let muzzle = SKAction.runBlock { () -> Void in
-			//backing.alpha = 0
 			spark.enabled = false
 		}
 		let shabang = SKAction.sequence([flash,frameBreak,muzzle])
@@ -149,33 +176,33 @@ class MurderScene: SKScene {
         return blink
     }
     
-    func getHouseUpCloseMoment(parentSize: CGSize) -> SKNode {
+    func getHouseUpCloseMoment() -> SKNode {
         let houseUpCloseMoment = SKNode()
         
         let background = SKSpriteNode(imageNamed: "BackgroundNight")
-        background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
-        background.size.height = parentSize.height
-        background.size.width = parentSize.width * 2
+        background.position = CGPoint(x: size.width/2, y:size.height/2)
+        background.size.height = size.height
+        background.size.width = size.width * 2
         houseUpCloseMoment.addChild(background)
 		
 		let pointLight = SKLightNode()
 		pointLight.lightColor = SKColor.whiteColor()
 		pointLight.categoryBitMask = worldLightingBitmask
 		pointLight.falloff = 0.5
-		pointLight.position = CGPoint(x: parentSize.width/2, y: parentSize.height)
+		pointLight.position = CGPoint(x: size.width/2, y: size.height)
 		houseUpCloseMoment.addChild(pointLight)
 		
 		let sparkedBacking = SKSpriteNode(imageNamed: "BackgroundNightLightning")
-		sparkedBacking.position = CGPoint(x: parentSize.width/2, y: parentSize.height)
-		sparkedBacking.size.height = parentSize.height
-		sparkedBacking.size.width = parentSize.width * 4
+		sparkedBacking.position = CGPoint(x: size.width/2, y: size.height)
+		sparkedBacking.size.height = size.height
+		sparkedBacking.size.width = size.width * 4
 		houseUpCloseMoment.addChild(sparkedBacking)
 		let sparks = self.getSparkLayerForSparkedBackground(sparkedBacking)
 		self.addChild(sparks)
 		
         let ground = SKSpriteNode(imageNamed: "GroundNight")
-        ground.size = CGSize(width: parentSize.width, height: 250)
-        ground.position = CGPoint(x: parentSize.width/2, y: 125)
+        ground.size = CGSize(width: size.width, height: 250)
+        ground.position = CGPoint(x: size.width/2, y: 125)
 		ground.lightingBitMask = worldLightingBitmask
 		ground.shadowedBitMask = worldLightingBitmask
 		ground.zPosition = 1
@@ -186,7 +213,7 @@ class MurderScene: SKScene {
 		house.zPosition = 1
 		house.lightingBitMask = worldLightingBitmask
 		house.shadowCastBitMask = worldLightingBitmask
-        house.position = CGPoint(x: parentSize.width/2, y: ground.size.height)
+        house.position = CGPoint(x: size.width/2, y: ground.size.height)
         
         house.runAction(self.getBlinkAction())
 		
@@ -197,23 +224,23 @@ class MurderScene: SKScene {
         return houseUpCloseMoment
     }
     
-    func getWindowMoment(parentSize: CGSize) -> SKNode {
+    func getWindowMoment() -> SKNode {
         let windowMoment = SKNode()
         windowMoment.name = "window moment"
         
         let backdrop = SKSpriteNode(imageNamed: "WindowView")
-        backdrop.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
-        backdrop.size = CGSize(width: parentSize.width, height: parentSize.height)
+        backdrop.position = CGPoint(x: size.width/2, y:size.height/2)
+        backdrop.size = CGSize(width: size.width, height: size.height)
         
         windowMoment.addChild(backdrop)
         
         let bed = SKSpriteNode(imageNamed: "Bed")
         bed.name = "bed"
         bed.setScale(4)
-        bed.position = CGPoint(x: parentSize.width/2 - 10, y:parentSize.height/2)
+        bed.position = CGPoint(x: size.width/2 - 10, y:size.height/2)
         
         let bedPosition1 = bed.position
-        let bedPosition2 = CGPoint(x: parentSize.width/2 - 20, y:parentSize.height/2)
+        let bedPosition2 = CGPoint(x: size.width/2 - 20, y:size.height/2)
         
         let moveToPosition2 = SKAction.moveTo(bedPosition2, duration: 0.1)
         let waitABit = SKAction.waitForDuration(1)
@@ -227,19 +254,19 @@ class MurderScene: SKScene {
         return windowMoment
     }
     
-    func getPitchforkGrabMoment(parentSize: CGSize) -> SKNode {
+    func getPitchforkGrabMoment() -> SKNode {
         let pitchforkGrabMoment = SKNode()
         
         let background = SKSpriteNode(imageNamed: "GroundNight")
-        background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
-        background.size.height = parentSize.height * 3
-        background.size.width = parentSize.width * 3
+        background.position = CGPoint(x: size.width/2, y:size.height/2)
+        background.size.height = size.height * 3
+        background.size.width = size.width * 3
         background.runAction(self.getBlinkAction(color: SKColor.redColor()))
         pitchforkGrabMoment.addChild(background)
         
         let pitchfork = SKSpriteNode(imageNamed: "Pitchfork")
         pitchfork.name = "pitchfork"
-        pitchfork.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        pitchfork.position = CGPoint(x: size.width/2, y:size.height/2)
         pitchfork.setScale(7)
         pitchforkGrabMoment.addChild(pitchfork)
         
@@ -265,18 +292,21 @@ class MurderScene: SKScene {
             //on completion:
             let moveBack = SKAction.moveTo(initialPoint, duration: 0.75)
             💪!.runAction(moveBack)
-            pitchfork!.runAction(moveBack)
+			pitchfork!.runAction(moveBack) {
+				//on completion:
+				self.transitionToMoment(.DoorClosed)
+			}
         }
         
     }
     
-    func getDoorClosedMoment(parentSize: CGSize) -> SKNode {
+    func getDoorClosedMoment() -> SKNode {
         let doorClosedMoment = SKNode()
         doorClosedMoment.name = "door closed"
         
         let backdrop = SKSpriteNode(imageNamed: "DoorClosed")
-        backdrop.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
-        backdrop.size = CGSize(width: parentSize.width, height: parentSize.height)
+        backdrop.position = CGPoint(x: size.width/2, y:size.height/2)
+        backdrop.size = CGSize(width: size.width, height: size.height)
         
         doorClosedMoment.addChild(backdrop)
         
@@ -284,32 +314,32 @@ class MurderScene: SKScene {
     }
 
     
-    func getDoorOpenMoment(parentSize: CGSize) -> SKNode {
+    func getDoorOpenMoment() -> SKNode {
         let doorOpenMoment = SKNode()
         doorOpenMoment.name = "door open"
         
         let backdrop = SKSpriteNode(imageNamed: "DoorOpen")
-        backdrop.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
-        backdrop.size = CGSize(width: parentSize.width, height: parentSize.height)
+        backdrop.position = CGPoint(x: size.width/2, y:size.height/2)
+        backdrop.size = CGSize(width: size.width, height: size.height)
         
         doorOpenMoment.addChild(backdrop)
         
         return doorOpenMoment
     }
     
-    func getStabMoment(parentSize: CGSize) -> SKNode {
+    func getStabMoment() -> SKNode {
         let stabMoment = SKNode()
         stabMoment.name = "stab moment"
         
         let fear = SKSpriteNode(imageNamed: "Fear")
         fear.name = "fear"
-        fear.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
-        fear.size = CGSize(width: parentSize.width, height: parentSize.height)
+        fear.position = CGPoint(x: size.width/2, y:size.height/2)
+        fear.size = CGSize(width: size.width, height: size.height)
         
         let ouch = SKSpriteNode(imageNamed: "Stabbing")
         ouch.name = "ouch"
-        ouch.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
-        ouch.size = CGSize(width: parentSize.width, height: parentSize.height)
+        ouch.position = CGPoint(x: size.width/2, y:size.height/2)
+        ouch.size = CGSize(width: size.width, height: size.height)
         
         ouch.alpha = 0.0 // dont show the blood quite yet, know wat i mean?
         
@@ -317,7 +347,7 @@ class MurderScene: SKScene {
         stabMoment.addChild(ouch)
         
         let pitchfork = SKSpriteNode(imageNamed: "PitchforkForward")
-        pitchfork.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        pitchfork.position = CGPoint(x: size.width/2, y:size.height/2)
         pitchfork.name = "stabbing pitchfork"
         pitchfork.alpha = 0.0
         pitchfork.setScale(8)
@@ -361,77 +391,42 @@ class MurderScene: SKScene {
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         //touches
         for touch in touches {
-            let location = (touch as! UITouch).locationInNode(self)
-            if (self.nodeAtPoint(location).name == "distant house") {
-				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
-					self.moments[0].removeFromParent()
-					self.moments.removeAtIndex(0)
-				}
-                self.addChild(moments[1])
-                moments[1].alpha = 0.0
-                moments[1].runAction(SKAction.fadeInWithDuration(1))
-            }
-            
-            else if (self.nodeAtPoint(location).name == "closer house") {
-				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
-					self.moments[0].removeFromParent()
-					self.moments.removeAtIndex(0)
-				}
-                self.addChild(moments[1])
-                moments[1].alpha = 0.0
-                moments[1].runAction(SKAction.fadeInWithDuration(1))
-            }
-            
-            else if (moments[0].name == "window moment" || self.nodeAtPoint(location).name == "bed") {
-				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
-					self.moments[0].removeFromParent()
-					self.moments.removeAtIndex(0)
-				}
-                self.addChild(moments[1])
-                moments[1].alpha = 0.0
-                moments[1].runAction(SKAction.fadeInWithDuration(1))
-            }
-            
-            else if (self.nodeAtPoint(location).name == "pitchfork") {
-                self.grabPitchfork()
-                
-                self.runAction(SKAction.waitForDuration(2)) {
-					self.moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
-						self.moments[0].removeFromParent()
-						self.moments.removeAtIndex(0)
+			let location = (touch as! UITouch).locationInNode(self)
+			switch currentMoment {
+			case .HouseInDistance:
+				for touched in self.nodesAtPoint(location) {
+					if let node = touched as? SKNode {
+						if node.name == "distant house" {
+							self.transitionToMoment(.HouseUpClose)
+						}
 					}
-                    self.addChild(self.moments[1])
-                    self.moments[1].alpha = 0.0
-                    self.moments[1].runAction(SKAction.fadeInWithDuration(1))
-                }
-            }
-            
-            else if (moments[0].name == "door closed") {
-				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
-					self.moments[0].removeFromParent()
-					self.moments.removeAtIndex(0)
 				}
-                self.addChild(moments[1])
-                moments[1].alpha = 0.0
-                moments[1].runAction(SKAction.fadeInWithDuration(1))
-            }
-            
-            else if (moments[0].name == "door open") {
-				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
-					self.moments[0].removeFromParent()
-					self.moments.removeAtIndex(0)
+			case .HouseUpClose:
+				for touched in self.nodesAtPoint(location) {
+					if let node = touched as? SKNode {
+						if node.name == "closer house" {
+							self.transitionToMoment(.Window)
+						}
+					}
 				}
-                self.addChild(moments[1])
-                moments[1].alpha = 0.0
-                moments[1].runAction(SKAction.fadeInWithDuration(1))
-            }
-            
-            else if (moments[0].name == "stab moment") {
-                var stabCount = 0
-                stab()
-            }
-            
-        }
+			case .Window:
+				self.transitionToMoment(.Pitchfork)
+			case .Pitchfork:
+				for touched in self.nodesAtPoint(location) {
+					if let node = touched as? SKNode {
+						if node.name == "pitchfork" {
+							self.grabPitchfork()
+						}
+					}
+				}
+			case .DoorClosed:
+				self.transitionToMoment(.DoorOpened)
+			case .DoorOpened:
+				self.transitionToMoment(.Stabs)
+			case .Stabs:
+				self.stab()
+			}
+		}
     }
 
 	
