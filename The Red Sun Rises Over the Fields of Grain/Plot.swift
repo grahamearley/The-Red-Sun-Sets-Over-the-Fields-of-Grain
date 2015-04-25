@@ -31,12 +31,10 @@ class Plot: SKNode, Touchable {
 	var age : Int = 0
 	var size : CGSize!
 	var index : Int
-//    var profile : GameProfile
 	
 	var fieldNodes = [SKNode]()
 	
 	init(contents: PlotContent, index: Int) {
-//        profile = GameProfile.sharedInstance
 		self.contents = contents
 		self.index = index
 		super.init()
@@ -68,6 +66,13 @@ class Plot: SKNode, Touchable {
 		button.position = CGPoint(x: 0, y: (-size.height/2)+buttonMargin)
 		button.name = "button"
 		self.addChild(button)
+		
+		//multiplier text
+		let label = SKLabelNode(text: "x1")
+		label.position = CGPoint(x: 0, y: size.height/3)
+		label.fontSize = 40
+		label.name = "multiplierLabel"
+		self.addChild(label)
 		
 		updateNodeContent()
 
@@ -142,6 +147,19 @@ class Plot: SKNode, Touchable {
 			let buttonInfo = self.getButtonActionForCurrentPlot()
 			button.setTitle(buttonInfo.0)
 			button.action = buttonInfo.1
+		}
+	}
+	
+	///Call everytime the person 
+	func lightUpdate() {
+		//update multiplier text
+		if let multiplierLabel = self.childNodeWithName("multiplierLabel") as? SKLabelNode {
+			let multi = self.getMultiplier()
+			if multi == 1 {
+				multiplierLabel.text = ""
+			} else {
+				multiplierLabel.text = "x\(self.getMultiplier())"
+			}
 		}
 	}
 	
@@ -231,7 +249,24 @@ class Plot: SKNode, Touchable {
 	}
 	
 	func getMultiplier() -> Float {
-		return 1
+		let allPlots = GameProfile.sharedInstance.plots
+		if index == 0 || index >= allPlots.count-1 {
+			return 1	//will cause errors, and only applies to edge plots which don't need multipliers
+		}
+		
+		let onlyLeftPlots = allPlots[0..<self.index]
+		var leftwardPlots = onlyLeftPlots.reverse() //0 is closest Plot to the left
+		var rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
+		
+		var totalMultiplier : Float = 1.0
+		
+		if contents == .Corn {
+			if leftwardPlots[0].contents == PlotContent.Corn && rightwardPlots[0].contents == PlotContent.Corn {
+				totalMultiplier += 2
+			}
+		}
+		
+		return totalMultiplier
 	}
 
 	

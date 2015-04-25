@@ -106,6 +106,7 @@ class FarmScene: SKScene {
 	func didSwipeLeft() {
 		if currentPlotIndex < profile.plots.count-1 && !scrollLock {
 			currentPlotIndex++
+			profile.plots[currentPlotIndex].lightUpdate()
 			for child in self.children {
 				if let panningNode = child as? PanNode {
 					panningNode.shiftLeft()
@@ -120,6 +121,7 @@ class FarmScene: SKScene {
 	func didSwipeRight() {
 		if currentPlotIndex > 0 && !scrollLock {
 			currentPlotIndex--
+			profile.plots[currentPlotIndex].lightUpdate()
 			for child in self.children {
 				if let panningNode = child as? PanNode {
 					panningNode.shiftRight()
