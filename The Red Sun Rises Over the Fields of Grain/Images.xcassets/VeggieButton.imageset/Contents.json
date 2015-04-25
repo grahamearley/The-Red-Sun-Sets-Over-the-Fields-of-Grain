@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "scale" : "1x",
+      "filename" : "VeggieButton.PNG"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x",
+      "filename" : "VeggieButton-1.PNG"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x",
+      "filename" : "VeggieButton-2.PNG"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
