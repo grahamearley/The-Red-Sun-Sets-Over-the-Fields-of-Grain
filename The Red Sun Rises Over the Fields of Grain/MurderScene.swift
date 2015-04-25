@@ -14,19 +14,28 @@ class MurderScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-//        self.addChild(self.getHouseInTheDistanceMoment(size))
-        self.addChild(self.getHouseUpCloseMoment(size))
+        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
+        
+        self.addChild(houseInTheDistanceMoment)
+        houseInTheDistanceMoment.runAction(SKAction.fadeOutWithDuration(4))
+
+//        self.addChild(self.getHouseUpCloseMoment(size))
         
     }
     
-    // MARK: Moments
-    // (not quite scenes!)
+    
+    // MARK: Moments (not quite scenes!)
     func getHouseInTheDistanceMoment(parentSize: CGSize) -> SKNode {
         let houseInTheDistanceMoment = SKNode()
         
+        let background = SKSpriteNode(imageNamed: "Background")
+        background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        background.size.height = parentSize.height
+        houseInTheDistanceMoment.addChild(background)
+        
         let ground = SKSpriteNode(imageNamed: "Ground")
-        ground.size = CGSize(width: parentSize.width * 2, height: ground.size.height)
-        ground.position = CGPoint(x: parentSize.width/2, y: 3)
+        ground.size = CGSize(width: parentSize.width * 2, height: 300)
+        ground.position = CGPoint(x: parentSize.width/2, y: 0)
         
         let house = SKSpriteNode(imageNamed: "House")
         house.setScale(3)
@@ -41,13 +50,19 @@ class MurderScene: SKScene {
     func getHouseUpCloseMoment(parentSize: CGSize) -> SKNode {
         let houseUpCloseMoment = SKNode()
         
+        let background = SKSpriteNode(imageNamed: "Background")
+        background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        background.size.height = parentSize.height
+        background.size.width = parentSize.width * 2
+        houseUpCloseMoment.addChild(background)
+        
         let ground = SKSpriteNode(imageNamed: "Ground")
-        ground.size = CGSize(width: parentSize.width, height: ground.size.height)
-        ground.position = CGPoint(x: parentSize.width/2, y: 3)
+        ground.size = CGSize(width: parentSize.width, height: 250)
+        ground.position = CGPoint(x: parentSize.width/2, y: 125)
         
         let house = SKSpriteNode(imageNamed: "House")
         house.setScale(4)
-        house.position = CGPoint(x: parentSize.width/2, y: ground.size.height/2+50)
+        house.position = CGPoint(x: parentSize.width/2, y: ground.size.height)
         
         houseUpCloseMoment.addChild(ground)
         houseUpCloseMoment.addChild(house)
