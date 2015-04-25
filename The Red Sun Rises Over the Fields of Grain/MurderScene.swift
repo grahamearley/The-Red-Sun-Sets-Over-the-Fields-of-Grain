@@ -156,14 +156,24 @@ class MurderScene: SKScene {
 		let flash = SKAction.runBlock { () -> Void in
 			spark.enabled = true
 		}
+		let show = SKAction.runBlock { () -> Void in
+			backing.alpha = 1
+		}
 		let frameBreak = SKAction.waitForDuration(0.06)
 		let muzzle = SKAction.runBlock { () -> Void in
 			spark.enabled = false
 		}
+		let hide = SKAction.runBlock { () -> Void in
+			backing.alpha = 0
+		}
 		let shabang = SKAction.sequence([flash,frameBreak,muzzle])
-		let seq = SKAction.sequence([wait,shabang,shortWait,shabang,wait,shabang,longWait,shabang])
-		let loop = SKAction.repeatActionForever(seq)
-		spark.runAction(loop)
+		let showbang = SKAction.sequence([show,frameBreak,hide])
+		let shaseq = SKAction.sequence([wait,shabang,shortWait,shabang,wait,shabang,longWait,shabang])
+		let showseq = SKAction.sequence([wait,showbang,shortWait,showbang,wait,showbang,longWait,showbang])
+		let shaloop = SKAction.repeatActionForever(shaseq)
+		let showloop = SKAction.repeatActionForever(showseq)
+		spark.runAction(shaloop)
+		backing.runAction(showloop)
 		
 		return spark
 	}
