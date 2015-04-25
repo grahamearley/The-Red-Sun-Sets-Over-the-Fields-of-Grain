@@ -318,6 +318,7 @@ class Plot: SKNode, Touchable {
                             if let farmScene = sender as? FarmScene {
                                 // flash money sign if you don't have enough $$
                                 farmScene.moneyWarning()
+                                println("hi")
                         }
                     }
                         
