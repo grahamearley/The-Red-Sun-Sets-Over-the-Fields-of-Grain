@@ -218,6 +218,11 @@ class Plot: SKNode, Touchable {
 			let buttonInfo = self.getButtonActionForCurrentPlot()
 			button.setTitle(buttonInfo.0)
 			button.action = buttonInfo.1
+			if button.getTitle() == nil || button.getTitle() == "" {
+				button.hidden = true
+			} else {
+				button.hidden = false
+			}
 		}
 	}
 	

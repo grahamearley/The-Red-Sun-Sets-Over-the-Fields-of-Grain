@@ -23,6 +23,7 @@ class Button: SKNode, Touchable {
 		self.addChild(sprite)
 		
 		let label = SKLabelNode(fontNamed: "FreePixel-Regular")
+		label.verticalAlignmentMode = .Center
 		label.name = "label"
 		self.addChild(label)
 	}
@@ -45,6 +46,13 @@ class Button: SKNode, Touchable {
 		if let label = self.childNodeWithName("label") as? SKLabelNode {
 			label.text = text
 		}
+	}
+	
+	func getTitle() -> String? {
+		if let label = self.childNodeWithName("label") as? SKLabelNode {
+			return label.text
+		}
+		return nil
 	}
 	
 }
