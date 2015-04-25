@@ -58,8 +58,13 @@ class MurderScene: SKScene {
 		pointLight.position = CGPoint(x: size.width/2, y: size.height/2)
 		houseInTheDistanceMoment.addChild(pointLight)
 		
-		let sparks = self.getSparkLayer()
-		self.addChild(sparks)
+		let sparkedBacking = SKSpriteNode(imageNamed: "BackgroundNightLightning")
+		sparkedBacking.position = CGPoint(x: parentSize.width/2, y: parentSize.height/2)
+		sparkedBacking.size.height = parentSize.height
+		sparkedBacking.size.width = parentSize.width * 4
+		houseInTheDistanceMoment.addChild(sparkedBacking)
+		let sparks = self.getSparkLayerForSparkedBackground(sparkedBacking)
+		houseInTheDistanceMoment.addChild(sparks)
         
         let ground = SKSpriteNode(imageNamed: "GroundNight")
         ground.size = CGSize(width: parentSize.width * 2, height: 300)
@@ -105,22 +110,27 @@ class MurderScene: SKScene {
 		return rainLayer
 	}
 	
-	func getSparkLayer() -> SKNode {
+	func getSparkLayerForSparkedBackground(backing:SKNode) -> SKNode {
 		let spark = SKLightNode()
 		spark.lightColor = SKColor.whiteColor()
 		spark.categoryBitMask = worldLightingBitmask
 		spark.falloff = 0.3	//big area
 		spark.position = CGPoint(x: size.width/2, y: size.height/2)
+		
+		//hide both spark layer and the backing
 		spark.enabled = false
+		//backing.alpha = 0
 		
 		let wait = SKAction.waitForDuration(1.2)
 		let shortWait = SKAction.waitForDuration(0.4)
 		let longWait = SKAction.waitForDuration(2)
 		let flash = SKAction.runBlock { () -> Void in
+			//backing.alpha = 1
 			spark.enabled = true
 		}
-		let frameBreak = SKAction.waitForDuration(0.02)
+		let frameBreak = SKAction.waitForDuration(0.06)
 		let muzzle = SKAction.runBlock { () -> Void in
+			//backing.alpha = 0
 			spark.enabled = false
 		}
 		let shabang = SKAction.sequence([flash,frameBreak,muzzle])
@@ -147,16 +157,35 @@ class MurderScene: SKScene {
         background.size.height = parentSize.height
         background.size.width = parentSize.width * 2
         houseUpCloseMoment.addChild(background)
-        
+		
+		let pointLight = SKLightNode()
+		pointLight.lightColor = SKColor.whiteColor()
+		pointLight.categoryBitMask = worldLightingBitmask
+		pointLight.falloff = 0.5
+		pointLight.position = CGPoint(x: parentSize.width/2, y: parentSize.height)
+		houseUpCloseMoment.addChild(pointLight)
+		
+		let sparkedBacking = SKSpriteNode(imageNamed: "BackgroundNightLightning")
+		sparkedBacking.position = CGPoint(x: parentSize.width/2, y: parentSize.height)
+		sparkedBacking.size.height = parentSize.height
+		sparkedBacking.size.width = parentSize.width * 4
+		houseUpCloseMoment.addChild(sparkedBacking)
+		let sparks = self.getSparkLayerForSparkedBackground(sparkedBacking)
+		self.addChild(sparks)
+		
         let ground = SKSpriteNode(imageNamed: "GroundNight")
         ground.size = CGSize(width: parentSize.width, height: 250)
         ground.position = CGPoint(x: parentSize.width/2, y: 125)
+		ground.lightingBitMask = worldLightingBitmask
+		ground.shadowedBitMask = worldLightingBitmask
 		ground.zPosition = 1
         
         let house = SKSpriteNode(imageNamed: "House")
         house.name = "closer house"
         house.setScale(4)
 		house.zPosition = 1
+		house.lightingBitMask = worldLightingBitmask
+		house.shadowCastBitMask = worldLightingBitmask
         house.position = CGPoint(x: parentSize.width/2, y: ground.size.height)
         
         house.runAction(self.getBlinkAction())
@@ -334,55 +363,67 @@ class MurderScene: SKScene {
         for touch in touches {
             let location = (touch as! UITouch).locationInNode(self)
             if (self.nodeAtPoint(location).name == "distant house") {
-                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
+					self.moments[0].removeFromParent()
+					self.moments.removeAtIndex(0)
+				}
                 self.addChild(moments[1])
                 moments[1].alpha = 0.0
                 moments[1].runAction(SKAction.fadeInWithDuration(1))
-                moments.removeAtIndex(0)
             }
             
             else if (self.nodeAtPoint(location).name == "closer house") {
-                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
+					self.moments[0].removeFromParent()
+					self.moments.removeAtIndex(0)
+				}
                 self.addChild(moments[1])
                 moments[1].alpha = 0.0
                 moments[1].runAction(SKAction.fadeInWithDuration(1))
-                moments.removeAtIndex(0)
             }
             
             else if (moments[0].name == "window moment" || self.nodeAtPoint(location).name == "bed") {
-                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
+					self.moments[0].removeFromParent()
+					self.moments.removeAtIndex(0)
+				}
                 self.addChild(moments[1])
                 moments[1].alpha = 0.0
                 moments[1].runAction(SKAction.fadeInWithDuration(1))
-                moments.removeAtIndex(0)
             }
             
             else if (self.nodeAtPoint(location).name == "pitchfork") {
                 self.grabPitchfork()
                 
                 self.runAction(SKAction.waitForDuration(2)) {
-                    self.moments[0].runAction(SKAction.fadeOutWithDuration(1))
+					self.moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
+						self.moments[0].removeFromParent()
+						self.moments.removeAtIndex(0)
+					}
                     self.addChild(self.moments[1])
                     self.moments[1].alpha = 0.0
                     self.moments[1].runAction(SKAction.fadeInWithDuration(1))
-                    self.moments.removeAtIndex(0)
                 }
             }
             
             else if (moments[0].name == "door closed") {
-                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
+					self.moments[0].removeFromParent()
+					self.moments.removeAtIndex(0)
+				}
                 self.addChild(moments[1])
                 moments[1].alpha = 0.0
                 moments[1].runAction(SKAction.fadeInWithDuration(1))
-                moments.removeAtIndex(0)
             }
             
             else if (moments[0].name == "door open") {
-                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+				moments[0].runAction(SKAction.fadeOutWithDuration(1)) {
+					self.moments[0].removeFromParent()
+					self.moments.removeAtIndex(0)
+				}
                 self.addChild(moments[1])
                 moments[1].alpha = 0.0
                 moments[1].runAction(SKAction.fadeInWithDuration(1))
-                moments.removeAtIndex(0)
             }
             
             else if (moments[0].name == "stab moment") {
