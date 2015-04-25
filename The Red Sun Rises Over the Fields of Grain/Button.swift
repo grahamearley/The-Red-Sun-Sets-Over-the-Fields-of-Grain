@@ -13,28 +13,38 @@ import SpriteKit
 class Button: SKNode, Touchable {
 	
 	var enabled : Bool = true
-	var action : Void -> Void
+	var action : AnyObject? -> Void
 	
-	init(imageNamed: String, action: () -> ()) {
+	init(imageNamed: String, action: AnyObject? -> ()) {
 		self.action = action
 		super.init()
 		let sprite = SKSpriteNode(imageNamed: imageNamed)
         sprite.name = "sprite"
 		self.addChild(sprite)
+		
+		let label = SKLabelNode(text: "hello world")
+		label.name = "label"
+		self.addChild(label)
 	}
 
 	required init?(coder aDecoder: NSCoder) {
 	    fatalError("init(coder:) has not been implemented")
 	}
 	
-	func onTouchDownInside(touch: UITouch, sender: AnyObject) {
+	func onTouchDownInside(touch: UITouch, sender: AnyObject?) {
 		if self.enabled {
-			action()
+			action(sender)
 		}
 	}
     
     func getUnderlyingSprite() -> SKSpriteNode? {
         return self.childNodeWithName("sprite") as? SKSpriteNode
     }
+	
+	func setTitle(text: String) {
+		if let label = self.childNodeWithName("label") as? SKLabelNode {
+			label.text = text
+		}
+	}
 	
 }

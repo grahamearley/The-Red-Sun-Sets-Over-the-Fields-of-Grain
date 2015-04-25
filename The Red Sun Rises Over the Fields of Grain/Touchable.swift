@@ -11,10 +11,10 @@ import UIKit
 
 @objc protocol Touchable {
 	
-	optional func onTouchDownInside(touch: UITouch, sender: AnyObject)
+	optional func onTouchDownInside(touch: UITouch, sender: AnyObject?)
 	
-	optional func onTouchUpInside(touch: UITouch, sender: AnyObject)
+	optional func onTouchUpInside(touch: UITouch, sender: AnyObject?)
 	
-	optional func onTouchThroughInside(touch: UITouch, sender: AnyObject)
+	optional func onTouchThroughInside(touch: UITouch, sender: AnyObject?)
 	
 }

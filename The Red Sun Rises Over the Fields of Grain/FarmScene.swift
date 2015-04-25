@@ -21,12 +21,12 @@ class FarmScene: SKScene {
 		
 		super.init(size: size)
 		
-		let plotWidth = size.width-100
+		let spaceSize = CGSize(width: size.width-100, height: size.height)
 		
 		//test
-		let plot1 = Plot(contents: .Corn)
-		let plot2 = Plot(contents: .Windmill)
-		let plot3 = Plot(contents: .DeadBody)
+		let plot1 = Plot(contents: .House, index: 0)
+		let plot2 = Plot(contents: .Empty, index: 1)
+		let plot3 = Plot(contents: .Corn, index: 2)
 		
 		profile.plots.append(plot1)
 		profile.plots.append(plot2)
@@ -35,27 +35,26 @@ class FarmScene: SKScene {
 		
 		var currentXPos : CGFloat = size.width/2
 		for plot in profile.plots {
-			let space = PanNode(size: CGSize(width: plotWidth, height: size.height))
-			let spaceSize = space.size
+			let space = PanNode(size: spaceSize)
 			
 			space.position = CGPoint(x: currentXPos, y: size.height/2)
 			currentXPos += spaceSize.width
 			space.addChild(plot)
-			plot.initNodeContent(spaceSize)
+			plot.initializeNodeContents(spaceSize)
 			self.addChild(space)
 		}
 		
         // Static ground for edges
 		let leftGround = SKSpriteNode(imageNamed: "Ground")
-		leftGround.size.width = plotWidth
+		leftGround.size.width = spaceSize.width
 		leftGround.size.height = size.height/5
-		leftGround.position = CGPoint(x: (size.width/2)-plotWidth/2, y: leftGround.size.height/2)
+		leftGround.position = CGPoint(x: (size.width/2)-spaceSize.width/2, y: leftGround.size.height/2)
 		leftGround.zPosition = -9
 		self.addChild(leftGround)
 		let rightGround = SKSpriteNode(imageNamed: "Ground")
-		rightGround.size.width = plotWidth
+		rightGround.size.width = spaceSize.width
 		rightGround.size.height = size.height/5
-		rightGround.position = CGPoint(x: (size.width/2)+plotWidth/2, y: rightGround.size.height/2)
+		rightGround.position = CGPoint(x: (size.width/2)+spaceSize.width/2, y: rightGround.size.height/2)
 		rightGround.zPosition = -9
 		self.addChild(rightGround)
 		
@@ -123,7 +122,15 @@ class FarmScene: SKScene {
             }
         }
     }
-   
+	
+	func ageByTurn(amount: Int = 1) {
+		for plot in profile.plots {
+			plot.age += amount
+			profile.saveToFile()
+			plot.updateNodeContent()
+		}
+	}
+	
     override func update(currentTime: CFTimeInterval) {
 		//called every 60 seconds
     }

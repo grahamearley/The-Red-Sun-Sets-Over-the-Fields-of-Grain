@@ -29,14 +29,13 @@ class Plot: SKNode, Touchable {
 	
 	var contents : PlotContent = .Empty
 	var age : Int = 0
+	var size : CGSize!
+	var index : Int
 	
-	override init() {
-		super.init()
-	}
-	
-	init(contents: PlotContent) {
-		super.init()
+	init(contents: PlotContent, index: Int) {
 		self.contents = contents
+		self.index = index
+		super.init()
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -44,39 +43,35 @@ class Plot: SKNode, Touchable {
 	}
 	
 	//MARK: - Plot Interaction
-    
-    ///Initializes basic visual elements
-    func initNodeContent(size: CGSize) {
-        
-        //add ground
-        let ground = SKSpriteNode(imageNamed: "Ground")
-        ground.size.width = size.width
-        ground.size.height = size.height/5
-        ground.position = CGPoint(x: 0, y: (-size.height/2)+ground.size.height/2)
-        self.addChild(ground)
-        updateNodeContent(size)
-        
-        //add new plant button
-        let button = Button(imageNamed: "Redbutton") {
-            // On action
-            self.contents = .Corn
-            self.updateNodeContent(size)
-        }
-        
-        if let buttonSprite = button.getUnderlyingSprite() {
-            let buttonMargin = buttonSprite.size.height/2 + 50
-            
-            buttonSprite.size = CGSize(width: (size.width * 0.8), height: (size.height * 0.1))
-            buttonSprite.position = CGPoint(x: 0, y: (-size.height/2)+buttonMargin)
-        }
-        
-        self.addChild(button)
-        
-    }
+	
+	func initializeNodeContents(size: CGSize) {
+		self.size = size
+		
+		//add ground
+		let ground = SKSpriteNode(imageNamed: "Ground")
+		ground.size.width = size.width
+		ground.size.height = size.height/5
+		ground.position = CGPoint(x: 0, y: (-size.height/2)+ground.size.height/2)
+		self.addChild(ground)
+		
+		//button
+		let button = Button(imageNamed: "Redbutton") { (sender:AnyObject?) -> () in return}
+		var buttonMargin : CGFloat = 10
+		if let buttonSprite = button.getUnderlyingSprite() {
+			buttonMargin = buttonSprite.size.height/2 + 50
+			buttonSprite.size = CGSize(width: (size.width * 0.8), height: (size.height * 0.1))
+		}
+		button.position = CGPoint(x: 0, y: (-size.height/2)+buttonMargin)
+		button.name = "button"
+		self.addChild(button)
+		
+		updateNodeContent()
+
+	}
 	
 	///Replaces the current contents of the plot with a updated content.
 	///Must be called after changing self.contents to reflect that
-	func updateNodeContent(size: CGSize) {
+	func updateNodeContent() {
 		
 		//remove old plants
 		self.enumerateChildNodesWithName("field", usingBlock: {
@@ -87,13 +82,14 @@ class Plot: SKNode, Touchable {
 		//plants
 		var colorNode = SKShapeNode(rectOfSize: CGSize(width: size.width/4, height: size.height/4))
 		colorNode.position = CGPoint(x: 0, y: -size.height/4)
+		colorNode.strokeColor = SKColor.clearColor()
 		let color : SKColor
 		
 		switch self.contents {
 		case .DeadBody:
 			color = SKColor.brownColor()
 		case .Empty:
-			color = SKColor.blackColor()
+			color = SKColor.clearColor()
 		case .Corn:
 			color = SKColor.yellowColor()
 		case .House:
@@ -110,9 +106,65 @@ class Plot: SKNode, Touchable {
 		colorNode.fillColor = color
 		
 		self.addChild(colorNode)
+		
+		//update button
+		if let button = self.childNodeWithName("button") as? Button {
+			let buttonInfo = self.getButtonActionForCurrentPlot()
+			button.setTitle(buttonInfo.0)
+			button.action = buttonInfo.1
+		}
 	}
 	
-	func getMultiplier(plotArray: [Plot], atIndex: Int) -> Float {
+	///Returns the title and action that the current plot's button should display
+	private func getButtonActionForCurrentPlot() -> (String, AnyObject?->()) {
+		var buttonTitle : String = ""
+		var buttonAction : AnyObject?->Void = {(sender: AnyObject?)->() in return}
+		
+		if self.contents == .Corn {
+			if age >= 3 && age <= 7 {
+				//harvestable corn:
+				buttonTitle = "Harvest"
+				buttonAction = { (sender:AnyObject?) in
+					//harvest the corn:
+					GameProfile.sharedInstance.money += Int(7 * self.getMultiplier())
+					self.contents = .Empty
+					self.age = 0
+					self.updateNodeContent()
+				}
+			} else {
+				//dead or not grown corn:
+				buttonTitle = "Remove"
+				buttonAction = { (sender:AnyObject?) in
+					//remove the corn:
+					self.contents = .Empty
+					self.age = 0
+					self.updateNodeContent()
+				}
+			}
+		}
+		if self.contents == .Empty {
+			buttonTitle = "Plant Corn"
+			buttonAction = { (sender:AnyObject?) in
+				//add some corn:
+				self.contents = .Corn
+				self.age = 0
+				self.updateNodeContent()
+			}
+		}
+		if self.contents == .House {
+			buttonTitle = "Wait"
+			buttonAction = { (sender:AnyObject?) in
+				//progress the FarmScene (the sender) by one turn:
+				if let farmScene = sender as? FarmScene {
+					farmScene.ageByTurn(amount: 1)
+				}
+			}
+		}
+		
+		return (buttonTitle, buttonAction)
+	}
+	
+	func getMultiplier() -> Float {
 		return 1
 	}
 
@@ -128,20 +180,30 @@ class Plot: SKNode, Touchable {
 		
 		dict["contents"] = self.contents.rawValue
 		dict["age"] = self.age
+		dict["index"] = self.index
 		
 		return dict
 	}
 	
 	class func fromDictionary(dictionary: [String:AnyObject]) -> Plot {
-		let plot = Plot()
+		var contents : PlotContent = .Empty
+		var age = 0
+		var index = 0
+		
 		if let contentValFromDict : String = dictionary["contents"] as? String {
 			if let content = PlotContent(rawValue: contentValFromDict) {
-				plot.contents = content
+				contents = content
 			}
 		}
 		if let ageValFromDict : Int = dictionary["age"] as? Int {
-			plot.age = ageValFromDict
+			age = ageValFromDict
 		}
+		if let indexValFromDict : Int = dictionary["index"] as? Int {
+			index = indexValFromDict
+		}
+		
+		let plot = Plot(contents: contents, index: index)
+		plot.age = age
 		return plot
 	}
 	
