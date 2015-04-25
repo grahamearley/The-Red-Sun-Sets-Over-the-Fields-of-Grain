@@ -31,10 +31,12 @@ class Plot: SKNode, Touchable {
 	var age : Int = 0
 	var size : CGSize!
 	var index : Int
+//    var profile : GameProfile
 	
 	var fieldNodes = [SKNode]()
 	
 	init(contents: PlotContent, index: Int) {
+//        profile = GameProfile.sharedInstance
 		self.contents = contents
 		self.index = index
 		super.init()
@@ -145,7 +147,12 @@ class Plot: SKNode, Touchable {
 					GameProfile.sharedInstance.money += Int(7 * self.getMultiplier())
 					self.contents = .Empty
 					self.age = 0
-					self.updateNodeContent()
+                    self.updateNodeContent()
+                    
+                    // Gettin money
+                    if let farmScene = sender as? FarmScene {
+                        farmScene.updateMoney()
+                    }
 				}
 			} else {
 				//dead or not grown corn:
@@ -154,7 +161,12 @@ class Plot: SKNode, Touchable {
 					//remove the corn:
 					self.contents = .Empty
 					self.age = 0
-					self.updateNodeContent()
+                    self.updateNodeContent()
+                    
+                    // Gettin money
+                    if let farmScene = sender as? FarmScene {
+                        farmScene.updateMoney()
+                    }
 				}
 			}
 		}
@@ -164,7 +176,12 @@ class Plot: SKNode, Touchable {
 				//add some corn:
 				self.contents = .Corn
 				self.age = 0
-				self.updateNodeContent()
+                self.updateNodeContent()
+                
+                // Gettin money
+                if let farmScene = sender as? FarmScene {
+                    farmScene.updateMoney()
+                }
 			}
 		}
 		if self.contents == .House {
@@ -173,6 +190,7 @@ class Plot: SKNode, Touchable {
 				//progress the FarmScene (the sender) by one turn:
 				if let farmScene = sender as? FarmScene {
 					farmScene.ageByTurn(amount: 1)
+                    self.updateNodeContent()
 				}
 			}
 		}

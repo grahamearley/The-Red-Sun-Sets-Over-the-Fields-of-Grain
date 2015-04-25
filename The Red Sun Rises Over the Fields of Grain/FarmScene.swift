@@ -38,6 +38,7 @@ class FarmScene: SKScene {
 		profile.saveToFile()
 		
 		var currentXPos : CGFloat = size.width/2
+        
 		for plot in profile.plots {
 			let space = PanNode(size: spaceSize)
 			
@@ -68,6 +69,14 @@ class FarmScene: SKScene {
 		background.zPosition = -10
 		background.size = CGSize(width: background.size.width, height: size.height)
 		self.addChild(background)
+        
+        // Money label
+        let moneyLabel = SKLabelNode(text: "0")
+        moneyLabel.name = "Money Label"
+        moneyLabel.fontColor = UIColor.blackColor()
+        moneyLabel.fontSize = 25
+        moneyLabel.position = CGPoint(x: size.width - 40, y: size.height - 40)
+        self.addChild(moneyLabel)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -130,10 +139,16 @@ class FarmScene: SKScene {
 	func ageByTurn(amount: Int = 1) {
 		for plot in profile.plots {
 			plot.age += amount
-			profile.saveToFile()
 			plot.updateNodeContent()
 		}
 	}
+    
+    func updateMoney() {
+        if let label = self.childNodeWithName("Money Label") as? SKLabelNode {
+            
+            label.text = String(profile.money)
+        }
+    }
 	
 	func extendFarm() {
 		let newPlot = Plot(contents: .Tractor, index: profile.plots.count)
