@@ -204,21 +204,23 @@ class Plot: SKNode, Touchable {
 		if self.contents == .Tractor {
 			buttonTitle = "Expand"
 			buttonAction = { (sender:AnyObject?) in
-				//expand the farm by one plot, essencially adding another tractor plot
-				//and setting this plot to be empty
-				if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
-					let rotate = SKAction.rotateByAngle(-6.28, duration: 4)
-					let move = SKAction.moveByX(self.size.width, y: 0, duration: 4)
-					let group = SKAction.group([rotate,move])
-					wheel.runAction(group)
-					hull.runAction(move) {
-						//on completion:
-						if let farmScene = sender as? FarmScene {
-							GameProfile.sharedInstance.money -= 20
-							farmScene.updateMoney()
-							farmScene.extendFarm()
-							self.contents = .Empty
-							self.updateNodeContent()
+				if let farmScene = sender as? FarmScene {
+					farmScene.scrollLock = true
+					//expand the farm by one plot, essencially adding another tractor plot
+					//and setting this plot to be empty
+					if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
+						let rotate = SKAction.rotateByAngle(-6.28, duration: 3)
+						let move = SKAction.moveByX(self.size.width, y: 0, duration: 3)
+						let group = SKAction.group([rotate,move])
+						wheel.runAction(group)
+						hull.runAction(move) {
+							//on completion:
+								GameProfile.sharedInstance.money -= 20
+								farmScene.updateMoney()
+								farmScene.extendFarm()
+								self.contents = .Empty
+								self.updateNodeContent()
+								farmScene.scrollLock = false
 						}
 					}
 				}

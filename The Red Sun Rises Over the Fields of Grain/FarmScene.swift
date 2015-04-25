@@ -17,6 +17,8 @@ class FarmScene: SKScene {
 	var currentPlotIndex : Int = 0
 	var profile : GameProfile
 	
+	var scrollLock : Bool = false
+	
 	//Init Scene here
 	override init(size: CGSize) {
 		self.screenSize = size
@@ -102,7 +104,7 @@ class FarmScene: SKScene {
 	
 	///On Swipes left, find all PanNodes and shift them left
 	func didSwipeLeft() {
-		if currentPlotIndex < profile.plots.count-1 {
+		if currentPlotIndex < profile.plots.count-1 && !scrollLock {
 			currentPlotIndex++
 			for child in self.children {
 				if let panningNode = child as? PanNode {
@@ -116,7 +118,7 @@ class FarmScene: SKScene {
 	
 	///On Swipes right, find all PanNodes and shift them right
 	func didSwipeRight() {
-		if currentPlotIndex > 0 {
+		if currentPlotIndex > 0 && !scrollLock {
 			currentPlotIndex--
 			for child in self.children {
 				if let panningNode = child as? PanNode {
@@ -133,11 +135,11 @@ class FarmScene: SKScene {
     // Move background with parallax black magic
     if let background = self.childNodeWithName("Background") as? SKSpriteNode {
         
-        let difference = ((background.size.width) - 375)
+        let difference = ((background.size.width) - screenSize.width)
         let width = difference / CGFloat(profile.plots.count)
         let offset = (-1 * width * CGFloat(currentPlotIndex)) + background.size.width / 2
         let destinationPoint = CGPoint(x: offset, y: background.position.y)
-        let moveTo = SKAction.moveTo(destinationPoint, duration: 0.5)
+        let moveTo = SKAction.moveTo(destinationPoint, duration: 0.175)
         background.runAction(moveTo);
     }
     }
