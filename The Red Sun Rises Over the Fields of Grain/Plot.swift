@@ -170,7 +170,26 @@ class Plot: SKNode, Touchable {
 		case .Wheat:
 			color = SKColor.greenColor()
 		case .Windmill:
-			color = SKColor.grayColor()
+			let millBase = SKSpriteNode(imageNamed: "windturbineturbine")	//image is named wrong...
+			millBase.name = "millBase"
+			millBase.setScale(7)
+			millBase.size = CGSize(width: millBase.size.width, height: millBase.size.height + 110)
+			millBase.position = CGPoint(x: 0, y: 60)
+			self.addChild(millBase)
+			self.fieldNodes.append(millBase)
+			
+			let millTurbine = SKSpriteNode(imageNamed: "windturbinebase") //image is named wrong...
+			millTurbine.name = "millTurbine"
+			millTurbine.setScale(7)
+			millTurbine.position = CGPoint(x: 0, y: size.height * 0.6)
+			self.addChild(millTurbine)
+			self.fieldNodes.append(millTurbine)
+			
+			//anim
+			let gentleRotate = SKAction.repeatActionForever(SKAction.rotateByAngle(6.28, duration: 6))
+			millTurbine.runAction(gentleRotate)
+			
+			color = SKColor.clearColor()
 		}
 		
 		colorNode.name = "colorNode"
@@ -264,8 +283,8 @@ class Plot: SKNode, Touchable {
 					//expand the farm by one plot, essencially adding another tractor plot
 					//and setting this plot to be empty
 					if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
-						let rotate = SKAction.rotateByAngle(-6.28, duration: 1)
-						let move = SKAction.moveByX(self.size.width, y: 0, duration: 1)
+						let rotate = SKAction.rotateByAngle(-6.28, duration: 2.2)
+						let move = SKAction.moveByX(self.size.width, y: 0, duration: 2.2)
 						let group = SKAction.group([rotate,move])
 						wheel.runAction(group)
 						hull.runAction(move) {
