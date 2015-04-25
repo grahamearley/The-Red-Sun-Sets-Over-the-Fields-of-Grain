@@ -15,23 +15,39 @@ class FarmScene: SKScene {
 	override init(size: CGSize) {
 		super.init(size: size)
 		
-		let plotWidth = size.width-20
+		let plotWidth = size.width-100
 		
-		let space1 = PanNode(size: CGSize(width: plotWidth, height: size.height))
-		let space2 = PanNode(size: CGSize(width: plotWidth, height: size.height))
-		let block = SKShapeNode(circleOfRadius: 30)
-		block.fillColor = SKColor.redColor()
-		space1.addChild(block)
+		//test
+		let plot1 = Plot(contents: .Corn)
+		let plot2 = Plot(contents: .Windmill)
+		let plot3 = Plot(contents: .DeadBody)
 		
-		let block2 = SKShapeNode(circleOfRadius: 30)
-		block2.fillColor = SKColor.yellowColor()
-		space2.addChild(block2)
+		let profile = GameProfile.sharedInstance
+		profile.clearAllData()
+		println(profile.money)
+		profile.plots.append(plot1)
+		profile.plots.append(plot2)
+		profile.plots.append(plot3)
+		profile.saveToFile()
 		
-		space1.position = CGPoint(x: size.width/2, y: size.height/2)
-		space2.position = CGPoint(x: space1.position.x + plotWidth, y: size.height/2)
-		
-		self.addChild(space1)
-		self.addChild(space2)
+		var currentXPos : CGFloat = size.width/2
+		for plot in profile.plots {
+			let space = PanNode(size: CGSize(width: plotWidth, height: size.height))
+			let spaceSize = space.size
+			
+			//add ground into spaces
+			let ground = SKSpriteNode(imageNamed: "Ground")
+			ground.size.width = spaceSize.width
+			ground.size.height = spaceSize.height/5
+			ground.position = CGPoint(x: 0, y: (-size.height/2)+ground.size.height/2)
+			space.addChild(ground)
+			
+			space.position = CGPoint(x: currentXPos, y: size.height/2)
+			currentXPos += spaceSize.width
+			space.addChild(plot)
+			plot.updateNodeContent(spaceSize)
+			self.addChild(space)
+		}
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

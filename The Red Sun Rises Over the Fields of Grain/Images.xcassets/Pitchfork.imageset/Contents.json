@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "ground.png"
+      "filename" : "pitchfork.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "ground-1.png"
+      "filename" : "pitchfork-1.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "ground-2.png"
+      "filename" : "pitchfork-2.png"
     }
   ],
   "info" : {
