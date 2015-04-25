@@ -33,7 +33,7 @@ class MurderScene: SKScene {
     func getHouseInTheDistanceMoment(parentSize: CGSize) -> SKNode {
         let houseInTheDistanceMoment = SKNode()
         
-        let background = SKSpriteNode(imageNamed: "Background")
+        let background = SKSpriteNode(imageNamed: "BackgroundNight")
         background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
         background.size.height = parentSize.height
         houseInTheDistanceMoment.addChild(background)
@@ -47,11 +47,7 @@ class MurderScene: SKScene {
         house.setScale(3)
         house.position = CGPoint(x: parentSize.width - 20, y: ground.size.height/2)
         
-        let colorizeWhite = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.6)
-        let colorizeReturn = SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.6)
-        let blink = SKAction.repeatActionForever(SKAction.sequence([colorizeWhite, colorizeReturn]))
-        
-        house.runAction(blink)
+        house.runAction(self.getBlinkAction())
         
         houseInTheDistanceMoment.addChild(ground)
         houseInTheDistanceMoment.addChild(house)
@@ -59,10 +55,18 @@ class MurderScene: SKScene {
         return houseInTheDistanceMoment
     }
     
+    func getBlinkAction() -> SKAction {
+        let colorizeWhite = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.5, duration: 0.6)
+        let colorizeReturn = SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.6)
+        let blink = SKAction.repeatActionForever(SKAction.sequence([colorizeWhite, colorizeReturn]))
+        
+        return blink
+    }
+    
     func getHouseUpCloseMoment(parentSize: CGSize) -> SKNode {
         let houseUpCloseMoment = SKNode()
         
-        let background = SKSpriteNode(imageNamed: "Background")
+        let background = SKSpriteNode(imageNamed: "BackgroundNight")
         background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
         background.size.height = parentSize.height
         background.size.width = parentSize.width * 2
@@ -73,8 +77,11 @@ class MurderScene: SKScene {
         ground.position = CGPoint(x: parentSize.width/2, y: 125)
         
         let house = SKSpriteNode(imageNamed: "House")
+        house.name = "closer house"
         house.setScale(4)
         house.position = CGPoint(x: parentSize.width/2, y: ground.size.height)
+        
+        house.runAction(self.getBlinkAction())
         
         houseUpCloseMoment.addChild(ground)
         houseUpCloseMoment.addChild(house)
@@ -157,10 +164,10 @@ class MurderScene: SKScene {
         for touch in touches {
             let location = (touch as! UITouch).locationInNode(self)
             if (self.nodeAtPoint(location).name == "distant house") {
-                moments[0].runAction(SKAction.fadeOutWithDuration(4))
+                moments[0].runAction(SKAction.fadeOutWithDuration(1))
                 self.addChild(moments[1])
                 moments[1].alpha = 0.0
-                moments[1].runAction(SKAction.fadeInWithDuration(3))
+                moments[1].runAction(SKAction.fadeInWithDuration(1))
                 moments.removeAtIndex(0)
             }
             
