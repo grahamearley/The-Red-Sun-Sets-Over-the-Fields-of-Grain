@@ -402,8 +402,6 @@ class Plot: SKNode, Touchable {
                 
                 // Costs $3
                 GameProfile.sharedInstance.money -= 3
-                
-                // Gettin money
                 if let farmScene = sender as? FarmScene {
                     farmScene.updateMoney()
                 }
@@ -416,38 +414,52 @@ class Plot: SKNode, Touchable {
 		}
 		
 		let wheatBag = StoreItem(imageNamed: "WheatBag", cost: 5, time: 3) { (sender: AnyObject?) in
-			//onAction:
-			//add some wheat:
-			self.contents = .Wheat
-			self.age = 0
-			self.updateNodeContent()
-			
-			// Gettin money
-			if let farmScene = sender as? FarmScene {
-				farmScene.updateMoney()
-			}
-			
-			// reset locking
-			if let farmScene = sender as? FarmScene {
-				farmScene.setStoreLocks(false)
+			if currentFunds < 5 {
+				if let farmScene = sender as? FarmScene {
+					farmScene.moneyWarning()
+				}
+			} else {
+				//onAction:
+				//add some wheat:
+				self.contents = .Wheat
+				self.age = 0
+				self.updateNodeContent()
+				
+				// costs 1
+				GameProfile.sharedInstance.money -= 5
+				if let farmScene = sender as? FarmScene {
+					farmScene.updateMoney()
+				}
+				
+				// reset locking
+				if let farmScene = sender as? FarmScene {
+					farmScene.setStoreLocks(false)
+				}
 			}
 		}
 		
 		let pumpkinBag = StoreItem(imageNamed: "PumpkinBag", cost: 8, time: 5) { (sender: AnyObject?) in
-			//onAction:
-			//add some pumpkins:
-			self.contents = .Pumpkin
-			self.age = 0
-			self.updateNodeContent()
-			
-			// Gettin money
-			if let farmScene = sender as? FarmScene {
-				farmScene.updateMoney()
-			}
-			
-			// reset locking
-			if let farmScene = sender as? FarmScene {
-				farmScene.setStoreLocks(false)
+			if currentFunds < 5 {
+				if let farmScene = sender as? FarmScene {
+					farmScene.moneyWarning()
+				}
+			} else {
+				//onAction:
+				//add some pumpkins:
+				self.contents = .Pumpkin
+				self.age = 0
+				self.updateNodeContent()
+				
+				// costs 8
+				GameProfile.sharedInstance.money -= 8
+				if let farmScene = sender as? FarmScene {
+					farmScene.updateMoney()
+				}
+				
+				// reset locking
+				if let farmScene = sender as? FarmScene {
+					farmScene.setStoreLocks(false)
+				}
 			}
 		}
 
@@ -466,8 +478,6 @@ class Plot: SKNode, Touchable {
                 
                 // Costs $1
                 GameProfile.sharedInstance.money -= 1
-                
-                // Gettin money
                 if let farmScene = sender as? FarmScene {
                     farmScene.updateMoney()
                 }
