@@ -82,6 +82,25 @@ class FarmScene: SKScene {
         statusBar.position = CGPoint(x: self.size.width - statusBar.size.width/2 - 10, y: self.size.height - 30)
         self.addChild(statusBar)
         
+        // coin icon
+        let coinIcon = SKSpriteNode(imageNamed: "CoinCounter")
+        coinIcon.position = CGPoint(x: self.size.width - coinIcon.size.width/2 - 60, y: self.size.height - 30)
+        self.addChild(coinIcon)
+        
+        // clock icon
+        let clockIcon = SKSpriteNode(imageNamed: "ClockIcon")
+        clockIcon.position = CGPoint(x: self.size.width - clockIcon.size.width/2 - 170, y: self.size.height - 30)
+        self.addChild(clockIcon)
+        
+        // time label
+        let timeLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+        timeLabel.text = "0 days"
+        timeLabel.name = "Time Label"
+        timeLabel.fontColor = UIColor.blackColor()
+        timeLabel.fontSize = 25
+        timeLabel.position = CGPoint(x: size.width - 125, y: size.height - 40)
+        self.addChild(timeLabel)
+        
         // Money label
         let moneyLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
         moneyLabel.text = "\(profile.money)"
