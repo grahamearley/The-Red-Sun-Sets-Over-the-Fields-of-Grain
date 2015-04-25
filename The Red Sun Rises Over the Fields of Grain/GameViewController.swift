@@ -18,7 +18,7 @@ class GameViewController: UIViewController {
 		let skView = self.view as! SKView
         
         // testing: just show my scene instead of the real first scene
-		let scene = FarmScene(size: skView.bounds.size)
+		let scene = MurderScene(size: skView.bounds.size)
 		skView.showsFPS = true
 		skView.showsNodeCount = true
 		skView.ignoresSiblingOrder = true

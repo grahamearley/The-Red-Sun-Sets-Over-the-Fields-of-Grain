@@ -229,6 +229,8 @@ class MurderScene: SKScene {
         
         return stabMoment
     }
+	
+	//MARK: Interactions
     
     func stab() {
         let fear = self.childNodeWithName("//fear")
