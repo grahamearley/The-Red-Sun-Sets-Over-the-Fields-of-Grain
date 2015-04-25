@@ -19,6 +19,7 @@ class Button: SKNode, Touchable {
 		self.action = action
 		super.init()
 		let sprite = SKSpriteNode(imageNamed: imageNamed)
+        sprite.name = "sprite"
 		self.addChild(sprite)
 	}
 
@@ -31,5 +32,9 @@ class Button: SKNode, Touchable {
 			action()
 		}
 	}
+    
+    func getUnderlyingSprite() -> SKSpriteNode? {
+        return self.childNodeWithName("sprite") as? SKSpriteNode
+    }
 	
 }

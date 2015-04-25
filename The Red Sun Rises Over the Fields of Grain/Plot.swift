@@ -44,18 +44,47 @@ class Plot: SKNode {
 	}
 	
 	//MARK: - Plot Interaction
+    
+    ///Initializes basic visual elements
+    func initNodeContent(size: CGSize) {
+        
+        //add ground
+        let ground = SKSpriteNode(imageNamed: "Ground")
+        ground.size.width = size.width
+        ground.size.height = size.height/5
+        ground.position = CGPoint(x: 0, y: (-size.height/2)+ground.size.height/2)
+        self.addChild(ground)
+        updateNodeContent(size)
+        
+        //add new plant button
+        let button = Button(imageNamed: "Redbutton") {
+            // On action
+            self.contents = .Corn
+            self.updateNodeContent(size)
+        }
+        
+        if let buttonSprite = button.getUnderlyingSprite() {
+            let buttonMargin = buttonSprite.size.height/2 + 50
+            
+            buttonSprite.size = CGSize(width: (size.width * 0.8), height: (size.height * 0.1))
+            buttonSprite.position = CGPoint(x: 0, y: (-size.height/2)+buttonMargin)
+        }
+        
+        self.addChild(button)
+        
+    }
 	
 	///Replaces the current contents of the plot with a updated content.
 	///Must be called after changing self.contents to reflect that
 	func updateNodeContent(size: CGSize) {
 		
-		//remove old field content
+		//remove old plants
 		self.enumerateChildNodesWithName("field", usingBlock: {
 			(node: SKNode!, stop: UnsafeMutablePointer <ObjCBool>) -> Void in
 			node.removeFromParent()
 		})
 		
-		//fill in new contents
+		//plants
 		var colorNode = SKShapeNode(rectOfSize: CGSize(width: size.width/4, height: size.height/4))
 		colorNode.position = CGPoint(x: 0, y: -size.height/4)
 		let color : SKColor
@@ -86,10 +115,7 @@ class Plot: SKNode {
 	func getMultiplier(plotArray: [Plot], atIndex: Int) -> Float {
 		return 1
 	}
-	
-	func getActionAssociatedWithContent() -> Void->Void {
-		return {return}
-	}
+
 	
 	func ageContent(byAmount:Int = 1) {
 		age += byAmount

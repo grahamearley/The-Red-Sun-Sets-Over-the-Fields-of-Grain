@@ -38,20 +38,14 @@ class FarmScene: SKScene {
 			let space = PanNode(size: CGSize(width: plotWidth, height: size.height))
 			let spaceSize = space.size
 			
-			//add ground into spaces
-			let ground = SKSpriteNode(imageNamed: "Ground")
-			ground.size.width = spaceSize.width
-			ground.size.height = spaceSize.height/5
-			ground.position = CGPoint(x: 0, y: (-size.height/2)+ground.size.height/2)
-			space.addChild(ground)
-			
 			space.position = CGPoint(x: currentXPos, y: size.height/2)
 			currentXPos += spaceSize.width
 			space.addChild(plot)
-			plot.updateNodeContent(spaceSize)
+			plot.initNodeContent(spaceSize)
 			self.addChild(space)
 		}
 		
+        // Static ground for edges
 		let leftGround = SKSpriteNode(imageNamed: "Ground")
 		leftGround.size.width = plotWidth
 		leftGround.size.height = size.height/5
@@ -65,6 +59,7 @@ class FarmScene: SKScene {
 		rightGround.zPosition = -9
 		self.addChild(rightGround)
 		
+        // Sky
 		let background = SKSpriteNode(imageNamed: "Background")
 		background.position = CGPoint(x: size.width/2, y: size.height/2)
 		background.zPosition = -10
@@ -118,6 +113,18 @@ class FarmScene: SKScene {
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
 		//touches
+        for thing: AnyObject in touches {
+            if let touch = thing as? UITouch {
+                let touchLocation = touch.locationInNode(self)
+                self.enumerateChildNodesWithName("//*", usingBlock: { (node:SKNode!, cancel:UnsafeMutablePointer<ObjCBool>) -> Void in
+                    if node.containsPoint(touchLocation) {
+                        if let touchable = node as? Touchable {
+                            touchable.onTouchDownInside?(touch, sender: self)
+                        }
+                    }
+                })
+            }
+        }
     }
    
     override func update(currentTime: CFTimeInterval) {
