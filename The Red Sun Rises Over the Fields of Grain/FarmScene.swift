@@ -153,7 +153,10 @@ class FarmScene: SKScene {
 	func extendFarm() {
 		let newPlot = Plot(contents: .Tractor, index: profile.plots.count)
 		let newSpace = PanNode(size: spaceSize)
-		let newXPos = screenSize.width/2 + spaceSize.width
+		
+		let originPos = profile.plots[0].parent!.position
+		
+		let newXPos = originPos.x + spaceSize.width*CGFloat(newPlot.index)
 		newSpace.position = CGPoint(x: newXPos, y: screenSize.height/2)
 		newSpace.addChild(newPlot)
 		newPlot.initializeNodeContents(spaceSize)

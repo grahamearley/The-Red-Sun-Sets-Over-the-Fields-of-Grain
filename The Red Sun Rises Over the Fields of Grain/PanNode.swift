@@ -26,14 +26,14 @@ class PanNode: SKNode, Touchable {
 	///Shifts the PanNode and all its contents by its entire width over to the left
 	func shiftLeft() {
 		let destinationPoint = CGPoint(x: self.position.x-size.width, y: self.position.y)
-		let moveTo = SKAction.moveTo(destinationPoint, duration: 0.5)
+		let moveTo = SKAction.moveTo(destinationPoint, duration: 0.15)
 		self.runAction(moveTo)
 	}
 	
 	///Shifts the PanNode and all its contents by its entire width over to the right
 	func shiftRight() {
 		let destinationPoint = CGPoint(x: self.position.x+size.width, y: self.position.y)
-		let moveTo = SKAction.moveTo(destinationPoint, duration: 0.5)
+		let moveTo = SKAction.moveTo(destinationPoint, duration: 0.15)
 		self.runAction(moveTo)
 	}
 	

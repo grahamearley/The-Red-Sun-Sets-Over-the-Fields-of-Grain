@@ -94,7 +94,18 @@ class Plot: SKNode, Touchable {
 		case .Empty:
 			color = SKColor.clearColor()
 		case .Corn:
-			color = SKColor.yellowColor()
+			
+			for i in -3...3 {
+				let corn = SKSpriteNode(imageNamed: "Corn")
+				corn.setScale(3)
+				corn.name = "corn"
+				corn.position = CGPoint(x: CGFloat(i)*35, y: -self.size.height/7)
+				
+				self.addChild(corn)
+				self.fieldNodes.append(corn)
+			}
+			
+			color = SKColor.clearColor()
 		case .House:
 			color = SKColor.redColor()
 		case .Tractor:
@@ -120,8 +131,9 @@ class Plot: SKNode, Touchable {
 			color = SKColor.grayColor()
 		}
 		
-		colorNode.name = "field"
+		colorNode.name = "colorNode"
 		colorNode.fillColor = color
+		self.fieldNodes.append(colorNode)
 		
 		self.addChild(colorNode)
 		
