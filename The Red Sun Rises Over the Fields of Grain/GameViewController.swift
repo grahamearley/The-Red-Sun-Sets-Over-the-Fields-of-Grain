@@ -13,13 +13,7 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-		// Configure the view.
-		let skView = self.view as! SKView
-		skView.ignoresSiblingOrder = true
 		
-		let scene : SKScene
-        // testing: just show my scene instead of the real first scene
 		if GameProfile.sharedInstance.committedMurder {
 			let scene = FarmScene(size: skView.bounds.size)
 			scene.scaleMode = .AspectFill
