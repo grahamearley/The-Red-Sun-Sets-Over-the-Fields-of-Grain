@@ -115,43 +115,56 @@ class Plot: SKNode, Touchable {
             let deathTime = 7
 			
 			for i in -3...3 {
-				let corn = SKSpriteNode(imageNamed: "Corn")
                 
-                // Because it takes 3 turns to grow
-                let progress = CGFloat(min(1, Float(age) / Float(growTime)))
-                
-                let randomYOffset = CGFloat (rand() % 20)
-                
-                let maxHeight = (size.height / 4) - 10 + randomYOffset
-                let maxWidth = size.width / 2
-                
-                // Gray if unripe or approaching death
-                if age < growTime {
-                    let colorize = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.8, duration: 0)
-                    corn.runAction(colorize)
+                if age == 0 {
+                    
+                    var seed = SKShapeNode(circleOfRadius: 2)
+                    seed.zPosition = 1
+                    seed.fillColor = SKColor.brownColor()
+                    seed.lineWidth = 0
+                    let randomXOffset = Int (rand() % 20)
+                    seed.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: (-self.size.height * 0.32))
+                    
+                    self.addChild(seed)
+                    self.fieldNodes.append(seed)
+                    
+                } else {
+                    
+                    var corn = SKSpriteNode(imageNamed: "Corn")
+                    
+                    let randomYOffset = CGFloat (rand() % 20)
+                    
+                    let maxHeight = (size.height / 4) - 10 + randomYOffset
+                    let maxWidth = size.width / 2
+                    
+                    // Gray if unripe or approaching death
+                    if age < growTime {
+                        let colorize = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.8, duration: 0)
+                        corn.runAction(colorize)
+                    }
+                    
+                    // Red if approaching death
+                    if age == deathTime {
+                        let colorize = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 0.5, duration: 0)
+                        corn.runAction(colorize)
+                    }
+                    
+                    // Gray more if dead
+                    if age > deathTime {
+                        let colorize = SKAction.colorizeWithColor(SKColor.blackColor(), colorBlendFactor: 0.8, duration: 0)
+                        corn.runAction(colorize)
+                    }
+                    
+                    let progress = CGFloat(min(1, Float(age) / Float(growTime)))
+                    corn.size = CGSize(width: maxWidth * progress, height: maxHeight * progress)
+                    corn.name = "corn"
+                    
+                    let randomXOffset = Int (rand() % 20)
+                    corn.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: ((-self.size.height * 0.32) + corn.size.height/2))
+                    
+                    self.addChild(corn)
+                    self.fieldNodes.append(corn)
                 }
-                
-                // Read if approaching death
-                if age == deathTime {
-                    let colorize = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 0.5, duration: 0)
-                    corn.runAction(colorize)
-                }
-                
-                // Gray more if dead
-                if age > deathTime {
-                    let colorize = SKAction.colorizeWithColor(SKColor.blackColor(), colorBlendFactor: 0.8, duration: 0)
-                    corn.runAction(colorize)
-                }
-                
-                corn.size = CGSize(width: maxWidth * progress, height: maxHeight * progress)
-				corn.name = "corn"
-                
-                let randomXOffset = Int (rand() % 20)
-                
-				corn.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: ((-self.size.height * 0.32) + corn.size.height/2))
-				
-				self.addChild(corn)
-				self.fieldNodes.append(corn)
 			}
 			
 			color = SKColor.clearColor()
