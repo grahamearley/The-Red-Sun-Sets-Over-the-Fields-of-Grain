@@ -34,7 +34,16 @@ class GameProfile {
         plots = [Plot]()
         loadDataFromFile()
     }
-    
+	
+	func clearAllData() {
+		committedMurder = false
+		turn = 0
+		money = 0
+		ghostPoints = 0
+		soundOn = true
+		plots = [Plot]()
+	}
+	
     func saveToFile() {
         
         var playerData = NSMutableDictionary()
@@ -52,7 +61,7 @@ class GameProfile {
             plotDictArray.append(plotDict)
         }
         
-        playerData.setValue(plots, forKey: "plots")
+        playerData.setValue(plotDictArray, forKey: "plots")
         
         if let url = GameProfile.getPlayerFileURL() {
             playerData.writeToURL(url, atomically: true)
@@ -62,7 +71,7 @@ class GameProfile {
     func loadDataFromFile() {
         
         if let url = GameProfile.getPlayerFileURL() {
-            if let loadedPlayerData = NSDictionary(contentsOfURL: url) {
+            if let loadedPlayerData = NSMutableDictionary(contentsOfURL: url) {
                 
                 if let newCommittedMurder = loadedPlayerData.valueForKey("committed murder") as? Bool {
                     committedMurder = newCommittedMurder
@@ -85,7 +94,7 @@ class GameProfile {
                 }
                 
                 
-                if let plotDictArray = loadedPlayerData.valueForKey("ghost points") as? [[String:AnyObject]]
+                if let plotDictArray = loadedPlayerData.valueForKey("plots") as? [[String:AnyObject]]
                 {
                     var newPlots = [Plot]()
                     for plotDict in plotDictArray {

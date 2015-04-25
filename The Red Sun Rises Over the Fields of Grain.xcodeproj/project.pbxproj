@@ -99,11 +99,11 @@
 				CBF0BA6A1AEB4E0B00318937 /* Touchable.swift */,
 				CB303E261AEB41CB0060242C /* MurderScene.swift */,
 				D205ADF91AEB349F00F27ABD /* GameViewController.swift */,
+				BF93539D1AEB542B00FC17C2 /* GameProfile.swift */,
 				D205ADFB1AEB349F00F27ABD /* Main.storyboard */,
 				D205ADFE1AEB349F00F27ABD /* Images.xcassets */,
 				D205AE001AEB349F00F27ABD /* LaunchScreen.xib */,
 				D205ADF11AEB349F00F27ABD /* Supporting Files */,
-				BF93539D1AEB542B00FC17C2 /* GameProfile.swift */,
 			);
 			path = "The Red Sun Rises Over the Fields of Grain";
 			sourceTree = "<group>";

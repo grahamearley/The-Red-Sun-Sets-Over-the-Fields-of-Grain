@@ -17,32 +17,37 @@ class FarmScene: SKScene {
 		
 		let plotWidth = size.width-100
 		
-		let space1 = PanNode(size: CGSize(width: plotWidth, height: size.height))
-		let space2 = PanNode(size: CGSize(width: plotWidth, height: size.height))
-		let space3 = PanNode(size: CGSize(width: plotWidth, height: size.height))
-		let space4 = PanNode(size: CGSize(width: plotWidth, height: size.height))
+		//test
+		let plot1 = Plot(contents: .Corn)
+		let plot2 = Plot(contents: .Windmill)
+		let plot3 = Plot(contents: .DeadBody)
 		
-		let plot1 = Plot(contents: .Empty)
-		let plot2 = Plot(contents: .Corn)
-		let plot3 = Plot(contents: .Windmill)
+		let profile = GameProfile.sharedInstance
+		profile.clearAllData()
+		println(profile.money)
+		profile.plots.append(plot1)
+		profile.plots.append(plot2)
+		profile.plots.append(plot3)
+		profile.saveToFile()
 		
-		space1.addChild(plot1)
-		space2.addChild(plot2)
-		space3.addChild(plot3)
-		
-		plot1.updateNodeContent(space1.size)
-		plot2.updateNodeContent(space2.size)
-		plot3.updateNodeContent(space3.size)
-		
-		space1.position = CGPoint(x: size.width/2, y: size.height/2)
-		space2.position = CGPoint(x: space1.position.x + plotWidth, y: size.height/2)
-		space3.position = CGPoint(x: space2.position.x + plotWidth, y: size.height/2)
-		space4.position = CGPoint(x: space3.position.x + plotWidth, y: size.height/2)
-		
-		self.addChild(space1)
-		self.addChild(space2)
-		self.addChild(space3)
-		self.addChild(space4)
+		var currentXPos : CGFloat = size.width/2
+		for plot in profile.plots {
+			let space = PanNode(size: CGSize(width: plotWidth, height: size.height))
+			let spaceSize = space.size
+			
+			//add ground into spaces
+			let ground = SKSpriteNode(imageNamed: "Ground")
+			ground.size.width = spaceSize.width
+			ground.size.height = spaceSize.height/5
+			ground.position = CGPoint(x: 0, y: (-size.height/2)+ground.size.height/2)
+			space.addChild(ground)
+			
+			space.position = CGPoint(x: currentXPos, y: size.height/2)
+			currentXPos += spaceSize.width
+			space.addChild(plot)
+			plot.updateNodeContent(spaceSize)
+			self.addChild(space)
+		}
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
