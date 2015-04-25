@@ -112,17 +112,14 @@ class FarmScene: SKScene {
 	}
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-		//touches
         for thing: AnyObject in touches {
             if let touch = thing as? UITouch {
                 let touchLocation = touch.locationInNode(self)
-                self.enumerateChildNodesWithName("//*", usingBlock: { (node:SKNode!, cancel:UnsafeMutablePointer<ObjCBool>) -> Void in
-                    if node.containsPoint(touchLocation) {
-                        if let touchable = node as? Touchable {
-                            touchable.onTouchDownInside?(touch, sender: self)
-                        }
-                    }
-                })
+				for touched in self.nodesAtPoint(touchLocation) {
+					if let responder = touched as? Touchable {
+						responder.onTouchDownInside?(touch, sender: self)
+					}
+				}
             }
         }
     }

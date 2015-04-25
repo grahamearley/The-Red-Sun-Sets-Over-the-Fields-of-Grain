@@ -25,7 +25,7 @@ enum PlotContent : String {
 }
 
 ///Holds plots content, and an age for it
-class Plot: SKNode {
+class Plot: SKNode, Touchable {
 	
 	var contents : PlotContent = .Empty
 	var age : Int = 0
@@ -120,7 +120,7 @@ class Plot: SKNode {
 	func ageContent(byAmount:Int = 1) {
 		age += byAmount
 	}
-	
+		
 	//MARK: - Save/Load
 	
 	func toDictionary() -> [String:AnyObject] {

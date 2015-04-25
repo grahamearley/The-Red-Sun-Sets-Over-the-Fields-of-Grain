@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 
 ///Container for nodes which need to pan across the scene
-class PanNode: SKNode {
+class PanNode: SKNode, Touchable {
 	
 	let size : CGSize
 	
