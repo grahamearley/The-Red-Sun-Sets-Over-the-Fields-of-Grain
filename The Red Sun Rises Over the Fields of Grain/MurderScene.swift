@@ -14,8 +14,8 @@ class MurderScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-        self.addChild(self.getHouseInTheDistanceMoment(size))
-//        self.addChild(self.getHouseUpCloseMoment(size))
+//        self.addChild(self.getHouseInTheDistanceMoment(size))
+        self.addChild(self.getHouseUpCloseMoment(size))
         
     }
     
@@ -24,37 +24,35 @@ class MurderScene: SKScene {
     func getHouseInTheDistanceMoment(parentSize: CGSize) -> SKNode {
         let houseInTheDistanceMoment = SKNode()
         
-        let ground = SKSpriteNode(imageNamed: "groundtest")
-        ground.size = CGSize(width: parentSize.width, height: 200)
-        ground.position = CGPoint(x: parentSize.width/2, y: 200)
+        let ground = SKSpriteNode(imageNamed: "Ground")
+        ground.size = CGSize(width: parentSize.width * 2, height: ground.size.height)
+        ground.position = CGPoint(x: parentSize.width/2, y: 3)
         
-        let sun = SKShapeNode(circleOfRadius: 30)
-        
-        let houseSize = CGSize(width: 75, height: 50)
-        let house = SKShapeNode(rect: CGRect(origin: CGPoint(x: size.width-houseSize.width-10, y: 75), size: houseSize))
-        
-        sun.fillColor = SKColor.yellowColor()
-        sun.position = CGPoint(x: size.width/4, y: 3/4*size.height)
+        let house = SKSpriteNode(imageNamed: "House")
+        house.setScale(3)
+        house.position = CGPoint(x: parentSize.width - 20, y: ground.size.height/2)
         
         houseInTheDistanceMoment.addChild(ground)
-        houseInTheDistanceMoment.addChild(sun)
+        houseInTheDistanceMoment.addChild(house)
         
         return houseInTheDistanceMoment
     }
     
     func getHouseUpCloseMoment(parentSize: CGSize) -> SKNode {
-        let houseUpClose = SKNode()
+        let houseUpCloseMoment = SKNode()
         
-        let ground = SKShapeNode(rect: CGRect(origin: CGPoint(x: 0, y:0), size: CGSize(width: size.width, height: 75)))
-        ground.fillColor = SKColor.brownColor()
-
-        let houseSize = CGSize(width: 150, height: 100)
-        let house = SKShapeNode(rect: CGRect(origin: CGPoint(x: size.width/2, y: 75), size: houseSize))
-
-        houseUpClose.addChild(ground)
-        houseUpClose.addChild(house)
-
-        return houseUpClose
+        let ground = SKSpriteNode(imageNamed: "Ground")
+        ground.size = CGSize(width: parentSize.width, height: ground.size.height)
+        ground.position = CGPoint(x: parentSize.width/2, y: 3)
+        
+        let house = SKSpriteNode(imageNamed: "House")
+        house.setScale(4)
+        house.position = CGPoint(x: parentSize.width/2, y: ground.size.height/2+50)
+        
+        houseUpCloseMoment.addChild(ground)
+        houseUpCloseMoment.addChild(house)
+        
+        return houseUpCloseMoment
     }
     
     required init?(coder aDecoder: NSCoder) {
