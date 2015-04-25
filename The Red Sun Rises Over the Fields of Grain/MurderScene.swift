@@ -16,15 +16,15 @@ class MurderScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-//        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
-//        self.addChild(houseInTheDistanceMoment)
-//        moments.append(houseInTheDistanceMoment)
-//        
-//        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
-//        moments.append(houseUpCloseMoment)
+        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
+        self.addChild(houseInTheDistanceMoment)
+        moments.append(houseInTheDistanceMoment)
         
-        let pitchforkGrabMoment = self.getPitchforkGrabMoment(size)
-        self.addChild(pitchforkGrabMoment)
+        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
+        moments.append(houseUpCloseMoment)
+        
+//        let pitchforkGrabMoment = self.getPitchforkGrabMoment(size)
+//        self.addChild(pitchforkGrabMoment)
         
     }
     
@@ -46,6 +46,12 @@ class MurderScene: SKScene {
         house.name = "distant house"
         house.setScale(3)
         house.position = CGPoint(x: parentSize.width - 20, y: ground.size.height/2)
+        
+        let colorizeWhite = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.6)
+        let colorizeReturn = SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.6)
+        let blink = SKAction.repeatActionForever(SKAction.sequence([colorizeWhite, colorizeReturn]))
+        
+        house.runAction(blink)
         
         houseInTheDistanceMoment.addChild(ground)
         houseInTheDistanceMoment.addChild(house)
@@ -77,7 +83,7 @@ class MurderScene: SKScene {
     }
     
     func getWindowMoment(parentSize: CGSize) -> SKNode {
-        let windowMoment = SKNOde()
+        let windowMoment = SKNode()
         
         return windowMoment
     }
