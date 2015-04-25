@@ -38,7 +38,7 @@ class MurderScene: SKScene {
         background.size.height = parentSize.height
         houseInTheDistanceMoment.addChild(background)
         
-        let ground = SKSpriteNode(imageNamed: "Ground")
+        let ground = SKSpriteNode(imageNamed: "GroundNight")
         ground.size = CGSize(width: parentSize.width * 2, height: 300)
         ground.position = CGPoint(x: parentSize.width/2, y: 0)
         
@@ -72,7 +72,7 @@ class MurderScene: SKScene {
         background.size.width = parentSize.width * 2
         houseUpCloseMoment.addChild(background)
         
-        let ground = SKSpriteNode(imageNamed: "Ground")
+        let ground = SKSpriteNode(imageNamed: "GroundNight")
         ground.size = CGSize(width: parentSize.width, height: 250)
         ground.position = CGPoint(x: parentSize.width/2, y: 125)
         
@@ -98,7 +98,7 @@ class MurderScene: SKScene {
     func getPitchforkGrabMoment(parentSize: CGSize) -> SKNode {
         let pitchforkGrabMoment = SKNode()
         
-        let background = SKSpriteNode(imageNamed: "Ground")
+        let background = SKSpriteNode(imageNamed: "GroundNight")
         background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
         background.size.height = parentSize.height * 3
         background.size.width = parentSize.width * 3
