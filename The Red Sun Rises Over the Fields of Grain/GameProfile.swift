@@ -18,13 +18,19 @@ class GameProfile {
         return _GameProfileSharedInstance
     }
     
+    var committedMurder : Bool
+    var turn : Int
+    var money : Int
     var ghostPoints : Int
     var soundOn : Bool
     var plots : [Plot]
     
     init() {
+        committedMurder = false
+        turn = 0
+        money = 0
         ghostPoints = 0
-        soundOn = false
+        soundOn = true
         plots = [Plot]()
         loadDataFromFile()
     }
@@ -32,7 +38,10 @@ class GameProfile {
     func saveToFile() {
         
         var playerData = NSMutableDictionary()
-
+        
+        playerData.setValue(committedMurder, forKey: "committed murder")
+        playerData.setValue(turn, forKey: "turn")
+        playerData.setValue(money, forKey: "money")
         playerData.setValue(ghostPoints, forKey: "ghost points")
         playerData.setValue(soundOn, forKey: "sound on")
         
@@ -54,6 +63,18 @@ class GameProfile {
         
         if let url = GameProfile.getPlayerFileURL() {
             if let loadedPlayerData = NSDictionary(contentsOfURL: url) {
+                
+                if let newCommittedMurder = loadedPlayerData.valueForKey("committed murder") as? Bool {
+                    committedMurder = newCommittedMurder
+                }
+                
+                if let newTurn = loadedPlayerData.valueForKey("turn") as? Int {
+                    turn = newTurn
+                }
+                
+                if let newMoney = loadedPlayerData.valueForKey("money") as? Int {
+                    money = newMoney
+                }
                 
                 if let newGhostPoints = loadedPlayerData.valueForKey("ghost points") as? Int {
                     ghostPoints = newGhostPoints
