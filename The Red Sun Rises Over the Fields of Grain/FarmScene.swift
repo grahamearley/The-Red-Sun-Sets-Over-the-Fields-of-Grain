@@ -11,8 +11,14 @@ import SpriteKit
 
 class FarmScene: SKScene {
 	
+	var currentPlotIndex : Int = 0
+	var profile : GameProfile
+	
 	//Init Scene here
 	override init(size: CGSize) {
+		profile = GameProfile.sharedInstance
+		profile.clearAllData()
+		
 		super.init(size: size)
 		
 		let plotWidth = size.width-100
@@ -22,9 +28,6 @@ class FarmScene: SKScene {
 		let plot2 = Plot(contents: .Windmill)
 		let plot3 = Plot(contents: .DeadBody)
 		
-		let profile = GameProfile.sharedInstance
-		profile.clearAllData()
-		println(profile.money)
 		profile.plots.append(plot1)
 		profile.plots.append(plot2)
 		profile.plots.append(plot3)
@@ -48,6 +51,25 @@ class FarmScene: SKScene {
 			plot.updateNodeContent(spaceSize)
 			self.addChild(space)
 		}
+		
+		let leftGround = SKSpriteNode(imageNamed: "Ground")
+		leftGround.size.width = plotWidth
+		leftGround.size.height = size.height/5
+		leftGround.position = CGPoint(x: (size.width/2)-plotWidth/2, y: leftGround.size.height/2)
+		leftGround.zPosition = -9
+		self.addChild(leftGround)
+		let rightGround = SKSpriteNode(imageNamed: "Ground")
+		rightGround.size.width = plotWidth
+		rightGround.size.height = size.height/5
+		rightGround.position = CGPoint(x: (size.width/2)+plotWidth/2, y: rightGround.size.height/2)
+		rightGround.zPosition = -9
+		self.addChild(rightGround)
+		
+		let background = SKSpriteNode(imageNamed: "Background")
+		background.position = CGPoint(x: size.width/2, y: size.height/2)
+		background.zPosition = -10
+		background.size = CGSize(width: background.size.width, height: size.height)
+		self.addChild(background)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -72,18 +94,24 @@ class FarmScene: SKScene {
 	
 	///On Swipes left, find all PanNodes and shift them left
 	func didSwipeLeft() {
-		for child in self.children {
-			if let panningNode = child as? PanNode {
-				panningNode.shiftLeft()
+		if currentPlotIndex < profile.plots.count-1 {
+			currentPlotIndex++
+			for child in self.children {
+				if let panningNode = child as? PanNode {
+					panningNode.shiftLeft()
+				}
 			}
 		}
 	}
 	
 	///On Swipes right, find all PanNodes and shift them right
 	func didSwipeRight() {
-		for child in self.children {
-			if let panningNode = child as? PanNode {
-				panningNode.shiftRight()
+		if currentPlotIndex > 0 {
+			currentPlotIndex--
+			for child in self.children {
+				if let panningNode = child as? PanNode {
+					panningNode.shiftRight()
+				}
 			}
 		}
 	}

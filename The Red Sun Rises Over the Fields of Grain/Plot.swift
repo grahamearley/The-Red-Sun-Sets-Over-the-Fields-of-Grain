@@ -56,7 +56,8 @@ class Plot: SKNode {
 		})
 		
 		//fill in new contents
-		var colorNode = SKShapeNode(rectOfSize: CGSize(width: size.width, height: size.height))
+		var colorNode = SKShapeNode(rectOfSize: CGSize(width: size.width/4, height: size.height/4))
+		colorNode.position = CGPoint(x: 0, y: -size.height/4)
 		let color : SKColor
 		
 		switch self.contents {
