@@ -12,6 +12,8 @@ import SpriteKit
 private let _GameProfileSharedInstance = GameProfile()
 
 class GameProfile {
+    
+    // Singleton bizness
     class var sharedInstance: GameProfile {
         return _GameProfileSharedInstance
     }
@@ -34,11 +36,11 @@ class GameProfile {
         playerData.setValue(ghostPoints, forKey: "ghost points")
         playerData.setValue(soundOn, forKey: "sound on")
         
-        plotDictArray = [NSDictionary]()
+        var plotDictArray = [[String:AnyObject]]()
         
         for plot in plots {
-            plotDict = plot.toDictionary()
-            plotDictArray.append(plot)
+            let plotDict = plot.toDictionary()
+            plotDictArray.append(plotDict)
         }
         
         playerData.setValue(plots, forKey: "plots")
@@ -62,9 +64,9 @@ class GameProfile {
                 }
                 
                 
-                if let plotDictArray = loadedPlayerData.valueForKey("ghost points") as? [NSDictionary]
+                if let plotDictArray = loadedPlayerData.valueForKey("ghost points") as? [[String:AnyObject]]
                 {
-                    let newPlots = [Plot]()
+                    var newPlots = [Plot]()
                     for plotDict in plotDictArray {
                         let newPlot = Plot.fromDictionary(plotDict)
                         newPlots.append(newPlot)
@@ -78,7 +80,7 @@ class GameProfile {
     
     ///Returns the URL for the .txt file which holds the players data. Stolen from Charlie Imhoff.
     private class func getPlayerFileURL() -> NSURL? {
-        let fileName = "slidersProfileData.plist"
+        let fileName = "RedSunProfileData.plist"
         let directories = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: NSSearchPathDomainMask.AllDomainsMask)
         if let selectedDirectory = directories[0] as? NSURL {
             let filePath = selectedDirectory.URLByAppendingPathComponent(fileName)

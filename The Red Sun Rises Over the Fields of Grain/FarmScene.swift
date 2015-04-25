@@ -16,6 +16,10 @@ class FarmScene: SKScene {
 		super.init(size: size)
 		
 		let plotWidth = size.width-20
+        
+        let gameProfile = GameProfile.sharedInstance
+        
+        gameProfile.saveToFile()
 		
 		let space1 = PanNode(size: CGSize(width: plotWidth, height: size.height))
 		let space2 = PanNode(size: CGSize(width: plotWidth, height: size.height))

@@ -55,7 +55,7 @@ class Plot: SKNode {
 		return ["test":1]
 	}
 	
-	class func fromDictionary() -> Plot {
+    class func fromDictionary(dictionary: [String:AnyObject]) -> Plot {
 		//stub.
 		return Plot()
 	}
