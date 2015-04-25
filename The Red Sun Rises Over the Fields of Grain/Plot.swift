@@ -110,21 +110,36 @@ class Plot: SKNode, Touchable {
             
             // Seed the generator
             srand(10)
+            
+            let growTime = 3
+            let deathTime = 7
 			
 			for i in -3...3 {
 				let corn = SKSpriteNode(imageNamed: "Corn")
                 
                 // Because it takes 3 turns to grow
-                let progress = min(1, CGFloat(age) / 3.0)
+                let progress = CGFloat(min(1, Float(age) / Float(growTime)))
                 
                 let randomYOffset = CGFloat (rand() % 20)
                 
                 let maxHeight = (size.height / 4) - 10 + randomYOffset
                 let maxWidth = size.width / 2
                 
-                // Gray if unripe
-                if progress < 1 {
+                // Gray if unripe or approaching death
+                if age < growTime {
                     let colorize = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.8, duration: 0)
+                    corn.runAction(colorize)
+                }
+                
+                // Read if approaching death
+                if age == deathTime {
+                    let colorize = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 0.5, duration: 0)
+                    corn.runAction(colorize)
+                }
+                
+                // Gray more if dead
+                if age > deathTime {
+                    let colorize = SKAction.colorizeWithColor(SKColor.blackColor(), colorBlendFactor: 0.8, duration: 0)
                     corn.runAction(colorize)
                 }
                 
@@ -252,7 +267,7 @@ class Plot: SKNode, Touchable {
 			}
 		}
 		if self.contents == .Empty {
-			buttonTitle = "Plant Corn"
+			buttonTitle = "Plant"
 			buttonAction = { (sender:AnyObject?) in
 				//add some corn:
 				self.contents = .Corn
