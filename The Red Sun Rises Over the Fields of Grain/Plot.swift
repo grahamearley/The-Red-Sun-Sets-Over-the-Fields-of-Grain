@@ -495,7 +495,10 @@ class Plot: SKNode, Touchable {
 				
 				let randomYOffset = CGFloat (rand() % 20)
 				
-				let maxHeight = (size.height / 4) - 10 + randomYOffset
+				var maxHeight = (size.height / 4) - 10 + randomYOffset
+				if self.contents == .Wheat {
+					maxHeight *= 2
+				}
 				let maxWidth = size.width / 2
 				
 				// Gray if unripe or approaching death

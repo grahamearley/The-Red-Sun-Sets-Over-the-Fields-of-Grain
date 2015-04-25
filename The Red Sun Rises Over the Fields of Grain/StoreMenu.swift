@@ -100,7 +100,7 @@ class StorePage: SKNode, Touchable {
 		super.init()
 		
 		let padding : CGFloat = 75
-		let margin : CGFloat = 20
+		let margin : CGFloat = 50
 		
 		let buttonSize = buttons[0].getUnderlyingSprite()!.size
 		var evenXPos : CGFloat = -buttonSize.width * 0.75
@@ -157,13 +157,13 @@ class StoreItem: Button {
 		let costLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
 		costLabel.fontColor = SKColor.blackColor()
 		costLabel.text = "$\(cost)"
-		let yPos : CGFloat = -(imageSprite?.size.height ?? 30.0)
+		let yPos : CGFloat = -(imageSprite?.size.height ?? 30.0)*0.85
 		costLabel.position = CGPoint(x: 0, y: yPos)
 		
 		let timeLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
 		timeLabel.fontColor = SKColor.blackColor()
 		timeLabel.text = "\(time)t"
-		timeLabel.position = CGPoint(x: 0, y: costLabel.position.y - 30.0)
+		timeLabel.position = CGPoint(x: 0, y: costLabel.position.y - 25.0)
 		
 		self.addChild(costLabel)
 		self.addChild(timeLabel)
