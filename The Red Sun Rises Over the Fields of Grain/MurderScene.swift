@@ -163,10 +163,6 @@ class MurderScene: SKScene {
             }
         }
     }
-            
-//    override func update(currentTime: CFTimeInterval) {
-//        //called every 60 seconds
-//    }
 
 	
 }
