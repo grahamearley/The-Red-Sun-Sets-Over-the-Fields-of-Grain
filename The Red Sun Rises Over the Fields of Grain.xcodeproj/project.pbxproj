@@ -7,10 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+<<<<<<< HEAD
 		3AD5EC861AEB505700941AA3 /* backgroundtest@2_edited-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AD5EC841AEB505700941AA3 /* backgroundtest@2_edited-1.png */; };
 		3AD5EC871AEB505700941AA3 /* groundtest@2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AD5EC851AEB505700941AA3 /* groundtest@2.png */; };
+=======
+		BF93539E1AEB542B00FC17C2 /* GameProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF93539D1AEB542B00FC17C2 /* GameProfile.swift */; };
+>>>>>>> c393ae48a0359380f334ca3938c5af9680d4e291
 		CB303E271AEB41CB0060242C /* MurderScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E261AEB41CB0060242C /* MurderScene.swift */; };
 		CB303E291AEB43060060242C /* PanNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E281AEB43060060242C /* PanNode.swift */; };
+		CBF0BA691AEB4D8200318937 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA681AEB4D8200318937 /* Button.swift */; };
+		CBF0BA6B1AEB4E0B00318937 /* Touchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA6A1AEB4E0B00318937 /* Touchable.swift */; };
+		CBF0BA6D1AEB573A00318937 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA6C1AEB573A00318937 /* Plot.swift */; };
 		D205ADF41AEB349F00F27ABD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D205ADF31AEB349F00F27ABD /* AppDelegate.swift */; };
 		D205ADF81AEB349F00F27ABD /* FarmScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D205ADF71AEB349F00F27ABD /* FarmScene.swift */; };
 		D205ADFA1AEB349F00F27ABD /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D205ADF91AEB349F00F27ABD /* GameViewController.swift */; };
@@ -31,10 +38,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+<<<<<<< HEAD
 		3AD5EC841AEB505700941AA3 /* backgroundtest@2_edited-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "backgroundtest@2_edited-1.png"; path = "../../Desktop/RSSOFG/backgroundtest@2_edited-1.png"; sourceTree = "<group>"; };
 		3AD5EC851AEB505700941AA3 /* groundtest@2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "groundtest@2.png"; path = "../../Desktop/RSSOFG/groundtest@2.png"; sourceTree = "<group>"; };
+=======
+		BF93539D1AEB542B00FC17C2 /* GameProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameProfile.swift; sourceTree = "<group>"; };
+>>>>>>> c393ae48a0359380f334ca3938c5af9680d4e291
 		CB303E261AEB41CB0060242C /* MurderScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurderScene.swift; sourceTree = "<group>"; };
 		CB303E281AEB43060060242C /* PanNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanNode.swift; sourceTree = "<group>"; };
+		CBF0BA681AEB4D8200318937 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		CBF0BA6A1AEB4E0B00318937 /* Touchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Touchable.swift; sourceTree = "<group>"; };
+		CBF0BA6C1AEB573A00318937 /* Plot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
 		D205ADEE1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of Grain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Red Sun Rises Over the Fields of Grain.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D205ADF21AEB349F00F27ABD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D205ADF31AEB349F00F27ABD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +104,9 @@
 				D205ADF31AEB349F00F27ABD /* AppDelegate.swift */,
 				CB303E281AEB43060060242C /* PanNode.swift */,
 				D205ADF71AEB349F00F27ABD /* FarmScene.swift */,
+				CBF0BA6C1AEB573A00318937 /* Plot.swift */,
+				CBF0BA681AEB4D8200318937 /* Button.swift */,
+				CBF0BA6A1AEB4E0B00318937 /* Touchable.swift */,
 				CB303E261AEB41CB0060242C /* MurderScene.swift */,
 				D205ADF91AEB349F00F27ABD /* GameViewController.swift */,
 				D205ADFB1AEB349F00F27ABD /* Main.storyboard */,
@@ -98,6 +115,7 @@
 				3AD5EC851AEB505700941AA3 /* groundtest@2.png */,
 				D205AE001AEB349F00F27ABD /* LaunchScreen.xib */,
 				D205ADF11AEB349F00F27ABD /* Supporting Files */,
+				BF93539D1AEB542B00FC17C2 /* GameProfile.swift */,
 			);
 			path = "The Red Sun Rises Over the Fields of Grain";
 			sourceTree = "<group>";
@@ -231,8 +249,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB303E291AEB43060060242C /* PanNode.swift in Sources */,
+				CBF0BA691AEB4D8200318937 /* Button.swift in Sources */,
+				CBF0BA6B1AEB4E0B00318937 /* Touchable.swift in Sources */,
 				D205ADF81AEB349F00F27ABD /* FarmScene.swift in Sources */,
+				CBF0BA6D1AEB573A00318937 /* Plot.swift in Sources */,
 				CB303E271AEB41CB0060242C /* MurderScene.swift in Sources */,
+				BF93539E1AEB542B00FC17C2 /* GameProfile.swift in Sources */,
 				D205ADFA1AEB349F00F27ABD /* GameViewController.swift in Sources */,
 				D205ADF41AEB349F00F27ABD /* AppDelegate.swift in Sources */,
 			);
