@@ -21,17 +21,19 @@ class MurderScene: SKScene {
         moments.append(houseInTheDistanceMoment)
         
         let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
-        houseUpCloseMoment.name = "up close house moment"
-
         moments.append(houseUpCloseMoment)
         
         let windowMoment = self.getWindowMoment(size)
-        windowMoment.name = "window moment"
         moments.append(windowMoment)
         
         let pitchforkGrabMoment = self.getPitchforkGrabMoment(size)
-        pitchforkGrabMoment.name = "pitchfork moment"
         moments.append(pitchforkGrabMoment)
+        
+        let doorClosedMoment = self.getDoorClosedMoment(size)
+        moments.append(doorClosedMoment)
+        
+        let doorOpenMoment = self.getDoorOpenMoment(size)
+        moments.append(doorOpenMoment)
 
         
     }
@@ -63,10 +65,10 @@ class MurderScene: SKScene {
         return houseInTheDistanceMoment
     }
     
-    func getBlinkAction() -> SKAction {
-        let colorizeWhite = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.5, duration: 0.6)
+    func getBlinkAction(color: SKColor = SKColor.grayColor()) -> SKAction {
+        let colorize = SKAction.colorizeWithColor(color, colorBlendFactor: 0.5, duration: 0.6)
         let colorizeReturn = SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.6)
-        let blink = SKAction.repeatActionForever(SKAction.sequence([colorizeWhite, colorizeReturn]))
+        let blink = SKAction.repeatActionForever(SKAction.sequence([colorize, colorizeReturn]))
         
         return blink
     }
@@ -99,6 +101,7 @@ class MurderScene: SKScene {
     
     func getWindowMoment(parentSize: CGSize) -> SKNode {
         let windowMoment = SKNode()
+        windowMoment.name = "window moment"
         
         let backdrop = SKSpriteNode(imageNamed: "WindowView")
         backdrop.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
@@ -133,6 +136,7 @@ class MurderScene: SKScene {
         background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
         background.size.height = parentSize.height * 3
         background.size.width = parentSize.width * 3
+        background.runAction(self.getBlinkAction(color: SKColor.redColor()))
         pitchforkGrabMoment.addChild(background)
         
         let pitchfork = SKSpriteNode(imageNamed: "Pitchfork")
@@ -168,8 +172,28 @@ class MurderScene: SKScene {
         
     }
     
+    func getDoorClosedMoment(parentSize: CGSize) -> SKNode {
+        let doorClosedMoment = SKNode()
+        doorClosedMoment.name = "door closed"
+        
+        let backdrop = SKSpriteNode(imageNamed: "DoorClosed")
+        backdrop.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        backdrop.size = CGSize(width: parentSize.width, height: parentSize.height)
+        
+        doorClosedMoment.addChild(backdrop)
+        
+        return doorClosedMoment
+    }
+
+    
     func getDoorOpenMoment(parentSize: CGSize) -> SKNode {
         let doorOpenMoment = SKNode()
+        
+        let backdrop = SKSpriteNode(imageNamed: "DoorOpen")
+        backdrop.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        backdrop.size = CGSize(width: parentSize.width, height: parentSize.height)
+        
+        doorOpenMoment.addChild(backdrop)
         
         return doorOpenMoment
     }
@@ -219,11 +243,22 @@ class MurderScene: SKScene {
             
             else if (self.nodeAtPoint(location).name == "pitchfork") {
                 self.grabPitchfork()
-//                moments[0].runAction(SKAction.fadeOutWithDuration(1))
-//                self.addChild(moments[1])
-//                moments[1].alpha = 0.0
-//                moments[1].runAction(SKAction.fadeInWithDuration(1))
-//                moments.removeAtIndex(0)
+                
+                self.runAction(SKAction.waitForDuration(1)) {
+                    self.moments[0].runAction(SKAction.fadeOutWithDuration(1))
+                    self.addChild(self.moments[1])
+                    self.moments[1].alpha = 0.0
+                    self.moments[1].runAction(SKAction.fadeInWithDuration(1))
+                    self.moments.removeAtIndex(0)
+                }
+            }
+            
+            else if (moments[0].name == "door closed") {
+                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+                self.addChild(moments[1])
+                moments[1].alpha = 0.0
+                moments[1].runAction(SKAction.fadeInWithDuration(1))
+                moments.removeAtIndex(0)
             }
             
         }
