@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF93539E1AEB542B00FC17C2 /* GameProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF93539D1AEB542B00FC17C2 /* GameProfile.swift */; };
 		CB303E271AEB41CB0060242C /* MurderScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E261AEB41CB0060242C /* MurderScene.swift */; };
 		CB303E291AEB43060060242C /* PanNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E281AEB43060060242C /* PanNode.swift */; };
 		D205ADF41AEB349F00F27ABD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D205ADF31AEB349F00F27ABD /* AppDelegate.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BF93539D1AEB542B00FC17C2 /* GameProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameProfile.swift; sourceTree = "<group>"; };
 		CB303E261AEB41CB0060242C /* MurderScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurderScene.swift; sourceTree = "<group>"; };
 		CB303E281AEB43060060242C /* PanNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanNode.swift; sourceTree = "<group>"; };
 		D205ADEE1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of Grain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Red Sun Rises Over the Fields of Grain.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,6 +94,7 @@
 				D205ADFE1AEB349F00F27ABD /* Images.xcassets */,
 				D205AE001AEB349F00F27ABD /* LaunchScreen.xib */,
 				D205ADF11AEB349F00F27ABD /* Supporting Files */,
+				BF93539D1AEB542B00FC17C2 /* GameProfile.swift */,
 			);
 			path = "The Red Sun Rises Over the Fields of Grain";
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 				CB303E291AEB43060060242C /* PanNode.swift in Sources */,
 				D205ADF81AEB349F00F27ABD /* FarmScene.swift in Sources */,
 				CB303E271AEB41CB0060242C /* MurderScene.swift in Sources */,
+				BF93539E1AEB542B00FC17C2 /* GameProfile.swift in Sources */,
 				D205ADFA1AEB349F00F27ABD /* GameViewController.swift in Sources */,
 				D205ADF41AEB349F00F27ABD /* AppDelegate.swift in Sources */,
 			);
