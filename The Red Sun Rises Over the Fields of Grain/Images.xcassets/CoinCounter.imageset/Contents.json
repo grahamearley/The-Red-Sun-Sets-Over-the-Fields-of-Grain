@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "scale" : "1x",
+      "filename" : "CoinCount.PNG"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x",
+      "filename" : "CoinCount-1.PNG"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x",
+      "filename" : "CoinCount-2.PNG"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
