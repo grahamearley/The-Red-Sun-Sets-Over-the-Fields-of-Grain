@@ -96,7 +96,14 @@ class Plot: SKNode, Touchable {
 		
 		switch self.contents {
 		case .DeadBody:
-			color = SKColor.brownColor()
+			let bump = SKSpriteNode(imageNamed: "BodyLump")
+			bump.setScale(2)
+			bump.position = CGPoint(x: 0, y: -size.height/3.4)
+			bump.name = "bodyBump"
+			self.addChild(bump)
+			self.fieldNodes.append(bump)
+			
+			color = SKColor.clearColor()
 		case .Empty:
 			color = SKColor.clearColor()
 		case .Corn:
@@ -134,7 +141,15 @@ class Plot: SKNode, Touchable {
 			
 			color = SKColor.clearColor()
 		case .House:
-			color = SKColor.redColor()
+			let house = SKSpriteNode(imageNamed: "House")
+			house.name = "house"
+			house.setScale(8)
+			house.position = CGPoint(x: -size.width * 0.4, y: -size.height/8)
+			self.addChild(house)
+			
+			self.fieldNodes.append(house)
+			
+			color = SKColor.clearColor()
 		case .Tractor:
 			let hull = SKSpriteNode(imageNamed: "TractorBody")
 			hull.name = "hull"
@@ -249,18 +264,24 @@ class Plot: SKNode, Touchable {
 					//expand the farm by one plot, essencially adding another tractor plot
 					//and setting this plot to be empty
 					if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
-						let rotate = SKAction.rotateByAngle(-6.28, duration: 3)
-						let move = SKAction.moveByX(self.size.width, y: 0, duration: 3)
+						let rotate = SKAction.rotateByAngle(-6.28, duration: 1)
+						let move = SKAction.moveByX(self.size.width, y: 0, duration: 1)
 						let group = SKAction.group([rotate,move])
 						wheel.runAction(group)
 						hull.runAction(move) {
 							//on completion:
-								GameProfile.sharedInstance.money -= 20
-								farmScene.updateMoney()
-								farmScene.extendFarm()
+							GameProfile.sharedInstance.money -= 20
+							farmScene.updateMoney()
+							farmScene.extendFarm()
+						
+							if self.index == 4 {
+								self.contents = .DeadBody
+							} else {
 								self.contents = .Empty
-								self.updateNodeContent()
-								farmScene.scrollLock = false
+							}
+							
+							self.updateNodeContent()
+							farmScene.scrollLock = false
 						}
 					}
 				}
