@@ -12,6 +12,8 @@ class MurderScene: SKScene {
     
     var moments = [SKNode]()
 
+	let worldLightingBitmask : UInt32 = 0x1 << 1
+	
     //Init Scene here
     override init(size: CGSize) {
         super.init(size: size)
@@ -49,22 +51,35 @@ class MurderScene: SKScene {
         background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
         background.size.height = parentSize.height
         houseInTheDistanceMoment.addChild(background)
+		
+		let pointLight = SKLightNode()
+		pointLight.lightColor = SKColor.whiteColor()
+		pointLight.categoryBitMask = worldLightingBitmask
+		pointLight.position = CGPoint(x: size.width/2, y: size.height/2)
+		houseInTheDistanceMoment.addChild(pointLight)
+		
+		let sparks = self.getSparkLayer()
+		self.addChild(sparks)
         
         let ground = SKSpriteNode(imageNamed: "GroundNight")
         ground.size = CGSize(width: parentSize.width * 2, height: 300)
         ground.position = CGPoint(x: parentSize.width/2, y: 0)
+		ground.zPosition = 1
+		ground.lightingBitMask = worldLightingBitmask
         
         let house = SKSpriteNode(imageNamed: "House")
         house.name = "distant house"
         house.setScale(3)
+		house.zPosition = 1
         house.position = CGPoint(x: parentSize.width - 20, y: ground.size.height/2)
+		house.lightingBitMask = worldLightingBitmask
         
         house.runAction(self.getBlinkAction())
-        
+		
+		houseInTheDistanceMoment.addChild(self.getRainLayer())
         houseInTheDistanceMoment.addChild(ground)
         houseInTheDistanceMoment.addChild(house)
-		houseInTheDistanceMoment.addChild(self.getRainLayer())
-        
+		
         return houseInTheDistanceMoment
     }
 	
@@ -76,16 +91,44 @@ class MurderScene: SKScene {
 		let dropRainDropRandomly = SKAction.runBlock { () -> Void in
 			//add a drop
 			let drop = SKSpriteNode(imageNamed: "Raindrop")
-			let xPos = CGFloat(arc4random_uniform(UInt32(self.size.width)))-200
+			drop.setScale(0.5)
+			let xPos = CGFloat(arc4random_uniform(UInt32(self.size.width)))-300
 			drop.position = CGPoint(x: xPos, y: 0)
-			drop.zRotation = 1.57
+			drop.zRotation = 0.185
 			drop.physicsBody = SKPhysicsBody(circleOfRadius: 2)	//so it drops
 			rainLayer.addChild(drop)
 			drop.physicsBody?.applyForce(CGVector(dx: 2, dy: 0))
 		}
 		rainLayer.runAction(SKAction.repeatActionForever(SKAction.sequence([wait,dropRainDropRandomly])))
+		rainLayer.zPosition = 0
 		
 		return rainLayer
+	}
+	
+	func getSparkLayer() -> SKNode {
+		let spark = SKLightNode()
+		spark.lightColor = SKColor.whiteColor()
+		spark.categoryBitMask = worldLightingBitmask
+		spark.falloff = 0.3	//big area
+		spark.position = CGPoint(x: size.width/2, y: size.height/2)
+		spark.enabled = false
+		
+		let wait = SKAction.waitForDuration(1.2)
+		let shortWait = SKAction.waitForDuration(0.4)
+		let longWait = SKAction.waitForDuration(2)
+		let flash = SKAction.runBlock { () -> Void in
+			spark.enabled = true
+		}
+		let frameBreak = SKAction.waitForDuration(0.02)
+		let muzzle = SKAction.runBlock { () -> Void in
+			spark.enabled = false
+		}
+		let shabang = SKAction.sequence([flash,frameBreak,muzzle])
+		let seq = SKAction.sequence([wait,shabang,shortWait,shabang,wait,shabang,longWait,shabang])
+		let loop = SKAction.repeatActionForever(seq)
+		spark.runAction(loop)
+		
+		return spark
 	}
 	
     func getBlinkAction(color: SKColor = SKColor.grayColor()) -> SKAction {
@@ -108,18 +151,20 @@ class MurderScene: SKScene {
         let ground = SKSpriteNode(imageNamed: "GroundNight")
         ground.size = CGSize(width: parentSize.width, height: 250)
         ground.position = CGPoint(x: parentSize.width/2, y: 125)
+		ground.zPosition = 1
         
         let house = SKSpriteNode(imageNamed: "House")
         house.name = "closer house"
         house.setScale(4)
+		house.zPosition = 1
         house.position = CGPoint(x: parentSize.width/2, y: ground.size.height)
         
         house.runAction(self.getBlinkAction())
-        
+		
+		houseUpCloseMoment.addChild(self.getRainLayer())
         houseUpCloseMoment.addChild(ground)
         houseUpCloseMoment.addChild(house)
-		houseUpCloseMoment.addChild(self.getRainLayer())
-        
+		
         return houseUpCloseMoment
     }
     
