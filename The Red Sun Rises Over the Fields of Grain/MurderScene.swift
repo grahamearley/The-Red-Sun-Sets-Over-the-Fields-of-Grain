@@ -14,8 +14,8 @@ class MurderScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-//        self.addChild(self.getHouseInTheDistanceMoment(size))
-        self.addChild(self.getHouseUpCloseMoment(size))
+        self.addChild(self.getHouseInTheDistanceMoment(size))
+//        self.addChild(self.getHouseUpCloseMoment(size))
         
     }
     
@@ -24,8 +24,9 @@ class MurderScene: SKScene {
     func getHouseInTheDistanceMoment(parentSize: CGSize) -> SKNode {
         let houseInTheDistanceMoment = SKNode()
         
-        let ground = SKShapeNode(rect: CGRect(origin: CGPoint(x: 0, y:0), size: CGSize(width: size.width, height: 75)))
-        ground.fillColor = SKColor.brownColor()
+        let ground = SKSpriteNode(imageNamed: "groundtest")
+        ground.size = CGSize(width: parentSize.width, height: 200)
+        ground.position = CGPoint(x: parentSize.width/2, y: 200)
         
         let sun = SKShapeNode(circleOfRadius: 30)
         
