@@ -22,6 +22,7 @@ class MurderScene: SKScene {
 	
 	var currentMoment : MurderMoment
 	var currentMomentNode : SKNode?
+	var stabs : Int = 0
 	var inTransition : Bool = false
 	let worldLightingBitmask : UInt32 = 0x1 << 1
 	
@@ -389,8 +390,27 @@ class MurderScene: SKScene {
                 pitchfork!.runAction(stabOut)
             }
         }
-
-        
+		
+		stabs++
+		
+		if let faderCurtain = self.childNodeWithName("faderCurtain") {
+			faderCurtain.runAction(SKAction.fadeAlphaBy(+0.2, duration: 0.5))
+		} else {
+			let faderCurtain = SKShapeNode(rectOfSize: size)
+			faderCurtain.name = "faderCurtain"
+			faderCurtain.position = CGPoint(x: size.width/2, y: size.height/2)
+			faderCurtain.fillColor = SKColor.blackColor()
+			faderCurtain.strokeColor = SKColor.blackColor()
+			faderCurtain.alpha = 0
+			self.addChild(faderCurtain)
+		}
+		
+		if stabs >= 7 {
+			GameProfile.sharedInstance.committedMurder = true
+			GameProfile.sharedInstance.saveToFile()
+			let transition = SKTransition.crossFadeWithDuration(5)
+			self.view?.presentScene(FarmScene(size: size), transition: transition)
+		}
     }
     
     required init?(coder aDecoder: NSCoder) {

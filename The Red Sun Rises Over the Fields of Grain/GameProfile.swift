@@ -28,20 +28,20 @@ class GameProfile {
     init() {
         committedMurder = false
         turn = 0
-        money = 0
-        ghostPoints = 0
+        money = 15
+        ghostPoints = 1
         soundOn = true
-        plots = [Plot]()
-        loadDataFromFile()
+		plots = [Plot(contents: .House, index: 0), Plot(contents: .Empty, index: 1),Plot(contents: .Empty, index: 2),Plot(contents: .Empty, index: 3), Plot(contents: .Empty, index: 4),Plot(contents: .Empty, index: 5), Plot(contents: .Tractor, index: 6)]	//default start
+		loadDataFromFile()
     }
 	
 	func clearAllData() {
 		committedMurder = false
 		turn = 0
-		money = 0
-		ghostPoints = 0
+		money = 15
+		ghostPoints = 1
 		soundOn = true
-		plots = [Plot]()
+		plots = [Plot(contents: .House, index: 0), Plot(contents: .Empty, index: 1),Plot(contents: .Empty, index: 2),Plot(contents: .Empty, index: 3), Plot(contents: .Empty, index: 4),Plot(contents: .Empty, index: 5), Plot(contents: .Tractor, index: 6)]	//default start
 	}
 	
     func saveToFile() {

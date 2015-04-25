@@ -25,22 +25,8 @@ class FarmScene: SKScene {
 		self.spaceSize = CGSize(width: size.width-100, height: size.height)
 		
 		profile = GameProfile.sharedInstance
-		profile.clearAllData()
 		
 		super.init(size: size)
-        
-        // Just a little something to start 'em out with:
-        profile.money = 15
-		
-		//test
-		let plot1 = Plot(contents: .House, index: 0)
-		let plot2 = Plot(contents: .Carrot, index: 1)
-		let plot3 = Plot(contents: .Tractor, index: 2)
-		
-		profile.plots.append(plot1)
-		profile.plots.append(plot2)
-		profile.plots.append(plot3)
-		profile.saveToFile()
 		
 		var currentXPos : CGFloat = size.width/2
         

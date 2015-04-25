@@ -163,6 +163,8 @@ class Plot: SKNode, Touchable {
 		}
 		
 		lightUpdate()
+		
+		GameProfile.sharedInstance.saveToFile()
 	}
 	
 	///Call everytime the person 
