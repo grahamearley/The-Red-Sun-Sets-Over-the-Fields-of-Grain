@@ -92,8 +92,9 @@ class MurderScene: SKScene {
         pitchforkGrabMoment.addChild(pitchfork)
         
         let 💪 = SKSpriteNode(imageNamed: "Reachingarm") // EMOJI VARIABLE YO! (for the burly arm that grabs the pitchfork)
-        💪.position = CGPoint(x: 0, y: 0)
+        💪.position = CGPoint(x: -25, y: -25)
         💪.name = "burly arm"
+        💪.setScale(4)
         pitchforkGrabMoment.addChild(💪)
         
         return pitchforkGrabMoment
@@ -105,8 +106,16 @@ class MurderScene: SKScene {
         let pitchfork = self.childNodeWithName("//pitchfork")
         
         let destinationPoint = pitchfork!.position
-        let moveTo = SKAction.moveTo(destinationPoint, duration: 0.5)
-        💪!.runAction(moveTo)
+        let initialPoint = 💪!.position
+        
+        
+        let moveTo = SKAction.moveTo(destinationPoint, duration: 1.0)
+        💪!.runAction(moveTo) {
+            //on completion:
+            let moveBack = SKAction.moveTo(initialPoint, duration: 0.75)
+            💪!.runAction(moveBack)
+            pitchfork!.runAction(moveBack)
+        }
         
     }
     
@@ -144,7 +153,6 @@ class MurderScene: SKScene {
             
             if (self.nodeAtPoint(location).name == "pitchfork") {
                 self.grabPitchfork()
-                
             }
         }
     }
