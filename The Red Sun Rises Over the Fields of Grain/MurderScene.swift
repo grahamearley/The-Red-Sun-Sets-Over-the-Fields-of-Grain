@@ -188,6 +188,7 @@ class MurderScene: SKScene {
     
     func getDoorOpenMoment(parentSize: CGSize) -> SKNode {
         let doorOpenMoment = SKNode()
+        doorOpenMoment.name = "door open"
         
         let backdrop = SKSpriteNode(imageNamed: "DoorOpen")
         backdrop.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
@@ -200,12 +201,35 @@ class MurderScene: SKScene {
     
     func getStabMoment(parentSize: CGSize) -> SKNode {
         let stabMoment = SKNode()
+        stabMoment.name = "stab moment"
+        
+        let fear = SKSpriteNode(imageNamed: "Fear")
+        fear.name = "fear"
+        fear.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        fear.size = CGSize(width: parentSize.width, height: parentSize.height)
+        
+        let ouch = SKSpriteNode(imageNamed: "Stabbing")
+        ouch.name = "ouch"
+        ouch.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        ouch.size = CGSize(width: parentSize.width, height: parentSize.height)
+        
+        ouch.hidden = true // dont show the blood quite yet, know wat i mean?
+        
+        stabMoment.addChild(fear)
+        stabMoment.addChild(ouch)
+        
+        let pitchfork = SKSpriteNode(imageNamed: "PitchforkForward")
+        pitchfork.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        pitchfork.name = "stabbing pitchfork"
         
         return stabMoment
     }
     
     func stab() {
+        let fear = self.childNodeWithName("//fear")
+        let ouch = self.childNodeWithName("//ouch")
         
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -233,7 +257,7 @@ class MurderScene: SKScene {
                 moments.removeAtIndex(0)
             }
             
-            else if (self.nodeAtPoint(location).name == "window moment" || self.nodeAtPoint(location).name == "bed") {
+            else if (moments[0].name == "window moment" || self.nodeAtPoint(location).name == "bed") {
                 moments[0].runAction(SKAction.fadeOutWithDuration(1))
                 self.addChild(moments[1])
                 moments[1].alpha = 0.0
@@ -244,7 +268,7 @@ class MurderScene: SKScene {
             else if (self.nodeAtPoint(location).name == "pitchfork") {
                 self.grabPitchfork()
                 
-                self.runAction(SKAction.waitForDuration(1)) {
+                self.runAction(SKAction.waitForDuration(2)) {
                     self.moments[0].runAction(SKAction.fadeOutWithDuration(1))
                     self.addChild(self.moments[1])
                     self.moments[1].alpha = 0.0
@@ -259,6 +283,22 @@ class MurderScene: SKScene {
                 moments[1].alpha = 0.0
                 moments[1].runAction(SKAction.fadeInWithDuration(1))
                 moments.removeAtIndex(0)
+            }
+            
+            else if (moments[0].name == "door open") {
+                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+                self.addChild(moments[1])
+                moments[1].alpha = 0.0
+                moments[1].runAction(SKAction.fadeInWithDuration(1))
+                moments.removeAtIndex(0)
+            }
+            
+            else if (moments[0].name == "stab moment") {
+                var stabCount = 0
+//                while stabCount < 5 {
+//                    stab()
+//                    stabCount += 1
+//                }
             }
             
         }
