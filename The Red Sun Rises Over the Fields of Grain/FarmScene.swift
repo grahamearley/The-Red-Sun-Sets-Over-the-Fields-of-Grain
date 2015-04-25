@@ -74,7 +74,8 @@ class FarmScene: SKScene {
 		self.addChild(background)
         
         // Money label
-        let moneyLabel = SKLabelNode(text: "0")
+        let moneyLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+        moneyLabel.text = "0"
         moneyLabel.name = "Money Label"
         moneyLabel.fontColor = UIColor.blackColor()
         moneyLabel.fontSize = 25
@@ -158,7 +159,29 @@ class FarmScene: SKScene {
             }
         }
     }
-	
+    
+    func moneyWarning() {
+        let moneyLabel = self.childNodeWithName("Money Label") as? SKLabelNode
+        let colorizeRed = SKAction.runBlock { () -> Void in
+            moneyLabel?.fontColor = SKColor.redColor()
+            return
+        }
+        
+        let colorizeBlack = SKAction.runBlock{ () -> Void in
+            moneyLabel?.fontColor = SKColor.blackColor()
+            return
+        }
+        
+        let scaleUp = SKAction.scaleTo(2, duration: 0.2)
+        let scaleDown = SKAction.scaleTo(1, duration: 0.2)
+        
+        let colorFlash = SKAction.sequence([colorizeRed, scaleUp, SKAction.waitForDuration(0.2), colorizeBlack, SKAction.waitForDuration(0.2), scaleDown])
+        
+        moneyLabel!.runAction(colorFlash) {
+            moneyLabel!.runAction(colorFlash)
+        }
+    }
+	 
 	func ageByTurn(amount: Int = 1) {
 		let blackover = SKShapeNode(rectOfSize: CGSize(width: screenSize.width, height: screenSize.height + 100))
 		blackover.fillColor = SKColor.blackColor()
@@ -180,7 +203,7 @@ class FarmScene: SKScene {
     
     func updateMoney() {
         if let label = self.childNodeWithName("Money Label") as? SKLabelNode {
-            label.text = String(profile.money)
+            label.text = String(GameProfile.sharedInstance.money)
         }
     }
 	

@@ -118,7 +118,7 @@ class Plot: SKNode, Touchable {
 		case .House:
 			let house = SKSpriteNode(imageNamed: "House")
 			house.name = "house"
-			house.setScale(8)
+			house.setScale(5)
 			house.position = CGPoint(x: -size.width * 0.4, y: -size.height/8)
 			self.addChild(house)
 			
@@ -285,36 +285,44 @@ class Plot: SKNode, Touchable {
 		}
 		if self.contents == .Tractor {
 			buttonTitle = "Expand"
-			buttonAction = { (sender:AnyObject?) in
-				if let farmScene = sender as? FarmScene {
-					farmScene.scrollLock = true
-					//expand the farm by one plot, essencially adding another tractor plot
-					//and setting this plot to be empty
-					if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
-						let rotate = SKAction.rotateByAngle(-6.28, duration: 2.2)
-						let move = SKAction.moveByX(self.size.width, y: 0, duration: 2.2)
-						let group = SKAction.group([rotate,move])
-						wheel.runAction(group)
-						hull.runAction(move) {
-							//on completion:
-							GameProfile.sharedInstance.money -= 20
-							farmScene.updateMoney()
-							farmScene.extendFarm()
-						
-							if self.index == 4 {
-								self.contents = .DeadBody
-							} else {
-								self.contents = .Empty
-							}
-							
-							self.updateNodeContent()
-							farmScene.scrollLock = false
-						}
-					}
-				}
-			}
-		}
-		
+                buttonAction = { (sender:AnyObject?) in
+                    if GameProfile.sharedInstance.money >= 20 {
+                        if let farmScene = sender as? FarmScene {
+                            farmScene.scrollLock = true
+                            //expand the farm by one plot, essentially adding another tractor plot
+                            //and setting this plot to be empty
+                            if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
+                                let rotate = SKAction.rotateByAngle(-6.28, duration: 2.2)
+                                let move = SKAction.moveByX(self.size.width, y: 0, duration: 2.2)
+                                let group = SKAction.group([rotate,move])
+                                wheel.runAction(group)
+                                hull.runAction(move) {
+                                    //on completion:
+                                    GameProfile.sharedInstance.money -= 20
+                                    farmScene.updateMoney()
+                                    farmScene.extendFarm()
+                                
+                                    if self.index == 4 {
+                                        self.contents = .DeadBody
+                                    } else {
+                                        self.contents = .Empty
+                                    }
+                                    
+                                    self.updateNodeContent()
+                                    farmScene.scrollLock = false
+                                }
+                            }
+                        }
+                    }
+                    else {
+                            if let farmScene = sender as? FarmScene {
+                                // flash money sign if you don't have enough $$
+                                farmScene.moneyWarning()
+                        }
+                    }
+                        
+                }
+            }
 		return (buttonTitle, buttonAction)
 	}
 	
@@ -413,7 +421,7 @@ class Plot: SKNode, Touchable {
 		}
 		
 		let myButton = StoreItem(imageNamed: "TomatoBag", cost: -1, time: -1)  { (sender: AnyObject?) in
-			println("hey")
+			println("hey") // todo: add real code
 		}
 
 		let menuSize = CGSize(width: size.width * 1, height: size.height * 0.8)
