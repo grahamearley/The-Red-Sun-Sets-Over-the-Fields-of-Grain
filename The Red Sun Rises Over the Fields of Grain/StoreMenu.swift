@@ -116,7 +116,7 @@ class StorePage: SKNode, Touchable {
 			} else {
 				//odd : thus move down and back
 				butt.position = CGPoint(x: oddXPos, y: onYPos)
-				onYPos += margin + butt.getUnderlyingSprite()!.size.height
+				onYPos -= margin + butt.getUnderlyingSprite()!.size.height
 			}
 			
 			self.addChild(butt)
