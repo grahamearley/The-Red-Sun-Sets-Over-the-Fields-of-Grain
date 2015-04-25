@@ -16,12 +16,16 @@ class MurderScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
-        self.addChild(houseInTheDistanceMoment)
-        moments.append(houseInTheDistanceMoment)
+//        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
+//        self.addChild(houseInTheDistanceMoment)
+//        moments.append(houseInTheDistanceMoment)
+//        
+//        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
+//        moments.append(houseUpCloseMoment)
         
-        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
-        moments.append(houseUpCloseMoment)
+        let windowMoment = self.getWindowMoment(size)
+        moments.append(windowMoment)
+        self.addChild(windowMoment)
         
 //        let pitchforkGrabMoment = self.getPitchforkGrabMoment(size)
 //        self.addChild(pitchforkGrabMoment)
@@ -91,6 +95,28 @@ class MurderScene: SKScene {
     
     func getWindowMoment(parentSize: CGSize) -> SKNode {
         let windowMoment = SKNode()
+        
+        let backdrop = SKSpriteNode(imageNamed: "WindowView")
+        backdrop.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        backdrop.size = CGSize(width: parentSize.width, height: parentSize.height)
+        
+        windowMoment.addChild(backdrop)
+        
+        let bed = SKSpriteNode(imageNamed: "Bed")
+        bed.setScale(4)
+        bed.position = CGPoint(x: parentSize.width/2 - 10, y:parentSize.height/2)
+        
+        let bedPosition1 = bed.position
+        let bedPosition2 = CGPoint(x: parentSize.width/2 - 20, y:parentSize.height/2)
+        
+        let moveToPosition2 = SKAction.moveTo(bedPosition2, duration: 0.1)
+        let waitABit = SKAction.waitForDuration(1)
+        let moveToPosition1 = SKAction.moveTo(bedPosition1, duration: 0.1)
+        let bedVibrate = SKAction.repeatActionForever(SKAction.sequence([moveToPosition2, waitABit, moveToPosition1, waitABit]))
+
+        bed.runAction(bedVibrate)
+        
+        windowMoment.addChild(bed)
         
         return windowMoment
     }
