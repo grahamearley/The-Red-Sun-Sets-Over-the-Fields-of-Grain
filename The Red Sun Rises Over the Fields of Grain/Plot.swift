@@ -384,40 +384,59 @@ class Plot: SKNode, Touchable {
 	//MARK: - Reuseable Impl.
 	
 	func getStore() -> StoreMenu {
+        let currentFunds = GameProfile.sharedInstance.money
 		let cornBag = StoreItem(imageNamed: "CornBag", cost: 3, time: 3) { (sender: AnyObject?) in
-			//onAction:
-			//add some corn:
-			self.contents = .Corn
-			self.age = 0
-			self.updateNodeContent()
-			
-			// Gettin money
-			if let farmScene = sender as? FarmScene {
-				farmScene.updateMoney()
-			}
-			
-			// reset locking
-			if let farmScene = sender as? FarmScene {
-				farmScene.setStoreLocks(false)
-			}
+            if currentFunds < 3 {
+                if let farmScene = sender as? FarmScene {
+                    farmScene.moneyWarning()
+                }
+            } else {
+                //onAction:
+                //add some corn:
+                self.contents = .Corn
+                self.age = 0
+                self.updateNodeContent()
+                
+                // Costs $3
+                GameProfile.sharedInstance.money -= 3
+                
+                // Gettin money
+                if let farmScene = sender as? FarmScene {
+                    farmScene.updateMoney()
+                }
+                
+                // reset locking
+                if let farmScene = sender as? FarmScene {
+                    farmScene.setStoreLocks(false)
+                }
+            }
 		}
 		
 		let carrotBag = StoreItem(imageNamed: "CarrotBag", cost: 1, time: 2) { (sender: AnyObject?) in
-			//onAction:
-			//add some corn:
-			self.contents = .Carrot
-			self.age = 0
-			self.updateNodeContent()
-			
-			// Gettin money
-			if let farmScene = sender as? FarmScene {
-				farmScene.updateMoney()
-			}
-			
-			// reset locking
-			if let farmScene = sender as? FarmScene {
-				farmScene.setStoreLocks(false)
-			}
+            if currentFunds < 1 {
+                if let farmScene = sender as? FarmScene {
+                    farmScene.moneyWarning()
+                }
+            } else {
+                //onAction:
+                //add some corn:
+                self.contents = .Carrot
+                self.age = 0
+                self.updateNodeContent()
+                
+                // Costs $3
+                GameProfile.sharedInstance.money -= 1
+                
+                // Gettin money
+                if let farmScene = sender as? FarmScene {
+                    farmScene.updateMoney()
+                }
+                
+                // reset locking
+                if let farmScene = sender as? FarmScene {
+                    farmScene.setStoreLocks(false)
+                }
+            }
 		}
 		
 		let myButton = StoreItem(imageNamed: "TomatoBag", cost: -1, time: -1)  { (sender: AnyObject?) in
