@@ -9,20 +9,67 @@
 import Foundation
 import SpriteKit
 
-//class StoreMenu: SKNode, Touchable {
-//	
-//	var pages = [StorePage]()
-//	var onPageIndex : Int
-//	
-//	override init() {
-//		let backing = SKSpriteNode(imageNamed: "menu")
-//	}
-//
-//	required init?(coder aDecoder: NSCoder) {
-//	    fatalError("init(coder:) has not been implemented")
-//	}
-//	
-//}
+class StoreMenu: SKNode, Touchable {
+	
+	var pages : [StorePage]
+	var onPageIndex : Int = 0
+	
+	init(pages:[StorePage], size: CGSize) {
+		self.pages = pages
+		super.init()
+		
+		let backing = SKSpriteNode(imageNamed: "MenuBase")
+		backing.size = size
+		backing.name = "menuBacking"
+		self.addChild(backing)
+		
+		for i in 0..<pages.count {
+			if i == 0 {
+				continue
+			} else {
+				pages[i].alpha = 0
+				pages[i].setEnabledForAllButtons(false)
+			}
+		}
+		
+		let plantButton = Button(imageNamed: "Spaceship") { (sender: AnyObject?) -> Void in
+			//onAction:
+			self.onPageIndex = 0
+			self.updateDisplayedPage()
+			return
+		}
+		let tabButtonSize = CGSize(width: size.width/5, height: size.height/5)
+		plantButton.getUnderlyingSprite()?.size = tabButtonSize
+		plantButton.position = CGPoint(x: -tabButtonSize.width * 0.75, y: -size.height/2 + 40)
+		
+		let buildingButton = Button(imageNamed: "Spaceship") { (sender: AnyObject?) -> Void in
+			//onAction:
+			self.onPageIndex = 1
+			self.updateDisplayedPage()
+			return
+		}
+		buildingButton.getUnderlyingSprite()?.size = tabButtonSize
+		buildingButton.position = CGPoint(x: tabButtonSize.width * 0.75, y: -size.height/2 + 40)
+
+	}
+	
+	func updateDisplayedPage() {
+		for i in 0..<pages.count {
+			if i == onPageIndex {
+				pages[i].setEnabledForAllButtons(true)
+				pages[i].alpha = 1
+			} else {
+				pages[i].setEnabledForAllButtons(false)
+				pages[i].alpha = 0
+			}
+		}
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
+	}
+	
+}
 
 class StorePage: SKNode, Touchable {
 	
