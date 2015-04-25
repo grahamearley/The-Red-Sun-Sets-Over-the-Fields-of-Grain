@@ -63,10 +63,31 @@ class MurderScene: SKScene {
         
         houseInTheDistanceMoment.addChild(ground)
         houseInTheDistanceMoment.addChild(house)
+		houseInTheDistanceMoment.addChild(self.getRainLayer())
         
         return houseInTheDistanceMoment
     }
-    
+	
+	func getRainLayer() -> SKNode {
+		let rainLayer = SKNode()
+		rainLayer.position = CGPoint(x: size.width/2, y: self.size.height * 1.1)
+		
+		let wait = SKAction.waitForDuration(0.2)
+		let dropRainDropRandomly = SKAction.runBlock { () -> Void in
+			//add a drop
+			let drop = SKSpriteNode(imageNamed: "Raindrop")
+			let xPos = CGFloat(arc4random_uniform(UInt32(self.size.width)))-200
+			drop.position = CGPoint(x: xPos, y: 0)
+			drop.zRotation = 1.57
+			drop.physicsBody = SKPhysicsBody(circleOfRadius: 2)	//so it drops
+			rainLayer.addChild(drop)
+			drop.physicsBody?.applyForce(CGVector(dx: 2, dy: 0))
+		}
+		rainLayer.runAction(SKAction.repeatActionForever(SKAction.sequence([wait,dropRainDropRandomly])))
+		
+		return rainLayer
+	}
+	
     func getBlinkAction(color: SKColor = SKColor.grayColor()) -> SKAction {
         let colorize = SKAction.colorizeWithColor(color, colorBlendFactor: 0.5, duration: 0.6)
         let colorizeReturn = SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.6)
@@ -97,6 +118,7 @@ class MurderScene: SKScene {
         
         houseUpCloseMoment.addChild(ground)
         houseUpCloseMoment.addChild(house)
+		houseUpCloseMoment.addChild(self.getRainLayer())
         
         return houseUpCloseMoment
     }
