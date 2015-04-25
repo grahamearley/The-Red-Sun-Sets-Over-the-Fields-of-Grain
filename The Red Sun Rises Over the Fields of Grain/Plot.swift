@@ -61,7 +61,7 @@ class Plot: SKNode, Touchable {
 		var buttonMargin : CGFloat = 10
 		if let buttonSprite = button.getUnderlyingSprite() {
 			buttonMargin = buttonSprite.size.height/2 + 50
-			buttonSprite.size = CGSize(width: (size.width * 0.8), height: (size.height * 0.1))
+			buttonSprite.size = CGSize(width: (size.width * 0.6), height: (size.height * 0.1))
 		}
 		button.position = CGPoint(x: 0, y: (-size.height/2)+buttonMargin)
 		button.name = "button"

@@ -1,61 +1,19 @@
 {
   "images" : [
     {
-      "resizing" : {
-        "mode" : "9-part",
-        "center" : {
-          "mode" : "stretch",
-          "width" : 1,
-          "height" : 1
-        },
-        "capInsets" : {
-          "bottom" : 9,
-          "top" : 10,
-          "right" : 9,
-          "left" : 10
-        }
-      },
       "idiom" : "universal",
-      "filename" : "redbutton.png",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "redbutton.png"
     },
     {
-      "resizing" : {
-        "mode" : "9-part",
-        "center" : {
-          "mode" : "stretch",
-          "width" : 1,
-          "height" : 1
-        },
-        "capInsets" : {
-          "bottom" : 9,
-          "top" : 10,
-          "right" : 9,
-          "left" : 10
-        }
-      },
       "idiom" : "universal",
-      "filename" : "redbutton-1.png",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "redbutton-1.png"
     },
     {
-      "resizing" : {
-        "mode" : "9-part",
-        "center" : {
-          "mode" : "stretch",
-          "width" : 1,
-          "height" : 1
-        },
-        "capInsets" : {
-          "bottom" : 9,
-          "top" : 10,
-          "right" : 9,
-          "left" : 10
-        }
-      },
       "idiom" : "universal",
-      "filename" : "redbutton-2.png",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "redbutton-2.png"
     }
   ],
   "info" : {

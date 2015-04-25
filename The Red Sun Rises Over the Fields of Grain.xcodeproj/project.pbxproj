@@ -10,6 +10,8 @@
 		BF93539E1AEB542B00FC17C2 /* GameProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF93539D1AEB542B00FC17C2 /* GameProfile.swift */; };
 		CB303E271AEB41CB0060242C /* MurderScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E261AEB41CB0060242C /* MurderScene.swift */; };
 		CB303E291AEB43060060242C /* PanNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E281AEB43060060242C /* PanNode.swift */; };
+		CB449E061AEBC7C400010ECF /* PressStart2P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB449E051AEBC7C400010ECF /* PressStart2P.ttf */; };
+		CB449E091AEBC98500010ECF /* FreePixel.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB449E081AEBC93C00010ECF /* FreePixel.ttf */; };
 		CBF0BA691AEB4D8200318937 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA681AEB4D8200318937 /* Button.swift */; };
 		CBF0BA6B1AEB4E0B00318937 /* Touchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA6A1AEB4E0B00318937 /* Touchable.swift */; };
 		CBF0BA6D1AEB573A00318937 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA6C1AEB573A00318937 /* Plot.swift */; };
@@ -36,6 +38,8 @@
 		BF93539D1AEB542B00FC17C2 /* GameProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameProfile.swift; sourceTree = "<group>"; };
 		CB303E261AEB41CB0060242C /* MurderScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurderScene.swift; sourceTree = "<group>"; };
 		CB303E281AEB43060060242C /* PanNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanNode.swift; sourceTree = "<group>"; };
+		CB449E051AEBC7C400010ECF /* PressStart2P.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = PressStart2P.ttf; path = Fonts/PressStart2P.ttf; sourceTree = "<group>"; };
+		CB449E081AEBC93C00010ECF /* FreePixel.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FreePixel.ttf; sourceTree = "<group>"; };
 		CBF0BA681AEB4D8200318937 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		CBF0BA6A1AEB4E0B00318937 /* Touchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Touchable.swift; sourceTree = "<group>"; };
 		CBF0BA6C1AEB573A00318937 /* Plot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
@@ -70,6 +74,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CB449E071AEBC7CF00010ECF /* Misc Files */ = {
+			isa = PBXGroup;
+			children = (
+				CB449E081AEBC93C00010ECF /* FreePixel.ttf */,
+				CB449E051AEBC7C400010ECF /* PressStart2P.ttf */,
+			);
+			name = "Misc Files";
+			sourceTree = "<group>";
+		};
 		D205ADE51AEB349F00F27ABD = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +116,7 @@
 				D205ADFB1AEB349F00F27ABD /* Main.storyboard */,
 				D205ADFE1AEB349F00F27ABD /* Images.xcassets */,
 				D205AE001AEB349F00F27ABD /* LaunchScreen.xib */,
+				CB449E071AEBC7CF00010ECF /* Misc Files */,
 				D205ADF11AEB349F00F27ABD /* Supporting Files */,
 			);
 			path = "The Red Sun Rises Over the Fields of Grain";
@@ -214,7 +228,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB449E091AEBC98500010ECF /* FreePixel.ttf in Resources */,
 				D205AE021AEB349F00F27ABD /* LaunchScreen.xib in Resources */,
+				CB449E061AEBC7C400010ECF /* PressStart2P.ttf in Resources */,
 				D205ADFF1AEB349F00F27ABD /* Images.xcassets in Resources */,
 				D205ADFD1AEB349F00F27ABD /* Main.storyboard in Resources */,
 			);

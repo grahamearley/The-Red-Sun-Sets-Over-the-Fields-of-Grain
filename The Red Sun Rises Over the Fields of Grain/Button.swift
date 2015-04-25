@@ -22,7 +22,7 @@ class Button: SKNode, Touchable {
         sprite.name = "sprite"
 		self.addChild(sprite)
 		
-		let label = SKLabelNode(text: "hello world")
+		let label = SKLabelNode(fontNamed: "FreePixel-Regular")
 		label.name = "label"
 		self.addChild(label)
 	}
