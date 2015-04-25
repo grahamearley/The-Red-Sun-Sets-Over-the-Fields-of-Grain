@@ -65,9 +65,10 @@ class FarmScene: SKScene {
 		
         // Sky
 		let background = SKSpriteNode(imageNamed: "Background")
-		background.position = CGPoint(x: size.width/2, y: size.height/2)
+		background.size = CGSize(width: background.size.width*2, height: size.height)
+		background.position = CGPoint(x: background.size.width/2, y: size.height/2)
 		background.zPosition = -10
-		background.size = CGSize(width: background.size.width, height: size.height)
+        background.name = "Background"
 		self.addChild(background)
         
         // Money label
@@ -108,6 +109,8 @@ class FarmScene: SKScene {
 					panningNode.shiftLeft()
 				}
 			}
+            
+            shiftBackground()
 		}
 	}
 	
@@ -120,8 +123,24 @@ class FarmScene: SKScene {
 					panningNode.shiftRight()
 				}
 			}
+            
+            shiftBackground()
 		}
 	}
+    
+    private func shiftBackground() {
+    
+    // Move background with parallax black magic
+    if let background = self.childNodeWithName("Background") as? SKSpriteNode {
+        
+        let difference = ((background.size.width) - 375)
+        let width = difference / CGFloat(profile.plots.count)
+        let offset = (-1 * width * CGFloat(currentPlotIndex)) + background.size.width / 2
+        let destinationPoint = CGPoint(x: offset, y: background.position.y)
+        let moveTo = SKAction.moveTo(destinationPoint, duration: 0.5)
+        background.runAction(moveTo);
+    }
+    }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         for thing: AnyObject in touches {
