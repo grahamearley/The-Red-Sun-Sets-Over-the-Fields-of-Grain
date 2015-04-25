@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "scale" : "1x",
+      "filename" : "WheatBag.PNG"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x",
+      "filename" : "WheatBag-1.PNG"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x",
+      "filename" : "WheatBag-2.PNG"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
