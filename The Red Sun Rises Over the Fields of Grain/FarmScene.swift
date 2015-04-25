@@ -28,6 +28,9 @@ class FarmScene: SKScene {
 		profile.clearAllData()
 		
 		super.init(size: size)
+        
+        // Just a little something to start 'em out with:
+        profile.money = 15
 		
 		//test
 		let plot1 = Plot(contents: .House, index: 0)
@@ -73,9 +76,15 @@ class FarmScene: SKScene {
         background.name = "Background"
 		self.addChild(background)
         
+        // Status bar background
+        let statusBar = SKSpriteNode(imageNamed: "TopBar")
+        statusBar.setScale(2)
+        statusBar.position = CGPoint(x: self.size.width - statusBar.size.width/2 - 10, y: self.size.height - 30)
+        self.addChild(statusBar)
+        
         // Money label
         let moneyLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
-        moneyLabel.text = "0"
+        moneyLabel.text = "\(profile.money)"
         moneyLabel.name = "Money Label"
         moneyLabel.fontColor = UIColor.blackColor()
         moneyLabel.fontSize = 25
@@ -162,8 +171,10 @@ class FarmScene: SKScene {
     
     func moneyWarning() {
         let moneyLabel = self.childNodeWithName("Money Label") as? SKLabelNode
-        let colorizeRed = SKAction.runBlock { () -> Void in
-            moneyLabel?.fontColor = SKColor.redColor()
+        
+        moneyLabel?.zPosition = 900
+        let colorizeYellow = SKAction.runBlock { () -> Void in
+            moneyLabel?.fontColor = SKColor.yellowColor()
             return
         }
         
@@ -175,7 +186,7 @@ class FarmScene: SKScene {
         let scaleUp = SKAction.scaleTo(2, duration: 0.2)
         let scaleDown = SKAction.scaleTo(1, duration: 0.2)
         
-        let colorFlash = SKAction.sequence([colorizeRed, scaleUp, SKAction.waitForDuration(0.2), colorizeBlack, SKAction.waitForDuration(0.2), scaleDown])
+        let colorFlash = SKAction.sequence([colorizeYellow, scaleUp, SKAction.waitForDuration(0.2), colorizeBlack, SKAction.waitForDuration(0.2), scaleDown])
         
         moneyLabel!.runAction(colorFlash) {
             moneyLabel!.runAction(colorFlash)
