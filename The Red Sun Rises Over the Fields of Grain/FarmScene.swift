@@ -11,22 +11,26 @@ import SpriteKit
 
 class FarmScene: SKScene {
 	
+	var screenSize : CGSize
+	var spaceSize : CGSize
+	
 	var currentPlotIndex : Int = 0
 	var profile : GameProfile
 	
 	//Init Scene here
 	override init(size: CGSize) {
+		self.screenSize = size
+		self.spaceSize = CGSize(width: size.width-100, height: size.height)
+		
 		profile = GameProfile.sharedInstance
 		profile.clearAllData()
 		
 		super.init(size: size)
 		
-		let spaceSize = CGSize(width: size.width-100, height: size.height)
-		
 		//test
 		let plot1 = Plot(contents: .House, index: 0)
 		let plot2 = Plot(contents: .Empty, index: 1)
-		let plot3 = Plot(contents: .Corn, index: 2)
+		let plot3 = Plot(contents: .Tractor, index: 2)
 		
 		profile.plots.append(plot1)
 		profile.plots.append(plot2)
@@ -129,6 +133,20 @@ class FarmScene: SKScene {
 			profile.saveToFile()
 			plot.updateNodeContent()
 		}
+	}
+	
+	func extendFarm() {
+		let newPlot = Plot(contents: .Tractor, index: profile.plots.count)
+		let newSpace = PanNode(size: spaceSize)
+		let newXPos = screenSize.width/2 + spaceSize.width
+		println(newXPos)
+		newSpace.position = CGPoint(x: newXPos, y: screenSize.height/2)
+		newSpace.addChild(newPlot)
+		newPlot.initializeNodeContents(spaceSize)
+		self.addChild(newSpace)
+		
+		profile.plots.append(newPlot)
+		profile.saveToFile()
 	}
 	
     override func update(currentTime: CFTimeInterval) {

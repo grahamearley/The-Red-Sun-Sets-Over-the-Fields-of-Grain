@@ -160,6 +160,19 @@ class Plot: SKNode, Touchable {
 				}
 			}
 		}
+		if self.contents == .Tractor {
+			buttonTitle = "Expand"
+			buttonAction = { (sender:AnyObject?) in
+				//expand the farm by one plot, essencially adding another tractor plot
+				//and setting this plot to be empty
+				if let farmScene = sender as? FarmScene {
+					GameProfile.sharedInstance.money -= 20
+					farmScene.extendFarm()
+					self.contents = .Empty
+					self.updateNodeContent()
+				}
+			}
+		}
 		
 		return (buttonTitle, buttonAction)
 	}
