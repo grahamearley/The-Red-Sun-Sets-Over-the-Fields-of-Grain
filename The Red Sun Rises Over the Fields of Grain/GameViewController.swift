@@ -13,6 +13,8 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+	
+		let skView = self.view as! SKView
 		
 		if GameProfile.sharedInstance.committedMurder {
 			let scene = FarmScene(size: skView.bounds.size)
