@@ -16,7 +16,7 @@ class GameViewController: UIViewController {
 
 		// Configure the view.
 		let skView = self.view as! SKView
-		let scene = GameScene(size:	skView.bounds.size)
+		let scene = FarmScene(size:	skView.bounds.size)
 		skView.showsFPS = true
 		skView.showsNodeCount = true
 		skView.ignoresSiblingOrder = true

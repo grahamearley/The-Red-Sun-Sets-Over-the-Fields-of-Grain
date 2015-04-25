@@ -1,5 +1,5 @@
 //
-//  GameScene.swift
+//  FarmScene.swift
 //  The Red Sun Rises Over the Fields of Grain
 //
 //  Created by Graham Earley on 4/24/15.
@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class FarmScene: SKScene {
 	
 	override init(size: CGSize) {
 		super.init(size: size)
