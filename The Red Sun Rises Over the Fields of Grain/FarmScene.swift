@@ -180,6 +180,7 @@ class FarmScene: SKScene {
 		let currentPlot = GameProfile.sharedInstance.plots[self.currentPlotIndex]
 		if let button = currentPlot.childNodeWithName("button") as? Button {
 			button.enabled = !locksOn
+			button.alpha = locksOn ? 0 : 1
 		}
 		if let menu = self.childNodeWithName("//storeMenu") {
 			if !locksOn {

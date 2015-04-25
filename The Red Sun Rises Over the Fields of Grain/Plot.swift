@@ -69,10 +69,10 @@ class Plot: SKNode, Touchable {
 		self.addChild(button)
 		
 		//multiplier text
-		let label = SKLabelNode(text: "x1")
+		let label = SKLabelNode(text: "")
 		label.position = CGPoint(x: 0, y: size.height/3)
 		label.fontSize = 40
-		label.name = "multiplierLabel"
+		label.name = "bonusLabel"
 		self.addChild(label)
 		
 		updateNodeContent()
@@ -191,12 +191,12 @@ class Plot: SKNode, Touchable {
 	///Call everytime the person 
 	func lightUpdate() {
 		//update multiplier text
-		if let multiplierLabel = self.childNodeWithName("multiplierLabel") as? SKLabelNode {
-			let multi = self.getMultiplier()
-			if multi == 1 {
-				multiplierLabel.text = ""
+		if let bonusLabel = self.childNodeWithName("bonusLabel") as? SKLabelNode {
+			let bonus = self.getBonus()
+			if bonus == 0 {
+				bonusLabel.text = ""
 			} else {
-				multiplierLabel.text = "x\(self.getMultiplier())"
+				bonusLabel.text = "+\(bonus)"
 			}
 		}
 	}
@@ -212,7 +212,7 @@ class Plot: SKNode, Touchable {
 				buttonTitle = "Harvest"
 				buttonAction = { (sender:AnyObject?) in
 					//harvest the corn:
-					GameProfile.sharedInstance.money += Int(7 * self.getMultiplier())
+					GameProfile.sharedInstance.money += 7 + self.getBonus()
 					self.contents = .Empty
 					self.age = 0
                     self.updateNodeContent()
@@ -240,7 +240,7 @@ class Plot: SKNode, Touchable {
 				buttonTitle = "Harvest"
 				buttonAction = { (sender:AnyObject?) in
 					//harvest the corn:
-					GameProfile.sharedInstance.money += Int(3 * self.getMultiplier())
+					GameProfile.sharedInstance.money += 3 + self.getBonus()
 					self.contents = .Empty
 					self.age = 0
 					self.updateNodeContent()
@@ -318,31 +318,54 @@ class Plot: SKNode, Touchable {
 		return (buttonTitle, buttonAction)
 	}
 	
-	func getMultiplier() -> Float {
+	func getBonus() -> Int {
 		let allPlots = GameProfile.sharedInstance.plots
 		if index == 0 || index >= allPlots.count-1 {
-			return 1	//will cause errors, and only applies to edge plots which don't need multipliers
+			return 0	//will cause errors, and only applies to edge plots which don't need multipliers
 		}
 		
 		let onlyLeftPlots = allPlots[0..<self.index]
 		var leftwardPlots = onlyLeftPlots.reverse() //0 is closest Plot to the left
 		var rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
 		
-		var totalMultiplier : Float = 1.0
+		var totalBonus = 0
 		
 		if contents == .Corn {
 			if leftwardPlots[0].contents == .Corn && rightwardPlots[0].contents == .Corn {
-				totalMultiplier += 1.8
+				totalBonus += 4
 			}
 		}
 		
 		if contents == .Carrot {
 			if leftwardPlots[0].contents == .Carrot && rightwardPlots[0].contents == .Carrot {
-				totalMultiplier += 1.3
+				totalBonus += 1
 			}
 		}
 		
-		return totalMultiplier
+		//vegies
+		if contents == .Corn || contents == .Carrot || contents == .Wheat {
+			//Windmill check
+			var nearWindmill = false
+			if leftwardPlots[0].contents == .Windmill || leftwardPlots[0].contents == .Windmill {
+				nearWindmill = true
+			}
+			if leftwardPlots.count > 1 {
+				if leftwardPlots[1].contents == .Windmill {
+					nearWindmill = true
+				}
+			}
+			if rightwardPlots.count > 1 {
+				if rightwardPlots[1].contents == .Windmill {
+					nearWindmill = true
+				}
+			}
+			
+			if nearWindmill {
+				totalBonus += 2
+			}
+		}
+		
+		return totalBonus
 	}
 
 	
