@@ -20,16 +20,19 @@ class StoreMenu: SKNode, Touchable {
 		
 		let backing = SKSpriteNode(imageNamed: "MenuBase")
 		backing.size = size
+		backing.zPosition = -2
 		backing.name = "menuBacking"
 		self.addChild(backing)
 		
 		for i in 0..<pages.count {
 			if i == 0 {
-				continue
+				pages[i].alpha = 1
+				pages[i].setEnabledForAllButtons(true)
 			} else {
 				pages[i].alpha = 0
 				pages[i].setEnabledForAllButtons(false)
 			}
+			self.addChild(pages[i])
 		}
 		
 		let plantButton = Button(imageNamed: "Spaceship") { (sender: AnyObject?) -> Void in
@@ -50,7 +53,10 @@ class StoreMenu: SKNode, Touchable {
 		}
 		buildingButton.getUnderlyingSprite()?.size = tabButtonSize
 		buildingButton.position = CGPoint(x: tabButtonSize.width * 0.75, y: -size.height/2 + 40)
-
+		
+		self.addChild(plantButton)
+		self.addChild(buildingButton)
+		
 	}
 	
 	func updateDisplayedPage() {
@@ -81,13 +87,13 @@ class StorePage: SKNode, Touchable {
 		
 		super.init()
 		
-		let padding : CGFloat = 30
+		let padding : CGFloat = 75
 		let margin : CGFloat = 20
 		
-		let topLeftOrigin = CGPoint(x: -(size.width/2) + padding, y: -(size.height/2) + padding)
-		var evenXPos : CGFloat = topLeftOrigin.x
-		var oddXPos : CGFloat = topLeftOrigin.x + margin + (buttons[0].getUnderlyingSprite()?.size.width ?? 60)
-		var onYPos : CGFloat = topLeftOrigin.y
+		let buttonSize = buttons[0].getUnderlyingSprite()!.size
+		var evenXPos : CGFloat = -buttonSize.width * 0.75
+		var oddXPos : CGFloat = buttonSize.width * 0.75
+		var onYPos : CGFloat = (size.height/2) - padding
 		
 		for i in 0..<buttons.count {
 			let butt = buttons[i]
@@ -129,7 +135,7 @@ class StoreItem: Button {
 		super.init(imageNamed: imageNamed, action: action)
 		
 		let imageSprite = getUnderlyingSprite()
-		imageSprite?.setScale(0.5)
+		imageSprite?.setScale(4)
 		
 		//override and remove default label
 		if let label = self.childNodeWithName("label") {
@@ -137,11 +143,13 @@ class StoreItem: Button {
 		}
 		
 		let costLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+		costLabel.fontColor = SKColor.blackColor()
 		costLabel.text = "$\(cost)"
 		let yPos : CGFloat = -(imageSprite?.size.height ?? 30.0)
 		costLabel.position = CGPoint(x: 0, y: yPos)
 		
 		let timeLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+		timeLabel.fontColor = SKColor.blackColor()
 		timeLabel.text = "\(time)t"
 		timeLabel.position = CGPoint(x: 0, y: costLabel.position.y - 30.0)
 		

@@ -265,15 +265,15 @@ class Plot: SKNode, Touchable {
 		if self.contents == .Empty {
 			buttonTitle = "Plant"
 			buttonAction = { (sender:AnyObject?) in
-				//add some corn:
-				self.contents = .Corn
-				self.age = 0
-                self.updateNodeContent()
-                
-                // Gettin money
-                if let farmScene = sender as? FarmScene {
-                    farmScene.updateMoney()
-                }
+				if let farmScene = sender as? FarmScene {
+					farmScene.scrollLock = true
+				}
+				if let button = self.childNodeWithName("button") as? Button {
+					button.enabled = false
+				}
+				
+				let storeMenu = self.getStore()
+				self.addChild(storeMenu)
 			}
 		}
 		if self.contents == .House {
@@ -354,6 +354,45 @@ class Plot: SKNode, Touchable {
 	}
 	
 	//MARK: - Reuseable Impl.
+	
+	func getStore() -> StoreMenu {
+		let cornBag = StoreItem(imageNamed: "CornBag", cost: 3, time: 3) { (sender: AnyObject?) in
+			//onAction:
+			//add some corn:
+			self.contents = .Corn
+			self.age = 0
+			self.updateNodeContent()
+			
+			// Gettin money
+			if let farmScene = sender as? FarmScene {
+				farmScene.updateMoney()
+			}
+		}
+		
+		let carrotBag = StoreItem(imageNamed: "CarrotBag", cost: 1, time: 2) { (sender: AnyObject?) in
+			//onAction:
+			//add some corn:
+			self.contents = .Carrot
+			self.age = 0
+			self.updateNodeContent()
+			
+			// Gettin money
+			if let farmScene = sender as? FarmScene {
+				farmScene.updateMoney()
+			}
+		}
+		
+		let myButton = StoreItem(imageNamed: "TomatoBag", cost: -1, time: -1)  { (sender: AnyObject?) in
+			println("hey")
+		}
+
+		let menuSize = CGSize(width: size.width * 1, height: size.height * 0.8)
+		let seedPage = StorePage(buttons: [cornBag,carrotBag], size: menuSize)
+		let buildingPage = StorePage(buttons: [myButton], size: menuSize)
+		
+		let storeMenu = StoreMenu(pages: [seedPage,buildingPage], size: menuSize)
+		return storeMenu
+	}
 	
 	func addContentForVegitable(#growTime: Int, deathTime: Int, amount: Int, imageAssetNamed: String) {
 		srand(10)
