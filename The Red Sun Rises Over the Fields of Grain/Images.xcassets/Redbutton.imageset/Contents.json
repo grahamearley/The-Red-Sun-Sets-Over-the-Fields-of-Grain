@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "background.PNG"
+      "filename" : "redbutton.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "background-1.PNG"
+      "filename" : "redbutton-1.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "background-2.PNG"
+      "filename" : "redbutton-2.png"
     }
   ],
   "info" : {
