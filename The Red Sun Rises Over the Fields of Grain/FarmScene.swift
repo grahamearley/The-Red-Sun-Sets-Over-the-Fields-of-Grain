@@ -31,7 +31,7 @@ class FarmScene: SKScene {
 		
 		//test
 		let plot1 = Plot(contents: .House, index: 0)
-		let plot2 = Plot(contents: .Empty, index: 1)
+		let plot2 = Plot(contents: .Carrot, index: 1)
 		let plot3 = Plot(contents: .Tractor, index: 2)
 		
 		profile.plots.append(plot1)
@@ -160,18 +160,46 @@ class FarmScene: SKScene {
     }
 	
 	func ageByTurn(amount: Int = 1) {
-		for plot in profile.plots {
-			plot.age += amount
-			plot.updateNodeContent()
+		let blackover = SKShapeNode(rectOfSize: CGSize(width: screenSize.width, height: screenSize.height + 100))
+		blackover.fillColor = SKColor.blackColor()
+		blackover.strokeColor = SKColor.clearColor()
+		blackover.zPosition = 100
+		blackover.position = CGPoint(x: screenSize.width/2, y: screenSize.height/2)
+		blackover.alpha = 0
+		self.addChild(blackover)
+		blackover.runAction(SKAction.fadeAlphaTo(1, duration: 0.3)) {
+			//on blackover covers whole screen:
+			for plot in self.profile.plots {
+				plot.age += amount
+				plot.updateNodeContent()
+			}
+			let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.3)
+			blackover.runAction(SKAction.sequence([fadeOut,SKAction.removeFromParent()]))
 		}
 	}
     
     func updateMoney() {
         if let label = self.childNodeWithName("Money Label") as? SKLabelNode {
-            
             label.text = String(profile.money)
         }
     }
+	
+	///locks interaction to solely the open store window
+	///and also is in charge of unlocking this on store window close
+	func setStoreLocks(locksOn: Bool) {
+		self.scrollLock = locksOn
+		
+		let currentPlot = GameProfile.sharedInstance.plots[self.currentPlotIndex]
+		if let button = currentPlot.childNodeWithName("button") as? Button {
+			button.enabled = !locksOn
+			button.alpha = locksOn ? 0 : 1
+		}
+		if let menu = self.childNodeWithName("//storeMenu") {
+			if !locksOn {
+				menu.removeFromParent()
+			}
+		}
+	}
 	
 	func extendFarm() {
 		let newPlot = Plot(contents: .Tractor, index: profile.plots.count)

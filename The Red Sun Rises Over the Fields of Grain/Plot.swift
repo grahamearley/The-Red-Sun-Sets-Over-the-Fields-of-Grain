@@ -14,6 +14,7 @@ enum PlotContent : String {
 	case Empty = "Empty"
 	
 	case Corn = "Corn"
+	case Carrot = "Carrot"
 	case Wheat = "Wheat"
 	
 	case Windmill = "Windmill"
@@ -61,17 +62,17 @@ class Plot: SKNode, Touchable {
 		var buttonMargin : CGFloat = 10
 		if let buttonSprite = button.getUnderlyingSprite() {
 			buttonMargin = buttonSprite.size.height/2 + 50
-			buttonSprite.size = CGSize(width: (size.width * 0.8), height: (size.height * 0.1))
+			buttonSprite.size = CGSize(width: (size.width * 0.6), height: (size.height * 0.1))
 		}
 		button.position = CGPoint(x: 0, y: (-size.height/2)+buttonMargin)
 		button.name = "button"
 		self.addChild(button)
 		
 		//multiplier text
-		let label = SKLabelNode(text: "x1")
+		let label = SKLabelNode(text: "")
 		label.position = CGPoint(x: 0, y: size.height/3)
 		label.fontSize = 40
-		label.name = "multiplierLabel"
+		label.name = "bonusLabel"
 		self.addChild(label)
 		
 		updateNodeContent()
@@ -92,27 +93,38 @@ class Plot: SKNode, Touchable {
 		colorNode.position = CGPoint(x: 0, y: -size.height/4)
 		colorNode.strokeColor = SKColor.clearColor()
 		let color : SKColor
+
 		
 		switch self.contents {
 		case .DeadBody:
-			color = SKColor.brownColor()
+			let bump = SKSpriteNode(imageNamed: "BodyLump")
+			bump.setScale(2)
+			bump.position = CGPoint(x: 0, y: -size.height/3.4)
+			bump.name = "bodyBump"
+			self.addChild(bump)
+			self.fieldNodes.append(bump)
+			
+			color = SKColor.clearColor()
 		case .Empty:
 			color = SKColor.clearColor()
-		case .Corn:
+		case .Carrot:
+			self.addContentForVegitable(growTime: 2, deathTime: 3, amount: 2, imageAssetNamed: "Carrot")
 			
-			for i in -3...3 {
-				let corn = SKSpriteNode(imageNamed: "Corn")
-				corn.setScale(3)
-				corn.name = "corn"
-				corn.position = CGPoint(x: CGFloat(i)*35, y: -self.size.height/7)
-				
-				self.addChild(corn)
-				self.fieldNodes.append(corn)
-			}
+			color = SKColor.clearColor()
+		case .Corn:
+			self.addContentForVegitable(growTime: 3, deathTime: 7, amount: 6, imageAssetNamed: "Corn")
 			
 			color = SKColor.clearColor()
 		case .House:
-			color = SKColor.redColor()
+			let house = SKSpriteNode(imageNamed: "House")
+			house.name = "house"
+			house.setScale(8)
+			house.position = CGPoint(x: -size.width * 0.4, y: -size.height/8)
+			self.addChild(house)
+			
+			self.fieldNodes.append(house)
+			
+			color = SKColor.clearColor()
 		case .Tractor:
 			let hull = SKSpriteNode(imageNamed: "TractorBody")
 			hull.name = "hull"
@@ -133,7 +145,26 @@ class Plot: SKNode, Touchable {
 		case .Wheat:
 			color = SKColor.greenColor()
 		case .Windmill:
-			color = SKColor.grayColor()
+			let millBase = SKSpriteNode(imageNamed: "windturbineturbine")	//image is named wrong...
+			millBase.name = "millBase"
+			millBase.setScale(7)
+			millBase.size = CGSize(width: millBase.size.width, height: millBase.size.height + 110)
+			millBase.position = CGPoint(x: 0, y: 60)
+			self.addChild(millBase)
+			self.fieldNodes.append(millBase)
+			
+			let millTurbine = SKSpriteNode(imageNamed: "windturbinebase") //image is named wrong...
+			millTurbine.name = "millTurbine"
+			millTurbine.setScale(7)
+			millTurbine.position = CGPoint(x: 0, y: size.height * 0.6)
+			self.addChild(millTurbine)
+			self.fieldNodes.append(millTurbine)
+			
+			//anim
+			let gentleRotate = SKAction.repeatActionForever(SKAction.rotateByAngle(6.28, duration: 6))
+			millTurbine.runAction(gentleRotate)
+			
+			color = SKColor.clearColor()
 		}
 		
 		colorNode.name = "colorNode"
@@ -147,18 +178,25 @@ class Plot: SKNode, Touchable {
 			let buttonInfo = self.getButtonActionForCurrentPlot()
 			button.setTitle(buttonInfo.0)
 			button.action = buttonInfo.1
+			if button.getTitle() == nil || button.getTitle() == "" {
+				button.hidden = true
+			} else {
+				button.hidden = false
+			}
 		}
+		
+		lightUpdate()
 	}
 	
 	///Call everytime the person 
 	func lightUpdate() {
 		//update multiplier text
-		if let multiplierLabel = self.childNodeWithName("multiplierLabel") as? SKLabelNode {
-			let multi = self.getMultiplier()
-			if multi == 1 {
-				multiplierLabel.text = ""
+		if let bonusLabel = self.childNodeWithName("bonusLabel") as? SKLabelNode {
+			let bonus = self.getBonus()
+			if bonus == 0 {
+				bonusLabel.text = ""
 			} else {
-				multiplierLabel.text = "x\(self.getMultiplier())"
+				bonusLabel.text = "+\(bonus)"
 			}
 		}
 	}
@@ -174,7 +212,7 @@ class Plot: SKNode, Touchable {
 				buttonTitle = "Harvest"
 				buttonAction = { (sender:AnyObject?) in
 					//harvest the corn:
-					GameProfile.sharedInstance.money += Int(7 * self.getMultiplier())
+					GameProfile.sharedInstance.money += 7 + self.getBonus()
 					self.contents = .Empty
 					self.age = 0
                     self.updateNodeContent()
@@ -195,18 +233,44 @@ class Plot: SKNode, Touchable {
 				}
 			}
 		}
+		
+		if self.contents == .Carrot {
+			if age >= 2 && age <= 3 {
+				//harvestable corn:
+				buttonTitle = "Harvest"
+				buttonAction = { (sender:AnyObject?) in
+					//harvest the corn:
+					GameProfile.sharedInstance.money += 3 + self.getBonus()
+					self.contents = .Empty
+					self.age = 0
+					self.updateNodeContent()
+					
+					// Gettin money
+					if let farmScene = sender as? FarmScene {
+						farmScene.updateMoney()
+					}
+				}
+			} else {
+				//dead or not grown corn:
+				buttonTitle = "Remove"
+				buttonAction = { (sender:AnyObject?) in
+					//remove the corn:
+					self.contents = .Empty
+					self.age = 0
+					self.updateNodeContent()
+				}
+			}
+		}
+		
 		if self.contents == .Empty {
-			buttonTitle = "Plant Corn"
+			buttonTitle = "Plant"
 			buttonAction = { (sender:AnyObject?) in
-				//add some corn:
-				self.contents = .Corn
-				self.age = 0
-                self.updateNodeContent()
-                
-                // Gettin money
-                if let farmScene = sender as? FarmScene {
-                    farmScene.updateMoney()
-                }
+				if let farmScene = sender as? FarmScene {
+					farmScene.setStoreLocks(true)
+				}
+				
+				let storeMenu = self.getStore()
+				self.addChild(storeMenu)
 			}
 		}
 		if self.contents == .House {
@@ -227,18 +291,24 @@ class Plot: SKNode, Touchable {
 					//expand the farm by one plot, essencially adding another tractor plot
 					//and setting this plot to be empty
 					if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
-						let rotate = SKAction.rotateByAngle(-6.28, duration: 3)
-						let move = SKAction.moveByX(self.size.width, y: 0, duration: 3)
+						let rotate = SKAction.rotateByAngle(-6.28, duration: 2.2)
+						let move = SKAction.moveByX(self.size.width, y: 0, duration: 2.2)
 						let group = SKAction.group([rotate,move])
 						wheel.runAction(group)
 						hull.runAction(move) {
 							//on completion:
-								GameProfile.sharedInstance.money -= 20
-								farmScene.updateMoney()
-								farmScene.extendFarm()
+							GameProfile.sharedInstance.money -= 20
+							farmScene.updateMoney()
+							farmScene.extendFarm()
+						
+							if self.index == 4 {
+								self.contents = .DeadBody
+							} else {
 								self.contents = .Empty
-								self.updateNodeContent()
-								farmScene.scrollLock = false
+							}
+							
+							self.updateNodeContent()
+							farmScene.scrollLock = false
 						}
 					}
 				}
@@ -248,32 +318,169 @@ class Plot: SKNode, Touchable {
 		return (buttonTitle, buttonAction)
 	}
 	
-	func getMultiplier() -> Float {
+	func getBonus() -> Int {
 		let allPlots = GameProfile.sharedInstance.plots
 		if index == 0 || index >= allPlots.count-1 {
-			return 1	//will cause errors, and only applies to edge plots which don't need multipliers
+			return 0	//will cause errors, and only applies to edge plots which don't need multipliers
 		}
 		
 		let onlyLeftPlots = allPlots[0..<self.index]
 		var leftwardPlots = onlyLeftPlots.reverse() //0 is closest Plot to the left
 		var rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
 		
-		var totalMultiplier : Float = 1.0
+		var totalBonus = 0
 		
 		if contents == .Corn {
-			if leftwardPlots[0].contents == PlotContent.Corn && rightwardPlots[0].contents == PlotContent.Corn {
-				totalMultiplier += 2
+			if leftwardPlots[0].contents == .Corn && rightwardPlots[0].contents == .Corn {
+				totalBonus += 4
 			}
 		}
 		
-		return totalMultiplier
+		if contents == .Carrot {
+			if leftwardPlots[0].contents == .Carrot && rightwardPlots[0].contents == .Carrot {
+				totalBonus += 1
+			}
+		}
+		
+		//vegies
+		if contents == .Corn || contents == .Carrot || contents == .Wheat {
+			//Windmill check
+			var nearWindmill = false
+			if leftwardPlots[0].contents == .Windmill || leftwardPlots[0].contents == .Windmill {
+				nearWindmill = true
+			}
+			if leftwardPlots.count > 1 {
+				if leftwardPlots[1].contents == .Windmill {
+					nearWindmill = true
+				}
+			}
+			if rightwardPlots.count > 1 {
+				if rightwardPlots[1].contents == .Windmill {
+					nearWindmill = true
+				}
+			}
+			
+			if nearWindmill {
+				totalBonus += 2
+			}
+		}
+		
+		return totalBonus
 	}
 
 	
 	func ageContent(byAmount:Int = 1) {
 		age += byAmount
 	}
+	
+	//MARK: - Reuseable Impl.
+	
+	func getStore() -> StoreMenu {
+		let cornBag = StoreItem(imageNamed: "CornBag", cost: 3, time: 3) { (sender: AnyObject?) in
+			//onAction:
+			//add some corn:
+			self.contents = .Corn
+			self.age = 0
+			self.updateNodeContent()
+			
+			// Gettin money
+			if let farmScene = sender as? FarmScene {
+				farmScene.updateMoney()
+			}
+			
+			// reset locking
+			if let farmScene = sender as? FarmScene {
+				farmScene.setStoreLocks(false)
+			}
+		}
 		
+		let carrotBag = StoreItem(imageNamed: "CarrotBag", cost: 1, time: 2) { (sender: AnyObject?) in
+			//onAction:
+			//add some corn:
+			self.contents = .Carrot
+			self.age = 0
+			self.updateNodeContent()
+			
+			// Gettin money
+			if let farmScene = sender as? FarmScene {
+				farmScene.updateMoney()
+			}
+			
+			// reset locking
+			if let farmScene = sender as? FarmScene {
+				farmScene.setStoreLocks(false)
+			}
+		}
+		
+		let myButton = StoreItem(imageNamed: "TomatoBag", cost: -1, time: -1)  { (sender: AnyObject?) in
+			println("hey")
+		}
+
+		let menuSize = CGSize(width: size.width * 1, height: size.height * 0.8)
+		let seedPage = StorePage(buttons: [cornBag,carrotBag], size: menuSize)
+		let buildingPage = StorePage(buttons: [myButton], size: menuSize)
+		
+		let storeMenu = StoreMenu(pages: [seedPage,buildingPage], size: menuSize)
+		return storeMenu
+	}
+	
+	func addContentForVegitable(#growTime: Int, deathTime: Int, amount: Int, imageAssetNamed: String) {
+		srand(10)
+		let density = Int(amount/2)
+		
+		for i in -density...density {
+			
+			if age == 0 {
+				
+				var seed = SKShapeNode(circleOfRadius: 2)
+				seed.zPosition = 1
+				seed.fillColor = SKColor.brownColor()
+				seed.lineWidth = 0
+				let randomXOffset = Int (rand() % 20)
+				seed.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: (-self.size.height * 0.32))
+				
+				self.addChild(seed)
+				self.fieldNodes.append(seed)
+				
+			} else {
+				var vegi = SKSpriteNode(imageNamed: imageAssetNamed)
+				
+				let randomYOffset = CGFloat (rand() % 20)
+				
+				let maxHeight = (size.height / 4) - 10 + randomYOffset
+				let maxWidth = size.width / 2
+				
+				// Gray if unripe or approaching death
+				if age < growTime {
+					let colorize = SKAction.colorizeWithColor(SKColor.grayColor(), colorBlendFactor: 0.8, duration: 0)
+					vegi.runAction(colorize)
+				}
+				
+				// Red if approaching death
+				if age == deathTime {
+					let colorize = SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 0.5, duration: 0)
+					vegi.runAction(colorize)
+				}
+				
+				// Gray more if dead
+				if age > deathTime {
+					let colorize = SKAction.colorizeWithColor(SKColor.blackColor(), colorBlendFactor: 0.8, duration: 0)
+					vegi.runAction(colorize)
+				}
+				
+				let progress = CGFloat(min(1, Float(age) / Float(growTime)))
+				vegi.size = CGSize(width: maxWidth * progress, height: maxHeight * progress)
+				vegi.name = imageAssetNamed.lowercaseString
+				
+				let randomXOffset = Int (rand() % 20)
+				vegi.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: ((-self.size.height * 0.32) + vegi.size.height/2))
+				
+				self.addChild(vegi)
+				self.fieldNodes.append(vegi)
+			}
+		}
+	}
+	
 	//MARK: - Save/Load
 	
 	func toDictionary() -> [String:AnyObject] {
