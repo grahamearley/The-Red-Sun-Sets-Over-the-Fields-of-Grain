@@ -16,19 +16,23 @@ class MurderScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-//        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
-//        self.addChild(houseInTheDistanceMoment)
-//        moments.append(houseInTheDistanceMoment)
-//        
-//        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
-//        moments.append(houseUpCloseMoment)
+        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
+        self.addChild(houseInTheDistanceMoment)
+        moments.append(houseInTheDistanceMoment)
+        
+        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
+        houseUpCloseMoment.name = "up close house moment"
+
+        moments.append(houseUpCloseMoment)
         
         let windowMoment = self.getWindowMoment(size)
+        windowMoment.name = "window moment"
         moments.append(windowMoment)
-        self.addChild(windowMoment)
         
-//        let pitchforkGrabMoment = self.getPitchforkGrabMoment(size)
-//        self.addChild(pitchforkGrabMoment)
+        let pitchforkGrabMoment = self.getPitchforkGrabMoment(size)
+        pitchforkGrabMoment.name = "pitchfork moment"
+        moments.append(pitchforkGrabMoment)
+
         
     }
     
@@ -103,6 +107,7 @@ class MurderScene: SKScene {
         windowMoment.addChild(backdrop)
         
         let bed = SKSpriteNode(imageNamed: "Bed")
+        bed.name = "bed"
         bed.setScale(4)
         bed.position = CGPoint(x: parentSize.width/2 - 10, y:parentSize.height/2)
         
@@ -153,7 +158,6 @@ class MurderScene: SKScene {
         let destinationPoint = pitchfork!.position
         let initialPoint = 💪!.position
         
-        
         let moveTo = SKAction.moveTo(destinationPoint, duration: 1.0)
         💪!.runAction(moveTo) {
             //on completion:
@@ -197,9 +201,31 @@ class MurderScene: SKScene {
                 moments.removeAtIndex(0)
             }
             
-            if (self.nodeAtPoint(location).name == "pitchfork") {
-                self.grabPitchfork()
+            else if (self.nodeAtPoint(location).name == "closer house") {
+                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+                self.addChild(moments[1])
+                moments[1].alpha = 0.0
+                moments[1].runAction(SKAction.fadeInWithDuration(1))
+                moments.removeAtIndex(0)
             }
+            
+            else if (self.nodeAtPoint(location).name == "window moment" || self.nodeAtPoint(location).name == "bed") {
+                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+                self.addChild(moments[1])
+                moments[1].alpha = 0.0
+                moments[1].runAction(SKAction.fadeInWithDuration(1))
+                moments.removeAtIndex(0)
+            }
+            
+            else if (self.nodeAtPoint(location).name == "pitchfork") {
+                self.grabPitchfork()
+//                moments[0].runAction(SKAction.fadeOutWithDuration(1))
+//                self.addChild(moments[1])
+//                moments[1].alpha = 0.0
+//                moments[1].runAction(SKAction.fadeInWithDuration(1))
+//                moments.removeAtIndex(0)
+            }
+            
         }
     }
 
