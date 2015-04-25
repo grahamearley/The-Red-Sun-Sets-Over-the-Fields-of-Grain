@@ -34,7 +34,9 @@ class MurderScene: SKScene {
         
         let doorOpenMoment = self.getDoorOpenMoment(size)
         moments.append(doorOpenMoment)
-
+        
+        let stabMoment = self.getStabMoment(size)
+        moments.append(stabMoment)
         
     }
     
@@ -213,7 +215,7 @@ class MurderScene: SKScene {
         ouch.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
         ouch.size = CGSize(width: parentSize.width, height: parentSize.height)
         
-        ouch.hidden = true // dont show the blood quite yet, know wat i mean?
+        ouch.alpha = 0.0 // dont show the blood quite yet, know wat i mean?
         
         stabMoment.addChild(fear)
         stabMoment.addChild(ouch)
@@ -221,6 +223,9 @@ class MurderScene: SKScene {
         let pitchfork = SKSpriteNode(imageNamed: "PitchforkForward")
         pitchfork.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
         pitchfork.name = "stabbing pitchfork"
+        pitchfork.alpha = 0.0
+        pitchfork.setScale(8)
+        stabMoment.addChild(pitchfork)
         
         return stabMoment
     }
@@ -228,8 +233,26 @@ class MurderScene: SKScene {
     func stab() {
         let fear = self.childNodeWithName("//fear")
         let ouch = self.childNodeWithName("//ouch")
+        let pitchfork = self.childNodeWithName("//stabbing pitchfork")
         
+        let shrink = SKAction.scaleTo(4, duration: 0.3)
+        let shiftDown = SKAction.moveToY(pitchfork!.position.y + 10, duration: 0.3)
+        let stabIn = SKAction.sequence([shrink, shiftDown])
+        
+        let grow = SKAction.scaleTo(8, duration: 0.3)
+        let shiftUp = SKAction.moveToY(pitchfork!.position.y - 10, duration: 0.3)
+        let stabOut = SKAction.sequence([grow, shiftUp])
+        
+        pitchfork!.runAction(SKAction.fadeInWithDuration(0.4)){
+            // on completion:
+            pitchfork!.runAction(stabIn) {
+                ouch!.runAction(SKAction.fadeInWithDuration(1))
+                fear!.runAction(SKAction.fadeOutWithDuration(1.1))
+                pitchfork!.runAction(stabOut)
+            }
+        }
 
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -295,10 +318,7 @@ class MurderScene: SKScene {
             
             else if (moments[0].name == "stab moment") {
                 var stabCount = 0
-//                while stabCount < 5 {
-//                    stab()
-//                    stabCount += 1
-//                }
+                stab()
             }
             
         }
