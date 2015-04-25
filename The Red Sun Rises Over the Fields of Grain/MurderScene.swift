@@ -16,12 +16,15 @@ class MurderScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
-        self.addChild(houseInTheDistanceMoment)
-        moments.append(houseInTheDistanceMoment)
+//        let houseInTheDistanceMoment = self.getHouseInTheDistanceMoment(size)
+//        self.addChild(houseInTheDistanceMoment)
+//        moments.append(houseInTheDistanceMoment)
+//        
+//        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
+//        moments.append(houseUpCloseMoment)
         
-        let houseUpCloseMoment = self.getHouseUpCloseMoment(size)
-        moments.append(houseUpCloseMoment)
+        let pitchforkGrabMoment = self.getPitchforkGrabMoment(size)
+        self.addChild(pitchforkGrabMoment)
         
     }
     
@@ -73,6 +76,40 @@ class MurderScene: SKScene {
         return houseUpCloseMoment
     }
     
+    func getPitchforkGrabMoment(parentSize: CGSize) -> SKNode {
+        let pitchforkGrabMoment = SKNode()
+        
+        let background = SKSpriteNode(imageNamed: "Ground")
+        background.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        background.size.height = parentSize.height * 3
+        background.size.width = parentSize.width * 3
+        pitchforkGrabMoment.addChild(background)
+        
+        let pitchfork = SKSpriteNode(imageNamed: "Pitchfork")
+        pitchfork.name = "pitchfork"
+        pitchfork.position = CGPoint(x: parentSize.width/2, y:parentSize.height/2)
+        pitchfork.setScale(7)
+        pitchforkGrabMoment.addChild(pitchfork)
+        
+        let 💪 = SKSpriteNode(imageNamed: "Reachingarm") // EMOJI VARIABLE YO! (for the burly arm that grabs the pitchfork)
+        💪.position = CGPoint(x: 0, y: 0)
+        💪.name = "burly arm"
+        pitchforkGrabMoment.addChild(💪)
+        
+        return pitchforkGrabMoment
+        
+    }
+    
+    func grabPitchfork() {
+        let 💪 = self.childNodeWithName("//burly arm")
+        let pitchfork = self.childNodeWithName("//pitchfork")
+        
+        let destinationPoint = pitchfork!.position
+        let moveTo = SKAction.moveTo(destinationPoint, duration: 0.5)
+        💪!.runAction(moveTo)
+        
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -103,6 +140,11 @@ class MurderScene: SKScene {
                 moments[1].alpha = 0.0
                 moments[1].runAction(SKAction.fadeInWithDuration(3))
                 moments.removeAtIndex(0)
+            }
+            
+            if (self.nodeAtPoint(location).name == "pitchfork") {
+                self.grabPitchfork()
+                
             }
         }
     }
