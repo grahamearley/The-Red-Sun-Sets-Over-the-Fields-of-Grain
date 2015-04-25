@@ -160,9 +160,21 @@ class FarmScene: SKScene {
     }
 	
 	func ageByTurn(amount: Int = 1) {
-		for plot in profile.plots {
-			plot.age += amount
-			plot.updateNodeContent()
+		let blackover = SKShapeNode(rectOfSize: CGSize(width: screenSize.width, height: screenSize.height + 100))
+		blackover.fillColor = SKColor.blackColor()
+		blackover.strokeColor = SKColor.clearColor()
+		blackover.zPosition = 100
+		blackover.position = CGPoint(x: screenSize.width/2, y: screenSize.height/2)
+		blackover.alpha = 0
+		self.addChild(blackover)
+		blackover.runAction(SKAction.fadeAlphaTo(1, duration: 0.3)) {
+			//on blackover covers whole screen:
+			for plot in self.profile.plots {
+				plot.age += amount
+				plot.updateNodeContent()
+			}
+			let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.3)
+			blackover.runAction(SKAction.sequence([fadeOut,SKAction.removeFromParent()]))
 		}
 	}
     
