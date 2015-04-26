@@ -254,7 +254,7 @@ class MurderScene: SKScene {
         let bedPosition2 = CGPoint(x: size.width/2 - 20, y:size.height/2)
         
         let moveToPosition2 = SKAction.moveTo(bedPosition2, duration: 0.1)
-        let waitABit = SKAction.waitForDuration(1)
+        let waitABit = SKAction.waitForDuration(0.3)
         let moveToPosition1 = SKAction.moveTo(bedPosition1, duration: 0.1)
         let bedVibrate = SKAction.repeatActionForever(SKAction.sequence([moveToPosition2, waitABit, moveToPosition1, waitABit]))
 

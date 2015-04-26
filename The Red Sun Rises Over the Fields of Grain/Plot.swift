@@ -234,7 +234,7 @@ class Plot: SKNode, Touchable {
 			}
 		}
 		if self.contents == .House {
-			buttonTitle = "Wait"
+			buttonTitle = "Sleep"
 			buttonAction = { (sender:AnyObject?) in
 				//progress the FarmScene (the sender) by one turn:
 				if let farmScene = sender as? FarmScene {
