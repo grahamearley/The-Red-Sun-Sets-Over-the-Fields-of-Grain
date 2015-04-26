@@ -73,7 +73,8 @@ class Plot: SKNode, Touchable {
 		let label = SKLabelNode(fontNamed: "FreePixel-Regular")
 		label.text = ""
 		label.color = SKColor.orangeColor()
-		label.position = CGPoint(x: 0, y: size.height/3)
+		label.position = CGPoint(x: 0, y: 0)
+		label.zPosition = 15
 		label.fontSize = 40
 		label.name = "bonusLabel"
 		self.addChild(label)
