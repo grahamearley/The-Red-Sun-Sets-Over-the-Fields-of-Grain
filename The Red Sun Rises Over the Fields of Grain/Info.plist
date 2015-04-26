@@ -36,5 +36,10 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>PressStart2P.ttf</string>
+		<string>FreePixel.ttf</string>
+	</array>
 </dict>
 </plist>

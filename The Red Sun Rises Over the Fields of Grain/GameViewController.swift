@@ -13,18 +13,18 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-		// Configure the view.
+	
 		let skView = self.view as! SKView
-		let scene = GameScene(size:	skView.bounds.size)
-		skView.showsFPS = true
-		skView.showsNodeCount = true
-		skView.ignoresSiblingOrder = true
 		
-		/* Set the scale mode to scale to fit the window */
-		scene.scaleMode = .AspectFill
-		
-		skView.presentScene(scene)
+		if GameProfile.sharedInstance.committedMurder {
+			let scene = FarmScene(size: skView.bounds.size)
+			scene.scaleMode = .AspectFill
+			skView.presentScene(scene)
+		} else {
+			let scene = MurderScene(size: skView.bounds.size)
+			scene.scaleMode = .AspectFill
+			skView.presentScene(scene)
+		}
     }
 
     override func shouldAutorotate() -> Bool {
