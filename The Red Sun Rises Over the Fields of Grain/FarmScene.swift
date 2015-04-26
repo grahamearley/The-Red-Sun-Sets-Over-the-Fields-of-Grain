@@ -122,12 +122,12 @@ class FarmScene: SKScene {
 				alreadyBook.removeFromParent()
 				return
 			}
-			let notebookContents = Button(imageNamed: "MenuBase") { (sender: AnyObject?) -> () in
+			let notebookContents = Button(imageNamed: "Recipe") { (sender: AnyObject?) -> () in
 				//onAction:
 				self.childNodeWithName("notebookContents")?.removeFromParent()
 			}
 			notebookContents.name = "notebookContents"
-			notebookContents.setScale(4)
+			notebookContents.setScale(3.5)
 			notebookContents.position = CGPoint(x: size.width/2, y: size.height/2 + 25)
 			self.addChild(notebookContents)
 		}
