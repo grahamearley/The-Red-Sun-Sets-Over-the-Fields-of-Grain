@@ -225,6 +225,7 @@ class Plot: SKNode, Touchable {
 				if let farmScene = sender as? FarmScene {
 					farmScene.ageByTurn(amount: 1)
                     self.updateNodeContent()
+                    farmScene.updateDayCount()
 				}
 			}
 		}

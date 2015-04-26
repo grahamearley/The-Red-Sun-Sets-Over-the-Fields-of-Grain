@@ -110,6 +110,17 @@ class FarmScene: SKScene {
         moneyLabel.position = CGPoint(x: size.width - 40, y: size.height - 40)
         self.addChild(moneyLabel)
 	}
+    
+    func updateDayCount() {
+        var label = self.childNodeWithName("Time Label") as? SKLabelNode
+        let count = GameProfile.sharedInstance.turn
+        if count == 1 {
+            label!.text = "1 day"
+        } else {
+            label!.text = "\(count) days"
+        }
+        label?.zPosition = 99
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -213,6 +224,9 @@ class FarmScene: SKScene {
     }
 	 
 	func ageByTurn(amount: Int = 1) {
+        profile.turn += amount
+        profile.saveToFile()
+        
 		let blackover = SKShapeNode(rectOfSize: CGSize(width: screenSize.width, height: screenSize.height + 100))
 		blackover.fillColor = SKColor.blackColor()
 		blackover.strokeColor = SKColor.clearColor()
