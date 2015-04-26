@@ -404,6 +404,7 @@ class Plot: SKNode, Touchable {
 	
 	func getStore() -> StoreMenu {
         let currentFunds = GameProfile.sharedInstance.money
+        let currentGhosts = GameProfile.sharedInstance.ghostPoints
 		let cornBag = StoreItem(imageNamed: "CornBag", cost: 3, time: 3) { (sender: AnyObject?) in
             if currentFunds < 3 {
                 if let farmScene = sender as? FarmScene {
@@ -505,13 +506,35 @@ class Plot: SKNode, Touchable {
             }
 		}
 		
-		let myButton = StoreItem(imageNamed: "TomatoBag", cost: -1, time: -1)  { (sender: AnyObject?) in
-			println("hey") // todo: add real code
+        let windmill = StoreItem(imageNamed: "windturbinebase", ghosts: 3, time: 8, scale: 1.85)  { (sender: AnyObject?) in
+            if currentGhosts < 3 {
+                if let farmScene = sender as? FarmScene {
+                    farmScene.ghostWarning()
+                }
+            } else {
+                //onAction:
+                //add some windmill lol:
+                self.contents = .Windmill
+                self.age = 0
+                self.updateNodeContent()
+                
+                // Costs 3 ghosts
+                GameProfile.sharedInstance.ghostPoints -= 3
+                if let farmScene = sender as? FarmScene {
+                    farmScene.updateGhosts()
+                }
+                
+                // reset locking
+                if let farmScene = sender as? FarmScene {
+                    farmScene.setStoreLocks(false)
+                }
+ 
+            }
 		}
 
 		let menuSize = CGSize(width: size.width * 1, height: size.height * 0.8)
 		let seedPage = StorePage(buttons: [cornBag,carrotBag,wheatBag,pumpkinBag], size: menuSize)
-		let buildingPage = StorePage(buttons: [myButton], size: menuSize)
+		let buildingPage = StorePage(buttons: [windmill], size: menuSize)
 		
 		let storeMenu = StoreMenu(pages: [seedPage,buildingPage], size: menuSize)
 		return storeMenu

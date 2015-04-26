@@ -140,14 +140,22 @@ class StoreItem: Button {
 	let cost : Int
 	let time : Int
 	
-	init(imageNamed: String, cost: Int, time: Int, action: AnyObject? -> ()) {
-		self.cost = cost
+    // cost and ghost are preset so that you can set the price in ghosts or in gold
+    init(imageNamed: String, cost: Int = -1, ghosts: Int = -1, time: Int, scale: CGFloat = 4.0, action: AnyObject? -> ()) {
+        var priceInGhosts = false
+        if cost < 0 {
+            priceInGhosts = true
+            self.cost = ghosts
+        } else {
+            self.cost = cost
+        }
+        
 		self.time = time
 		
 		super.init(imageNamed: imageNamed, action: action)
 		
 		let imageSprite = getUnderlyingSprite()
-		imageSprite?.setScale(4)
+		imageSprite?.setScale(scale)
 		
 		//override and remove default label
 		if let label = self.childNodeWithName("label") {
@@ -156,13 +164,17 @@ class StoreItem: Button {
 		
 		let costLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
 		costLabel.fontColor = SKColor.blackColor()
-		costLabel.text = "$\(cost)"
+        if priceInGhosts {
+            costLabel.text = "\(self.cost) ghosts"
+        } else {
+            costLabel.text = "$\(self.cost)"
+        }
 		let yPos : CGFloat = -(imageSprite?.size.height ?? 30.0)*0.85
 		costLabel.position = CGPoint(x: 0, y: yPos)
 		
 		let timeLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
 		timeLabel.fontColor = SKColor.blackColor()
-		timeLabel.text = "\(time)t"
+		timeLabel.text = "\(time) days"
 		timeLabel.position = CGPoint(x: 0, y: costLabel.position.y - 25.0)
 		
 		self.addChild(costLabel)

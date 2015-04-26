@@ -223,6 +223,30 @@ class FarmScene: SKScene {
             moneyLabel!.runAction(colorFlash)
         }
     }
+    
+    func ghostWarning() {
+        let ghostLabel = self.childNodeWithName("Ghost Label") as? SKLabelNode
+        
+        ghostLabel?.zPosition = 900
+        let colorizeYellow = SKAction.runBlock { () -> Void in
+            ghostLabel?.fontColor = SKColor.yellowColor()
+            return
+        }
+        
+        let colorizeBlack = SKAction.runBlock{ () -> Void in
+            ghostLabel?.fontColor = SKColor.blackColor()
+            return
+        }
+        
+        let scaleUp = SKAction.scaleTo(2, duration: 0.2)
+        let scaleDown = SKAction.scaleTo(1, duration: 0.2)
+        
+        let colorFlash = SKAction.sequence([colorizeYellow, scaleUp, SKAction.waitForDuration(0.2), colorizeBlack, SKAction.waitForDuration(0.2), scaleDown])
+        
+        ghostLabel!.runAction(colorFlash) {
+            ghostLabel!.runAction(colorFlash)
+        }
+    }
 	 
 	func ageByTurn(amount: Int = 1) {
         profile.turn += amount
@@ -259,6 +283,12 @@ class FarmScene: SKScene {
     func updateMoney() {
         if let label = self.childNodeWithName("Money Label") as? SKLabelNode {
             label.text = String(GameProfile.sharedInstance.money)
+        }
+    }
+    
+    func updateGhosts() {
+        if let label = self.childNodeWithName("Ghost label") as? SKLabelNode {
+            label.text = String(GameProfile.sharedInstance.ghostPoints)
         }
     }
 	
