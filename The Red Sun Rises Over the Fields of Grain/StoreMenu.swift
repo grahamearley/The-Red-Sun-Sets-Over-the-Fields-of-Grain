@@ -37,24 +37,24 @@ class StoreMenu: SKNode, Touchable {
 			self.addChild(pages[i])
 		}
 		
-		let plantButton = Button(imageNamed: "Spaceship") { (sender: AnyObject?) -> Void in
+		let plantButton = Button(imageNamed: "VeggieButton") { (sender: AnyObject?) -> Void in
 			//onAction:
 			self.onPageIndex = 0
 			self.updateDisplayedPage()
 			return
 		}
-		let tabButtonSize = CGSize(width: size.width/5, height: size.height/5)
+		let tabButtonSize = CGSize(width: size.width/5, height: size.height/10)
 		plantButton.getUnderlyingSprite()?.size = tabButtonSize
-		plantButton.position = CGPoint(x: -tabButtonSize.width * 0.75, y: -size.height/2 + 40)
+		plantButton.position = CGPoint(x: -tabButtonSize.width * 0.75, y: -size.height/2 + 100)
 		
-		let buildingButton = Button(imageNamed: "Spaceship") { (sender: AnyObject?) -> Void in
+		let buildingButton = Button(imageNamed: "BuildingButton") { (sender: AnyObject?) -> Void in
 			//onAction:
 			self.onPageIndex = 1
 			self.updateDisplayedPage()
 			return
 		}
 		buildingButton.getUnderlyingSprite()?.size = tabButtonSize
-		buildingButton.position = CGPoint(x: tabButtonSize.width * 0.75, y: -size.height/2 + 40)
+		buildingButton.position = CGPoint(x: tabButtonSize.width * 0.75, y: -size.height/2 + 100)
 		
 		self.addChild(plantButton)
 		self.addChild(buildingButton)
