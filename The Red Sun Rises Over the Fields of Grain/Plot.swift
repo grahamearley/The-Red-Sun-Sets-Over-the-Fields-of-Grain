@@ -153,10 +153,10 @@ class Plot: SKNode, Touchable {
 				let gentleRotate = SKAction.repeatActionForever(SKAction.rotateByAngle(6.28, duration: 6))
 				millTurbine.runAction(gentleRotate)
 			} else {
-				let trafficCone = SKSpriteNode(imageNamed: "pumpkin")
+				let trafficCone = SKSpriteNode(imageNamed: "TrafficCone")
 				trafficCone.name = "trafficCone"
 				trafficCone.setScale(3)
-				trafficCone.position = CGPoint(x: 0, y: -self.size.height/5)
+				trafficCone.position = CGPoint(x: 0, y: -self.size.height/5-60)
 
 				self.addChild(trafficCone)
 				self.fieldNodes.append(trafficCone)
@@ -520,6 +520,7 @@ class Plot: SKNode, Touchable {
                 
                 // Costs 3 ghosts
                 GameProfile.sharedInstance.ghostPoints -= 3
+                
                 if let farmScene = sender as? FarmScene {
                     farmScene.updateGhosts()
                 }

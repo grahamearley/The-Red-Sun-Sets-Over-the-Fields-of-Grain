@@ -288,7 +288,7 @@ class FarmScene: SKScene {
     }
     
     func updateGhosts() {
-        if let label = self.childNodeWithName("Ghost label") as? SKLabelNode {
+        if let label = self.childNodeWithName("Ghost Label") as? SKLabelNode {
             label.text = String(GameProfile.sharedInstance.ghostPoints)
         }
     }
