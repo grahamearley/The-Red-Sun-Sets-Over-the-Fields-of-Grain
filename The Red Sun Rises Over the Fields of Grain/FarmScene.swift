@@ -16,15 +16,19 @@ class FarmScene: SKScene {
 	
 	var currentPlotIndex : Int = 0
 	var profile : GameProfile
+    var gameSettings : GameSettings
 	
-	var scrollLock : Bool = false
+	var scrollLock : Bool
 	
 	//Init Scene here
 	override init(size: CGSize) {
 		self.screenSize = size
 		self.spaceSize = CGSize(width: size.width-100, height: size.height)
 		
+		self.scrollLock = true
+		
 		profile = GameProfile.sharedInstance
+        gameSettings = GameSettings.sharedInstance
 		
 		super.init(size: size)
 		
@@ -81,7 +85,7 @@ class FarmScene: SKScene {
         
         // time label
         let timeLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
-        timeLabel.text = "\(profile.turn) days"
+        timeLabel.text = "day \(profile.turn)"
         timeLabel.name = "Time Label"
         timeLabel.fontColor = UIColor.blackColor()
         timeLabel.fontSize = 25
@@ -110,16 +114,51 @@ class FarmScene: SKScene {
         moneyLabel.fontSize = 25
         moneyLabel.position = CGPoint(x: size.width - 40, y: size.height - 40)
         self.addChild(moneyLabel)
+		
+		// Notebook button
+		let notebookButton = Button(imageNamed: "InfoBook") { (sender: AnyObject?) -> () in
+			//onAction:
+			if let alreadyBook = self.childNodeWithName("notebookContents") {
+				alreadyBook.removeFromParent()
+				return
+			}
+			let notebookContents = Button(imageNamed: "Recipe") { (sender: AnyObject?) -> () in
+				//onAction:
+				self.childNodeWithName("notebookContents")?.removeFromParent()
+			}
+			notebookContents.name = "notebookContents"
+			notebookContents.setScale(3.5)
+			notebookContents.position = CGPoint(x: size.width/2, y: size.height/2 + 25)
+			self.addChild(notebookContents)
+		}
+		notebookButton.setScale(3)
+		notebookButton.position = CGPoint(x: 40, y: size.height - 40)
+		self.addChild(notebookButton)
+		
+		let bigLightNode = SKLightNode()
+		bigLightNode.falloff = 0.2
+		bigLightNode.lightColor = SKColor.redColor()
+		bigLightNode.ambientColor = SKColor.whiteColor()
+		bigLightNode.categoryBitMask = 1
+		self.enumerateChildNodesWithName("//*", usingBlock: { (node:SKNode!, cancel:UnsafeMutablePointer<ObjCBool>) -> Void in
+			if let sprite = node as? SKSpriteNode {
+				sprite.lightingBitMask = 1
+			}
+		})
+		bigLightNode.position = CGPoint(x: size.width/2, y: size.height * 0.8)
+		self.addChild(bigLightNode)
+		
+		let wait = SKNode()
+		self.addChild(wait)
+		wait.runAction(SKAction.waitForDuration(0.25)) {	//frame buffer
+			self.scrollLock = false
+		}
 	}
     
     func updateDayCount() {
         var label = self.childNodeWithName("Time Label") as? SKLabelNode
         let count = GameProfile.sharedInstance.turn
-        if count == 1 {
-            label!.text = "1 day"
-        } else {
-            label!.text = "\(count) days"
-        }
+		label!.text = "day \(count)"
         label?.zPosition = 99
     }
 	
@@ -127,6 +166,7 @@ class FarmScene: SKScene {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	var gestures = [UIGestureRecognizer]()
 	//Create Gesture Recognizers Here
 	override func didMoveToView(view: SKView) {
 		let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeLeft")
@@ -136,11 +176,16 @@ class FarmScene: SKScene {
 		let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeRight")
 		swipeRightGestureRecognizer.direction = .Right
 		self.view?.addGestureRecognizer(swipeRightGestureRecognizer)
+
+		gestures.append(swipeLeftGestureRecognizer)
+		gestures.append(swipeRightGestureRecognizer)
 	}
 	
 	//Remove Gesture Recognizers
 	override func willMoveFromView(view: SKView) {
-		self.view?.gestureRecognizers?.removeAll(keepCapacity: false)
+		for gesture in gestures {
+			view.removeGestureRecognizer(gesture)
+		}
 	}
 	
 	///On Swipes left, find all PanNodes and shift them left
@@ -214,7 +259,7 @@ class FarmScene: SKScene {
             return
         }
         
-        let scaleUp = SKAction.scaleTo(2, duration: 0.2)
+        let scaleUp = SKAction.scaleTo(1.6, duration: 0.2)
         let scaleDown = SKAction.scaleTo(1, duration: 0.2)
         
         let colorFlash = SKAction.sequence([colorizeYellow, scaleUp, SKAction.waitForDuration(0.2), colorizeBlack, SKAction.waitForDuration(0.2), scaleDown])
@@ -238,7 +283,7 @@ class FarmScene: SKScene {
             return
         }
         
-        let scaleUp = SKAction.scaleTo(2, duration: 0.2)
+        let scaleUp = SKAction.scaleTo(1.6, duration: 0.2)
         let scaleDown = SKAction.scaleTo(1, duration: 0.2)
         
         let colorFlash = SKAction.sequence([colorizeYellow, scaleUp, SKAction.waitForDuration(0.2), colorizeBlack, SKAction.waitForDuration(0.2), scaleDown])
@@ -250,6 +295,13 @@ class FarmScene: SKScene {
 	 
 	func ageByTurn(amount: Int = 1) {
         profile.turn += amount
+		if profile.turn % 5 == 0 {
+			profile.money--
+		}
+		if profile.money < 0 {
+			profile.money = 0
+		}
+		self.updateMoney()
         profile.saveToFile()
         
 		let blackover = SKShapeNode(rectOfSize: CGSize(width: screenSize.width, height: screenSize.height + 100))
@@ -262,21 +314,36 @@ class FarmScene: SKScene {
 		blackover.runAction(SKAction.fadeAlphaTo(1, duration: 0.3)) {
 			//on blackover covers whole screen:
 			for plot in self.profile.plots {
-				plot.age += amount
+				plot.ageContent(amount: amount)
 				plot.updateNodeContent()
 			}
 			let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.3)
 			blackover.runAction(SKAction.sequence([fadeOut,SKAction.removeFromParent()]))
 		}
 		
-		if profile.turn > 20 {
+		if profile.money <= 0 {
+			//check if any plots exist to save you...
+			var vegisFound = 0
+			for plot in profile.plots {
+				if plot.contents == .Corn || plot.contents == .Wheat || plot.contents == .Carrot || plot.contents == .Pumpkin {
+					vegisFound++
+				}
+			}
+			if vegisFound <= 1 {
+				//you die. sucks to suck
+				profile.clearAllData()	//reset all data
+				let transition = SKTransition.crossFadeWithDuration(3)
+				self.view?.presentScene(DeathScene(size: size, score: 0), transition: transition)
+			}
+		}
+		if profile.turn > gameSettings.lifespan {
 			//you die. sucks to suck
-			
 			let ghosts = profile.ghostPoints	//preserve ghosts
+			let score = profile.money //save money for presenting
 			profile.clearAllData()	//reset all data
 			profile.ghostPoints = ghosts + 1	//reinstall ghosts and add one for you
             let transition = SKTransition.crossFadeWithDuration(3)
-            self.view?.presentScene(DeathScene(size: size), transition: transition)
+			self.view?.presentScene(DeathScene(size: size, score: score), transition: transition)
 			
 		}
 	}
@@ -288,7 +355,7 @@ class FarmScene: SKScene {
     }
     
     func updateGhosts() {
-        if let label = self.childNodeWithName("Ghost label") as? SKLabelNode {
+        if let label = self.childNodeWithName("Ghost Label") as? SKLabelNode {
             label.text = String(GameProfile.sharedInstance.ghostPoints)
         }
     }

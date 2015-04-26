@@ -12,7 +12,7 @@ import UIKit
 import SpriteKit
 
 class DeathScene: SKScene {
-    override init(size: CGSize) {
+	init(size: CGSize, score: Int) {
         super.init(size: size)
         
         // Gravestone
@@ -28,7 +28,15 @@ class DeathScene: SKScene {
         textLabel.fontSize = 40
         textLabel.position = CGPoint(x: size.width  / 2, y: size.height * 0.8)
         self.addChild(textLabel)
-        
+		
+		// Top text
+		let hsLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+		hsLabel.text = score > 0 ? "You had \(score) coins." : "and you lost."
+		hsLabel.fontColor = UIColor.grayColor()
+		hsLabel.fontSize = 40
+		hsLabel.position = CGPoint(x: size.width  / 2, y: size.height * 0.7)
+		self.addChild(hsLabel)
+		
         // ghost icon
         let ghostIcon = SKSpriteNode(imageNamed: "Ghost")
         ghostIcon.position = CGPoint(x: self.size.width - ghostIcon.size.width/2 - 230, y: self.size.height - 30)
@@ -36,11 +44,16 @@ class DeathScene: SKScene {
         
         // ghost label
         let ghostLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
-        ghostLabel.text = "+1"
+		ghostLabel.text = "+1"
         ghostLabel.fontColor = UIColor.whiteColor()
         ghostLabel.fontSize = 25
         ghostLabel.position = CGPoint(x: size.width - 215, y: size.height - 40)
         self.addChild(ghostLabel)
+		
+		if score <= 0 {
+			ghostIcon.alpha = 0
+			ghostLabel.alpha = 0
+		}
         
         // Bottom text
         let bottomLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
@@ -49,6 +62,8 @@ class DeathScene: SKScene {
         bottomLabel.fontSize = 30
         bottomLabel.position = CGPoint(x: size.width  / 2, y: size.height * 0.07)
         self.addChild(bottomLabel)
+		bottomLabel.alpha = 0
+		bottomLabel.runAction(SKAction.fadeInWithDuration(3))
         
     }
 

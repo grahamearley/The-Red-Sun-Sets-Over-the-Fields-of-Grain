@@ -100,7 +100,7 @@ class StorePage: SKNode, Touchable {
 		super.init()
 		
 		let padding : CGFloat = 75
-		let margin : CGFloat = 50
+		let margin : CGFloat = 60
 		
 		let buttonSize = buttons[0].getUnderlyingSprite()!.size
 		var evenXPos : CGFloat = -buttonSize.width * 0.75
