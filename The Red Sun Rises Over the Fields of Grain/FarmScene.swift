@@ -18,12 +18,14 @@ class FarmScene: SKScene {
 	var profile : GameProfile
     var gameSettings : GameSettings
 	
-	var scrollLock : Bool = false
+	var scrollLock : Bool
 	
 	//Init Scene here
 	override init(size: CGSize) {
 		self.screenSize = size
 		self.spaceSize = CGSize(width: size.width-100, height: size.height)
+		
+		self.scrollLock = true
 		
 		profile = GameProfile.sharedInstance
         gameSettings = GameSettings.sharedInstance
@@ -145,6 +147,12 @@ class FarmScene: SKScene {
 		})
 		bigLightNode.position = CGPoint(x: size.width/2, y: size.height * 0.8)
 		self.addChild(bigLightNode)
+		
+		let wait = SKNode()
+		self.addChild(wait)
+		wait.runAction(SKAction.waitForDuration(0.25)) {	//frame buffer
+			self.scrollLock = false
+		}
 	}
     
     func updateDayCount() {
