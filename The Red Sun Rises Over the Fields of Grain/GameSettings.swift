@@ -17,7 +17,13 @@ class GameSettings {
     
     // Starting conditions
     let startingMoney : Int = 25
-    let startingPlots : [Plot] = [Plot(contents: .House, index: 0), Plot(contents: .Empty, index: 1),Plot(contents: .Empty, index: 2), Plot(contents: .Tractor, index: 3)]
+	func startingPlots() -> [Plot] {
+		let p1 = Plot(contents: .House, index: 0)
+		let p2 = Plot(contents: .Empty, index: 1)
+		let p3 = Plot(contents: .Empty, index: 2)
+		let p4 = Plot(contents: .Tractor, index: 3)
+		return [p1,p2,p3,p4]
+	}
     
     
     // Button titles

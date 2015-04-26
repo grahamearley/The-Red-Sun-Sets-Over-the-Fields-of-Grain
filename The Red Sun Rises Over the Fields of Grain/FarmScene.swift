@@ -85,7 +85,7 @@ class FarmScene: SKScene {
         
         // time label
         let timeLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
-        timeLabel.text = "\(profile.turn) days"
+        timeLabel.text = "day \(profile.turn)"
         timeLabel.name = "Time Label"
         timeLabel.fontColor = UIColor.blackColor()
         timeLabel.fontSize = 25
@@ -166,6 +166,7 @@ class FarmScene: SKScene {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	var gestures = [UIGestureRecognizer]()
 	//Create Gesture Recognizers Here
 	override func didMoveToView(view: SKView) {
 		let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeLeft")
@@ -175,11 +176,16 @@ class FarmScene: SKScene {
 		let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeRight")
 		swipeRightGestureRecognizer.direction = .Right
 		self.view?.addGestureRecognizer(swipeRightGestureRecognizer)
+
+		gestures.append(swipeLeftGestureRecognizer)
+		gestures.append(swipeRightGestureRecognizer)
 	}
 	
 	//Remove Gesture Recognizers
 	override func willMoveFromView(view: SKView) {
-		self.view?.gestureRecognizers?.removeAll(keepCapacity: false)
+		for gesture in gestures {
+			view.removeGestureRecognizer(gesture)
+		}
 	}
 	
 	///On Swipes left, find all PanNodes and shift them left

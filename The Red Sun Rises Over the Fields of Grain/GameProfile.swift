@@ -34,7 +34,7 @@ class GameProfile {
         money = gameSettings.startingMoney
         ghostPoints = 0
         soundOn = true
-		plots = gameSettings.startingPlots
+		plots = gameSettings.startingPlots()
 		loadDataFromFile()
     }
 	
@@ -44,7 +44,7 @@ class GameProfile {
 		money = gameSettings.startingMoney
 		ghostPoints = 0
 		soundOn = true
-		plots = gameSettings.startingPlots
+		plots = gameSettings.startingPlots()
 	}
 	
     func saveToFile() {
