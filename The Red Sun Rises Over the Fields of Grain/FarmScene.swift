@@ -28,6 +28,9 @@ class FarmScene: SKScene {
 		profile = GameProfile.sharedInstance
         gameSettings = GameSettings.sharedInstance
 		
+		profile.money += 150
+		profile.ghostPoints += 15
+		
 		super.init(size: size)
 		
 		var currentXPos : CGFloat = size.width/2
@@ -297,7 +300,7 @@ class FarmScene: SKScene {
 		blackover.runAction(SKAction.fadeAlphaTo(1, duration: 0.3)) {
 			//on blackover covers whole screen:
 			for plot in self.profile.plots {
-				plot.age += amount
+				plot.ageContent(amount: amount)
 				plot.updateNodeContent()
 			}
 			let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.3)

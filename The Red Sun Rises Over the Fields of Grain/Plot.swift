@@ -434,9 +434,37 @@ class Plot: SKNode, Touchable {
 		return totalBonus
 	}
 
-	
-	func ageContent(byAmount:Int = 1) {
-		age += byAmount
+	func ageContent(amount:Int = 1) {
+		let allPlots = GameProfile.sharedInstance.plots
+		if index == 0 || index >= allPlots.count-1 {
+			age+=amount	//will cause errors, and only applies to edge plots which don't need multipliers
+			return
+		}
+		
+		let onlyLeftPlots = allPlots[0..<self.index]
+		var leftwardPlots = onlyLeftPlots.reverse() //0 is closest Plot to the left
+		var rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
+		
+		var foundGoldWindmill = false
+		if leftwardPlots[0].contents == .GoldWindmill || rightwardPlots[0].contents == .GoldWindmill {
+			foundGoldWindmill = true
+		}
+		if leftwardPlots.count > 1 {
+			if leftwardPlots[1].contents == .GoldWindmill {
+				foundGoldWindmill = true
+			}
+		}
+		if rightwardPlots.count > 1 {
+			if rightwardPlots[1].contents == .GoldWindmill {
+				foundGoldWindmill = true
+			}
+		}
+		if foundGoldWindmill {
+			//boost age an extra bit
+			age++
+		}
+		
+		age += amount
 	}
 	
 	func getStore() -> StoreMenu {
@@ -475,10 +503,36 @@ class Plot: SKNode, Touchable {
  
             }
 		}
+		
+		let goldWindmill = StoreItem(imageNamed: "goldwindturbinebase", ghosts: 6, time: 15, scale: 1.85)  { (sender: AnyObject?) in
+			if currentGhosts < 6 {
+				if let farmScene = sender as? FarmScene {
+					farmScene.ghostWarning()
+				}
+			} else {
+				//onAction:
+				//add some windmill lol:
+				self.contents = .GoldWindmill
+				self.age = 0
+				self.updateNodeContent()
+				
+				// Costs 6 ghosts
+				GameProfile.sharedInstance.ghostPoints -= 6
+				if let farmScene = sender as? FarmScene {
+					farmScene.updateGhosts()
+				}
+				
+				// reset locking
+				if let farmScene = sender as? FarmScene {
+					farmScene.setStoreLocks(false)
+				}
+				
+			}
+		}
 
 		let menuSize = CGSize(width: size.width * 1, height: size.height * 0.8)
 		let seedPage = StorePage(buttons: seedArray, size: menuSize)
-		let buildingPage = StorePage(buttons: [windmill], size: menuSize)
+		let buildingPage = StorePage(buttons: [windmill,goldWindmill], size: menuSize)
 		
 		let storeMenu = StoreMenu(pages: [seedPage,buildingPage], size: menuSize)
 		return storeMenu
