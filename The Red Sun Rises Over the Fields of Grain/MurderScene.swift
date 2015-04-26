@@ -111,6 +111,13 @@ class MurderScene: SKScene {
         
         house.runAction(self.getBlinkAction())
 		
+		let goHome = SKLabelNode(fontNamed: "FreePixel-Regular")
+		goHome.name = "goHomeLabel"
+		goHome.text = "tap to go home."
+		goHome.position = CGPoint(x: size.width/2, y: size.height/2)
+		goHome.fontColor = SKColor.darkGrayColor()
+		houseInTheDistanceMoment.addChild(goHome)
+		
 		houseInTheDistanceMoment.addChild(self.getRainLayer())
         houseInTheDistanceMoment.addChild(ground)
         houseInTheDistanceMoment.addChild(house)
@@ -217,7 +224,6 @@ class MurderScene: SKScene {
         ground.size = CGSize(width: size.width, height: 250)
         ground.position = CGPoint(x: size.width/2, y: 125)
 		ground.lightingBitMask = worldLightingBitmask
-		ground.shadowedBitMask = worldLightingBitmask
 		ground.zPosition = 1
         
         let house = SKSpriteNode(imageNamed: "House")
@@ -225,7 +231,6 @@ class MurderScene: SKScene {
         house.setScale(4)
 		house.zPosition = 1
 		house.lightingBitMask = worldLightingBitmask
-		house.shadowCastBitMask = worldLightingBitmask
         house.position = CGPoint(x: size.width/2, y: ground.size.height)
         
         house.runAction(self.getBlinkAction())
@@ -295,7 +300,7 @@ class MurderScene: SKScene {
         background.position = CGPoint(x: size.width/2, y:size.height/2)
         background.size.height = size.height * 3
         background.size.width = size.width * 3
-        background.runAction(self.getBlinkAction(color: SKColor.redColor()))
+        background.runAction(self.getBlinkAction(color: SKColor.blackColor()))
         pitchforkGrabMoment.addChild(background)
         
         let pitchfork = SKSpriteNode(imageNamed: "Pitchfork")
@@ -492,13 +497,10 @@ class MurderScene: SKScene {
 			let location = (touch as! UITouch).locationInNode(self)
 			switch currentMoment {
 			case .HouseInDistance:
-				for touched in self.nodesAtPoint(location) {
-					if let node = touched as? SKNode {
-						if node.name == "distant house" {
-							self.transitionToMoment(.HouseUpClose)
-						}
-					}
+				if let label = self.childNodeWithName("goHomeLabel") {
+					label.runAction(SKAction.fadeOutWithDuration(0.2))
 				}
+				self.transitionToMoment(.HouseUpClose)
 			case .HouseUpClose:
 				for touched in self.nodesAtPoint(location) {
 					if let node = touched as? SKNode {
