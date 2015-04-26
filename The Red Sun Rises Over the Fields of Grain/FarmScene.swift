@@ -180,6 +180,9 @@ class FarmScene: SKScene {
     }
 	 
 	func ageByTurn(amount: Int = 1) {
+		profile.turn += amount
+		profile.saveToFile()
+		
 		let blackover = SKShapeNode(rectOfSize: CGSize(width: screenSize.width, height: screenSize.height + 100))
 		blackover.fillColor = SKColor.blackColor()
 		blackover.strokeColor = SKColor.clearColor()
@@ -195,6 +198,16 @@ class FarmScene: SKScene {
 			}
 			let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.3)
 			blackover.runAction(SKAction.sequence([fadeOut,SKAction.removeFromParent()]))
+		}
+		
+		if profile.turn > 100 {
+			//you die. sucks to suck
+			
+			let ghosts = profile.ghostPoints	//preserve ghosts
+			profile.clearAllData()	//reset all data
+			profile.ghostPoints = ghosts + 2	//reinstall ghosts and add one for you and one for him
+			
+			
 		}
 	}
     
