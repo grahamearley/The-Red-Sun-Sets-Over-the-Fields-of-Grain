@@ -28,9 +28,6 @@ class FarmScene: SKScene {
 		profile = GameProfile.sharedInstance
         gameSettings = GameSettings.sharedInstance
 		
-		profile.money += 150
-		profile.ghostPoints += 15
-		
 		super.init(size: size)
 		
 		var currentXPos : CGFloat = size.width/2
@@ -153,11 +150,7 @@ class FarmScene: SKScene {
     func updateDayCount() {
         var label = self.childNodeWithName("Time Label") as? SKLabelNode
         let count = GameProfile.sharedInstance.turn
-        if count == 1 {
-            label!.text = "1 day"
-        } else {
-            label!.text = "\(count) days"
-        }
+		label!.text = "day \(count)"
         label?.zPosition = 99
     }
 	
