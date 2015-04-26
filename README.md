@@ -1,4 +1,4 @@
-# The Red Sun Rises Over the Fields of Grain
+# The Red Sun Sets Over the Fields of Grain
 A riveting iPhone game about the life of a farmer with a dark secret...
 
 The game raises questions about complacency and mindlessness in smartphone video games.
