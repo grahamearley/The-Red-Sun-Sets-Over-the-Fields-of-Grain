@@ -65,8 +65,42 @@ class FarmScene: SKScene {
         // Status bar background
         let statusBar = SKSpriteNode(imageNamed: "TopBar")
         statusBar.setScale(2)
+        statusBar.size.width += 75
         statusBar.position = CGPoint(x: self.size.width - statusBar.size.width/2 - 10, y: self.size.height - 30)
         self.addChild(statusBar)
+        
+        // coin icon
+        let coinIcon = SKSpriteNode(imageNamed: "CoinCounter")
+        coinIcon.position = CGPoint(x: self.size.width - coinIcon.size.width/2 - 60, y: self.size.height - 30)
+        self.addChild(coinIcon)
+        
+        // clock icon
+        let clockIcon = SKSpriteNode(imageNamed: "ClockIcon")
+        clockIcon.position = CGPoint(x: self.size.width - clockIcon.size.width/2 - 170, y: self.size.height - 30)
+        self.addChild(clockIcon)
+        
+        // time label
+        let timeLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+        timeLabel.text = "0 days"
+        timeLabel.name = "Time Label"
+        timeLabel.fontColor = UIColor.blackColor()
+        timeLabel.fontSize = 25
+        timeLabel.position = CGPoint(x: size.width - 125, y: size.height - 40)
+        self.addChild(timeLabel)
+        
+        // ghost icon
+        let ghostIcon = SKSpriteNode(imageNamed: "Ghost")
+        ghostIcon.position = CGPoint(x: self.size.width - ghostIcon.size.width/2 - 230, y: self.size.height - 30)
+        self.addChild(ghostIcon)
+        
+        // ghost label
+        let ghostLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+        ghostLabel.text = "\(profile.ghostPoints)"
+        ghostLabel.name = "Ghost Label"
+        ghostLabel.fontColor = UIColor.blackColor()
+        ghostLabel.fontSize = 25
+        ghostLabel.position = CGPoint(x: size.width - 215, y: size.height - 40)
+        self.addChild(ghostLabel)
         
         // Money label
         let moneyLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
@@ -77,6 +111,17 @@ class FarmScene: SKScene {
         moneyLabel.position = CGPoint(x: size.width - 40, y: size.height - 40)
         self.addChild(moneyLabel)
 	}
+    
+    func updateDayCount() {
+        var label = self.childNodeWithName("Time Label") as? SKLabelNode
+        let count = GameProfile.sharedInstance.turn
+        if count == 1 {
+            label!.text = "1 day"
+        } else {
+            label!.text = "\(count) days"
+        }
+        label?.zPosition = 99
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -180,9 +225,9 @@ class FarmScene: SKScene {
     }
 	 
 	func ageByTurn(amount: Int = 1) {
-		profile.turn += amount
-		profile.saveToFile()
-		
+        profile.turn += amount
+        profile.saveToFile()
+        
 		let blackover = SKShapeNode(rectOfSize: CGSize(width: screenSize.width, height: screenSize.height + 100))
 		blackover.fillColor = SKColor.blackColor()
 		blackover.strokeColor = SKColor.clearColor()
