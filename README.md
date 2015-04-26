@@ -5,4 +5,4 @@ You return home one day and are provoked into committing murder. Life appears to
 
 This seemingly simple and fun iPhone game raises questions about complacency and mindlessness in smartphone video game culture. Rather than simply tap away and watch the gold coins increase, *The Red Sun Sets* pushes its users to carry the burden of the main character, establishing a strong link between the player and the character that the player controls.
 
-*Made at CarlHacks 2015 (Carleton College)*
+*Made in 36 hours at CarlHacks 2015 (Carleton College)*
