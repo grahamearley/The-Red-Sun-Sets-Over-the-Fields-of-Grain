@@ -281,6 +281,11 @@ class FarmScene: SKScene {
 	 
 	func ageByTurn(amount: Int = 1) {
         profile.turn += amount
+		profile.money -= amount
+		if profile.money < 0 {
+			profile.money = 0
+		}
+		self.updateMoney()
         profile.saveToFile()
         
 		let blackover = SKShapeNode(rectOfSize: CGSize(width: screenSize.width, height: screenSize.height + 100))
@@ -300,14 +305,29 @@ class FarmScene: SKScene {
 			blackover.runAction(SKAction.sequence([fadeOut,SKAction.removeFromParent()]))
 		}
 		
+//		if profile.money <= 0 {
+//			//check if any plots exist to save you...
+//			var vegisFound = 0
+//			for plot in profile.plots {
+//				if plot.contents == .Corn || plot.contents == .Wheat || plot.contents == .Carrot || plot.contents == .Pumpkin {
+//					vegisFound++
+//				}
+//			}
+//			if vegisFound <= 1 {
+//				//you die. sucks to suck
+//				profile.clearAllData()	//reset all data
+//				let transition = SKTransition.crossFadeWithDuration(3)
+//				self.view?.presentScene(DeathScene(size: size, score: 0), transition: transition)
+//			}
+//		}
 		if profile.turn > gameSettings.lifespan {
 			//you die. sucks to suck
-			
 			let ghosts = profile.ghostPoints	//preserve ghosts
+			let score = profile.money //save money for presenting
 			profile.clearAllData()	//reset all data
 			profile.ghostPoints = ghosts + 1	//reinstall ghosts and add one for you
             let transition = SKTransition.crossFadeWithDuration(3)
-            self.view?.presentScene(DeathScene(size: size), transition: transition)
+			self.view?.presentScene(DeathScene(size: size, score: score), transition: transition)
 			
 		}
 	}

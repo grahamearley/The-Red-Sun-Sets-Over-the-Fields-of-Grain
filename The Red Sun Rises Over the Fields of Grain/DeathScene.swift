@@ -12,7 +12,7 @@ import UIKit
 import SpriteKit
 
 class DeathScene: SKScene {
-    override init(size: CGSize) {
+	init(size: CGSize, score: Int) {
         super.init(size: size)
         
         // Gravestone
@@ -28,7 +28,15 @@ class DeathScene: SKScene {
         textLabel.fontSize = 40
         textLabel.position = CGPoint(x: size.width  / 2, y: size.height * 0.8)
         self.addChild(textLabel)
-        
+		
+		// Top text
+		let hsLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+		hsLabel.text = "You had \(score) coins."
+		hsLabel.fontColor = UIColor.grayColor()
+		hsLabel.fontSize = 40
+		hsLabel.position = CGPoint(x: size.width  / 2, y: size.height * 0.7)
+		self.addChild(hsLabel)
+		
         // ghost icon
         let ghostIcon = SKSpriteNode(imageNamed: "Ghost")
         ghostIcon.position = CGPoint(x: self.size.width - ghostIcon.size.width/2 - 230, y: self.size.height - 30)
@@ -49,6 +57,8 @@ class DeathScene: SKScene {
         bottomLabel.fontSize = 30
         bottomLabel.position = CGPoint(x: size.width  / 2, y: size.height * 0.07)
         self.addChild(bottomLabel)
+		bottomLabel.alpha = 0
+		bottomLabel.runAction(SKAction.fadeInWithDuration(3))
         
     }
 

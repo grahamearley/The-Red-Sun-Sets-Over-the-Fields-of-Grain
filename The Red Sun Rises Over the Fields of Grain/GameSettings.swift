@@ -24,7 +24,7 @@ class GameSettings {
     let harvestButtonTitle : String = "Harvest"
     let removeButtonTitle : String = "Remove"
     let plantButtonTitle : String = "Plant"
-    let houseButtonTitle : String = "Wait"
+    let houseButtonTitle : String = "Sleep"
     let tractorButtonTitle : String = "Expand"
     
     // Plant info
