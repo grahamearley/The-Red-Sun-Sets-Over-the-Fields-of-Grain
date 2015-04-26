@@ -31,7 +31,7 @@ class DeathScene: SKScene {
 		
 		// Top text
 		let hsLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
-		hsLabel.text = "You had \(score) coins."
+		hsLabel.text = score > 0 ? "You had \(score) coins." : "and you lost."
 		hsLabel.fontColor = UIColor.grayColor()
 		hsLabel.fontSize = 40
 		hsLabel.position = CGPoint(x: size.width  / 2, y: size.height * 0.7)
@@ -44,11 +44,16 @@ class DeathScene: SKScene {
         
         // ghost label
         let ghostLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
-        ghostLabel.text = "+1"
+		ghostLabel.text = "+1"
         ghostLabel.fontColor = UIColor.whiteColor()
         ghostLabel.fontSize = 25
         ghostLabel.position = CGPoint(x: size.width - 215, y: size.height - 40)
         self.addChild(ghostLabel)
+		
+		if score <= 0 {
+			ghostIcon.alpha = 0
+			ghostLabel.alpha = 0
+		}
         
         // Bottom text
         let bottomLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
