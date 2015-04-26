@@ -132,6 +132,19 @@ class FarmScene: SKScene {
 		notebookButton.setScale(3)
 		notebookButton.position = CGPoint(x: 40, y: size.height - 40)
 		self.addChild(notebookButton)
+		
+		let bigLightNode = SKLightNode()
+		bigLightNode.falloff = 0.2
+		bigLightNode.lightColor = SKColor.redColor()
+		bigLightNode.ambientColor = SKColor.whiteColor()
+		bigLightNode.categoryBitMask = 1
+		self.enumerateChildNodesWithName("//*", usingBlock: { (node:SKNode!, cancel:UnsafeMutablePointer<ObjCBool>) -> Void in
+			if let sprite = node as? SKSpriteNode {
+				sprite.lightingBitMask = 1
+			}
+		})
+		bigLightNode.position = CGPoint(x: size.width/2, y: size.height * 0.8)
+		self.addChild(bigLightNode)
 	}
     
     func updateDayCount() {

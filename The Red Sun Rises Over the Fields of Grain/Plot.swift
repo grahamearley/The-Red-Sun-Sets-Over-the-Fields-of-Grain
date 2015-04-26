@@ -58,6 +58,7 @@ class Plot: SKNode, Touchable {
 		ground.size.width = size.width
 		ground.size.height = size.height/5
 		ground.position = CGPoint(x: 0, y: (-size.height/2)+ground.size.height/2)
+		ground.lightingBitMask = 1
 		self.addChild(ground)
 		
 		//button
@@ -74,7 +75,7 @@ class Plot: SKNode, Touchable {
 		//bonus text
 		let label = SKLabelNode(fontNamed: "FreePixel-Regular")
 		label.text = ""
-		label.color = SKColor.orangeColor()
+		label.fontColor = SKColor.orangeColor()
 		label.position = CGPoint(x: 0, y: 0)
 		label.zPosition = 15
 		label.fontSize = 40
@@ -98,6 +99,7 @@ class Plot: SKNode, Touchable {
 			let bump = SKSpriteNode(imageNamed: "BodyLump")
 			bump.setScale(2)
 			bump.position = CGPoint(x: 0, y: -size.height/3.4)
+			bump.lightingBitMask = 1
 			bump.name = "bodyBump"
 			self.addChild(bump)
 			self.fieldNodes.append(bump)
@@ -115,17 +117,20 @@ class Plot: SKNode, Touchable {
 			let house = SKSpriteNode(imageNamed: "House")
 			house.name = "house"
 			house.setScale(5)
+			house.lightingBitMask = 1
 			house.position = CGPoint(x: -size.width * 0.4, y: -size.height/8)
 			self.addChild(house)
 			self.fieldNodes.append(house)
 		case .Tractor:
 			let hull = SKSpriteNode(imageNamed: "TractorBody")
 			hull.name = "hull"
+			hull.lightingBitMask = 1
 			hull.size = CGSize(width: self.size.width, height: self.size.height/2)
 			hull.position = CGPoint(x: self.size.width/4, y: 0)
 			self.addChild(hull)
 			
 			let wheel = SKSpriteNode(imageNamed: "TractorWheel")
+			wheel.lightingBitMask = 1
 			wheel.position = CGPoint(x: 0, y: -self.size.height/5)
 			wheel.setScale(5)
 			wheel.name = "wheel"
@@ -137,6 +142,7 @@ class Plot: SKNode, Touchable {
 			if self.age >= 8 {
 				//it's built
 				let millBase = SKSpriteNode(imageNamed: "windturbineturbine")	//image is named wrong...
+				millBase.lightingBitMask = 1
 				millBase.name = "millBase"
 				millBase.setScale(7)
 				millBase.size = CGSize(width: millBase.size.width, height: millBase.size.height + 110)
@@ -145,6 +151,7 @@ class Plot: SKNode, Touchable {
 				self.fieldNodes.append(millBase)
 				
 				let millTurbine = SKSpriteNode(imageNamed: "windturbinebase") //image is named wrong...
+				millTurbine.lightingBitMask = 1
 				millTurbine.name = "millTurbine"
 				millTurbine.setScale(7)
 				millTurbine.position = CGPoint(x: 0, y: size.height * 0.6)
@@ -156,6 +163,7 @@ class Plot: SKNode, Touchable {
 				millTurbine.runAction(gentleRotate)
 			} else {
 				let trafficCone = SKSpriteNode(imageNamed: "TrafficCone")
+				trafficCone.lightingBitMask = 1
 				trafficCone.name = "trafficCone"
 				trafficCone.setScale(3)
 				trafficCone.position = CGPoint(x: 0, y: -self.size.height/5-60)
@@ -168,6 +176,7 @@ class Plot: SKNode, Touchable {
             if self.age >= 15 {
                 //it's built
                 let millBase = SKSpriteNode(imageNamed: "goldwindturbineturbine")	//image is named wrong...
+				millBase.lightingBitMask = 1
                 millBase.name = "millBase"
                 millBase.setScale(7)
                 millBase.size = CGSize(width: millBase.size.width, height: millBase.size.height + 110)
@@ -176,6 +185,7 @@ class Plot: SKNode, Touchable {
                 self.fieldNodes.append(millBase)
                 
                 let millTurbine = SKSpriteNode(imageNamed: "goldwindturbinebase") //image is named wrong...
+				millTurbine.lightingBitMask = 1
                 millTurbine.name = "millTurbine"
                 millTurbine.setScale(7)
                 millTurbine.position = CGPoint(x: 0, y: size.height * 0.6)
@@ -187,6 +197,7 @@ class Plot: SKNode, Touchable {
                 millTurbine.runAction(gentleRotate)
             } else {
                 let trafficCone = SKSpriteNode(imageNamed: "TrafficCone")
+				trafficCone.lightingBitMask = 1
                 trafficCone.name = "trafficCone"
                 trafficCone.setScale(3)
                 trafficCone.position = CGPoint(x: 0, y: -self.size.height/5-60)
@@ -543,9 +554,7 @@ class Plot: SKNode, Touchable {
 		let density = Int(amount/2)
 		
 		for i in -density...density {
-			
 			if age == 0 {
-				
 				var seed = SKShapeNode(circleOfRadius: 2)
 				seed.zPosition = 1
 				seed.fillColor = SKColor.brownColor()
@@ -558,6 +567,7 @@ class Plot: SKNode, Touchable {
 				
 			} else {
 				var vegi = SKSpriteNode(imageNamed: assetName)
+				vegi.lightingBitMask = 1
 				
 				let randomYOffset = CGFloat (rand() % 20)
 				
