@@ -313,21 +313,21 @@ class FarmScene: SKScene {
 			blackover.runAction(SKAction.sequence([fadeOut,SKAction.removeFromParent()]))
 		}
 		
-//		if profile.money <= 0 {
-//			//check if any plots exist to save you...
-//			var vegisFound = 0
-//			for plot in profile.plots {
-//				if plot.contents == .Corn || plot.contents == .Wheat || plot.contents == .Carrot || plot.contents == .Pumpkin {
-//					vegisFound++
-//				}
-//			}
-//			if vegisFound <= 1 {
-//				//you die. sucks to suck
-//				profile.clearAllData()	//reset all data
-//				let transition = SKTransition.crossFadeWithDuration(3)
-//				self.view?.presentScene(DeathScene(size: size, score: 0), transition: transition)
-//			}
-//		}
+		if profile.money <= 0 {
+			//check if any plots exist to save you...
+			var vegisFound = 0
+			for plot in profile.plots {
+				if plot.contents == .Corn || plot.contents == .Wheat || plot.contents == .Carrot || plot.contents == .Pumpkin {
+					vegisFound++
+				}
+			}
+			if vegisFound <= 1 {
+				//you die. sucks to suck
+				profile.clearAllData()	//reset all data
+				let transition = SKTransition.crossFadeWithDuration(3)
+				self.view?.presentScene(DeathScene(size: size, score: 0), transition: transition)
+			}
+		}
 		if profile.turn > gameSettings.lifespan {
 			//you die. sucks to suck
 			let ghosts = profile.ghostPoints	//preserve ghosts
