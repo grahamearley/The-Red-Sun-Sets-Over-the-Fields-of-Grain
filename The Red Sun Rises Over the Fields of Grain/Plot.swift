@@ -19,6 +19,8 @@ enum PlotContent : String {
 	case Pumpkin = "Pumpkin"
 	
 	case Windmill = "Windmill"
+    
+    case GoldWindmill = "GoldWindmill"
 	
 	case DeadBody = "DeadBody"
 	
@@ -161,6 +163,37 @@ class Plot: SKNode, Touchable {
 				self.addChild(trafficCone)
 				self.fieldNodes.append(trafficCone)
 			}
+            
+        case .GoldWindmill:
+            if self.age >= 15 {
+                //it's built
+                let millBase = SKSpriteNode(imageNamed: "goldwindturbineturbine")	//image is named wrong...
+                millBase.name = "millBase"
+                millBase.setScale(7)
+                millBase.size = CGSize(width: millBase.size.width, height: millBase.size.height + 110)
+                millBase.position = CGPoint(x: 0, y: 60)
+                self.addChild(millBase)
+                self.fieldNodes.append(millBase)
+                
+                let millTurbine = SKSpriteNode(imageNamed: "goldwindturbinebase") //image is named wrong...
+                millTurbine.name = "millTurbine"
+                millTurbine.setScale(7)
+                millTurbine.position = CGPoint(x: 0, y: size.height * 0.6)
+                self.addChild(millTurbine)
+                self.fieldNodes.append(millTurbine)
+                
+                //anim
+                let gentleRotate = SKAction.repeatActionForever(SKAction.rotateByAngle(6.28, duration: 4))
+                millTurbine.runAction(gentleRotate)
+            } else {
+                let trafficCone = SKSpriteNode(imageNamed: "TrafficCone")
+                trafficCone.name = "trafficCone"
+                trafficCone.setScale(3)
+                trafficCone.position = CGPoint(x: 0, y: -self.size.height/5-60)
+                
+                self.addChild(trafficCone)
+                self.fieldNodes.append(trafficCone)
+            }
 		}
 		
 		//update button
@@ -392,6 +425,7 @@ class Plot: SKNode, Touchable {
 			if nearWindmill {
 				totalBonus += 2
 			}
+            
 		}
 		
 		return totalBonus
@@ -532,10 +566,37 @@ class Plot: SKNode, Touchable {
  
             }
 		}
+        
+        let goldWindmill = StoreItem(imageNamed: "goldwindturbinebase", ghosts: 8, time: 15, scale: 1.85)  { (sender: AnyObject?) in
+            if currentGhosts < 8 {
+                if let farmScene = sender as? FarmScene {
+                    farmScene.ghostWarning()
+                }
+            } else {
+                //onAction:
+                //add some windmill lol:
+                self.contents = .GoldWindmill
+                self.age = 0
+                self.updateNodeContent()
+                
+                // Costs 8 ghosts
+                GameProfile.sharedInstance.ghostPoints -= 8
+                
+                if let farmScene = sender as? FarmScene {
+                    farmScene.updateGhosts()
+                }
+                
+                // reset locking
+                if let farmScene = sender as? FarmScene {
+                    farmScene.setStoreLocks(false)
+                }
+                
+            }
+        }
 
 		let menuSize = CGSize(width: size.width * 1, height: size.height * 0.8)
 		let seedPage = StorePage(buttons: [cornBag,carrotBag,wheatBag,pumpkinBag], size: menuSize)
-		let buildingPage = StorePage(buttons: [windmill], size: menuSize)
+		let buildingPage = StorePage(buttons: [windmill, goldWindmill], size: menuSize)
 		
 		let storeMenu = StoreMenu(pages: [seedPage,buildingPage], size: menuSize)
 		return storeMenu
