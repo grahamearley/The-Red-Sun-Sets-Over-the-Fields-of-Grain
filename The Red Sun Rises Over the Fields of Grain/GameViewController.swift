@@ -17,7 +17,7 @@ class GameViewController: UIViewController {
 		let skView = self.view as! SKView
 		
 		if GameProfile.sharedInstance.committedMurder {
-			let scene = FarmScene(size: skView.bounds.size)
+			let scene = MurderScene(size: skView.bounds.size)
 			scene.scaleMode = .AspectFill
 			skView.presentScene(scene)
 		} else {

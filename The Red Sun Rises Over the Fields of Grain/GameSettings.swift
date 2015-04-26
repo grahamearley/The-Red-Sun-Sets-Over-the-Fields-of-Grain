@@ -13,7 +13,7 @@ private let _GameSettingsSharedInstance = GameSettings()
 
 class GameSettings {
     
-    let lifespan : Int = 10
+    let lifespan : Int = 100
     
     // Starting conditions
     let startingMoney : Int = 25
