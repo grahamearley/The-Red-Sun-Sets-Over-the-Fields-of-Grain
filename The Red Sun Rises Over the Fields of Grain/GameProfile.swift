@@ -72,7 +72,7 @@ class GameProfile {
     }
     
     func loadDataFromFile() {
-        
+        return
         if let url = GameProfile.getPlayerFileURL() {
             if let loadedPlayerData = NSMutableDictionary(contentsOfURL: url) {
                 
