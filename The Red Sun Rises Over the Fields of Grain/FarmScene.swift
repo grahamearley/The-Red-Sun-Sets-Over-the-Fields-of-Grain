@@ -216,7 +216,7 @@ class FarmScene: SKScene {
             return
         }
         
-        let scaleUp = SKAction.scaleTo(2, duration: 0.2)
+        let scaleUp = SKAction.scaleTo(1.6, duration: 0.2)
         let scaleDown = SKAction.scaleTo(1, duration: 0.2)
         
         let colorFlash = SKAction.sequence([colorizeYellow, scaleUp, SKAction.waitForDuration(0.2), colorizeBlack, SKAction.waitForDuration(0.2), scaleDown])
@@ -240,7 +240,7 @@ class FarmScene: SKScene {
             return
         }
         
-        let scaleUp = SKAction.scaleTo(2, duration: 0.2)
+        let scaleUp = SKAction.scaleTo(1.6, duration: 0.2)
         let scaleDown = SKAction.scaleTo(1, duration: 0.2)
         
         let colorFlash = SKAction.sequence([colorizeYellow, scaleUp, SKAction.waitForDuration(0.2), colorizeBlack, SKAction.waitForDuration(0.2), scaleDown])
