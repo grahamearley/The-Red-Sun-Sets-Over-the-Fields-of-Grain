@@ -112,6 +112,26 @@ class FarmScene: SKScene {
         moneyLabel.fontSize = 25
         moneyLabel.position = CGPoint(x: size.width - 40, y: size.height - 40)
         self.addChild(moneyLabel)
+		
+		// Notebook button
+		let notebookButton = Button(imageNamed: "InfoBook") { (sender: AnyObject?) -> () in
+			//onAction:
+			if let alreadyBook = self.childNodeWithName("notebookContents") {
+				alreadyBook.removeFromParent()
+				return
+			}
+			let notebookContents = Button(imageNamed: "MenuBase") { (sender: AnyObject?) -> () in
+				//onAction:
+				self.childNodeWithName("notebookContents")?.removeFromParent()
+			}
+			notebookContents.name = "notebookContents"
+			notebookContents.setScale(4)
+			notebookContents.position = CGPoint(x: size.width/2, y: size.height/2 + 25)
+			self.addChild(notebookContents)
+		}
+		notebookButton.setScale(3)
+		notebookButton.position = CGPoint(x: 40, y: size.height - 40)
+		self.addChild(notebookButton)
 	}
     
     func updateDayCount() {
