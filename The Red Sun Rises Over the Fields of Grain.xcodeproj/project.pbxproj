@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BF93539E1AEB542B00FC17C2 /* GameProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF93539D1AEB542B00FC17C2 /* GameProfile.swift */; };
 		BF9353A01AEC7BB600FC17C2 /* DeathScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF93539F1AEC7BB600FC17C2 /* DeathScene.swift */; };
+		BF9353A21AEC834300FC17C2 /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9353A11AEC834300FC17C2 /* GameSettings.swift */; };
 		CB06519C1AEBE97B0044C3C9 /* StoreMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB06519B1AEBE97B0044C3C9 /* StoreMenu.swift */; };
 		CB303E271AEB41CB0060242C /* MurderScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E261AEB41CB0060242C /* MurderScene.swift */; };
 		CB303E291AEB43060060242C /* PanNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E281AEB43060060242C /* PanNode.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		BF93539D1AEB542B00FC17C2 /* GameProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameProfile.swift; sourceTree = "<group>"; };
 		BF93539F1AEC7BB600FC17C2 /* DeathScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeathScene.swift; sourceTree = "<group>"; };
+		BF9353A11AEC834300FC17C2 /* GameSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSettings.swift; sourceTree = "<group>"; };
 		CB06519B1AEBE97B0044C3C9 /* StoreMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreMenu.swift; sourceTree = "<group>"; };
 		CB303E261AEB41CB0060242C /* MurderScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurderScene.swift; sourceTree = "<group>"; };
 		CB303E281AEB43060060242C /* PanNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanNode.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				CB303E261AEB41CB0060242C /* MurderScene.swift */,
 				D205ADF91AEB349F00F27ABD /* GameViewController.swift */,
 				BF93539D1AEB542B00FC17C2 /* GameProfile.swift */,
+				BF9353A11AEC834300FC17C2 /* GameSettings.swift */,
 				CB06519B1AEBE97B0044C3C9 /* StoreMenu.swift */,
 				D205ADFB1AEB349F00F27ABD /* Main.storyboard */,
 				D205ADFE1AEB349F00F27ABD /* Images.xcassets */,
@@ -264,6 +267,7 @@
 				CB303E271AEB41CB0060242C /* MurderScene.swift in Sources */,
 				BF93539E1AEB542B00FC17C2 /* GameProfile.swift in Sources */,
 				D205ADFA1AEB349F00F27ABD /* GameViewController.swift in Sources */,
+				BF9353A21AEC834300FC17C2 /* GameSettings.swift in Sources */,
 				BF9353A01AEC7BB600FC17C2 /* DeathScene.swift in Sources */,
 				CB06519C1AEBE97B0044C3C9 /* StoreMenu.swift in Sources */,
 				D205ADF41AEB349F00F27ABD /* AppDelegate.swift in Sources */,
