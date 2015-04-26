@@ -79,6 +79,7 @@ class FarmScene: SKScene {
         // Status bar background
         let statusBar = SKSpriteNode(imageNamed: "TopBar")
         statusBar.setScale(2)
+        statusBar.size.width += 75
         statusBar.position = CGPoint(x: self.size.width - statusBar.size.width/2 - 10, y: self.size.height - 30)
         self.addChild(statusBar)
         
@@ -100,6 +101,20 @@ class FarmScene: SKScene {
         timeLabel.fontSize = 25
         timeLabel.position = CGPoint(x: size.width - 125, y: size.height - 40)
         self.addChild(timeLabel)
+        
+        // ghost icon
+        let ghostIcon = SKSpriteNode(imageNamed: "Ghost")
+        ghostIcon.position = CGPoint(x: self.size.width - ghostIcon.size.width/2 - 230, y: self.size.height - 30)
+        self.addChild(ghostIcon)
+        
+        // ghost label
+        let ghostLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+        ghostLabel.text = "\(profile.ghostPoints)"
+        ghostLabel.name = "Ghost Label"
+        ghostLabel.fontColor = UIColor.blackColor()
+        ghostLabel.fontSize = 25
+        ghostLabel.position = CGPoint(x: size.width - 215, y: size.height - 40)
+        self.addChild(ghostLabel)
         
         // Money label
         let moneyLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
