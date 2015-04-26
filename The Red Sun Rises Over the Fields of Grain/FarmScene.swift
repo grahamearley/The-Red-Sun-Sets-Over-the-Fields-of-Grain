@@ -289,7 +289,9 @@ class FarmScene: SKScene {
 	 
 	func ageByTurn(amount: Int = 1) {
         profile.turn += amount
-		profile.money -= amount
+		if profile.turn % 5 == 0 {
+			profile.money--
+		}
 		if profile.money < 0 {
 			profile.money = 0
 		}
