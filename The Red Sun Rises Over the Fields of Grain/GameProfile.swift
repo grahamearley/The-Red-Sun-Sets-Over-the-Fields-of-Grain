@@ -25,23 +25,26 @@ class GameProfile {
     var soundOn : Bool
     var plots : [Plot]
     
+    var gameSettings : GameSettings
+    
     init() {
+        gameSettings = GameSettings.sharedInstance
         committedMurder = false
         turn = 0
-        money = 15
-        ghostPoints = 1
+        money = gameSettings.startingMoney
+        ghostPoints = 0
         soundOn = true
-		plots = [Plot(contents: .House, index: 0), Plot(contents: .Empty, index: 1),Plot(contents: .Empty, index: 2),Plot(contents: .Empty, index: 3), Plot(contents: .Empty, index: 4),Plot(contents: .Empty, index: 5), Plot(contents: .Tractor, index: 6)]	//default start
+		plots = gameSettings.startingPlots
 		loadDataFromFile()
     }
 	
 	func clearAllData() {
 		committedMurder = false
 		turn = 0
-		money = 15
-		ghostPoints = 1
+		money = gameSettings.startingMoney
+		ghostPoints = 0
 		soundOn = true
-		plots = [Plot(contents: .House, index: 0), Plot(contents: .Empty, index: 1),Plot(contents: .Empty, index: 2),Plot(contents: .Empty, index: 3), Plot(contents: .Empty, index: 4),Plot(contents: .Empty, index: 5), Plot(contents: .Tractor, index: 6)]	//default start
+		plots = gameSettings.startingPlots
 	}
 	
     func saveToFile() {

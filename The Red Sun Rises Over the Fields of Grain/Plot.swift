@@ -101,14 +101,14 @@ class Plot: SKNode, Touchable {
 			self.fieldNodes.append(bump)
 		case .Empty:
 			break
-		case .Carrot:
-			self.addContentForVegitable(growTime: 2, deathTime: 3, amount: 2, imageAssetNamed: "Carrot")
 		case .Corn:
-			self.addContentForVegitable(growTime: 3, deathTime: 7, amount: 6, imageAssetNamed: "Corn")
+			self.addContentForVegetable()
+        case .Carrot:
+            self.addContentForVegetable()
 		case .Wheat:
-			self.addContentForVegitable(growTime: 3, deathTime: 5, amount: 10, imageAssetNamed: "Wheat")
+			self.addContentForVegetable()
 		case .Pumpkin:
-			self.addContentForVegitable(growTime: 5, deathTime: 9, amount: 1, imageAssetNamed: "Pumpkin")
+			self.addContentForVegetable()
 		case .House:
 			let house = SKSpriteNode(imageNamed: "House")
 			house.name = "house"
@@ -197,33 +197,16 @@ class Plot: SKNode, Touchable {
 	private func getButtonActionForCurrentPlot() -> (String, AnyObject?->()) {
 		var buttonTitle : String = ""
 		var buttonAction : AnyObject?->Void = {(sender: AnyObject?)->() in return}
-		
-		if self.contents == .Corn {
-			let info = self.getButtonInfoForPlant(growAge: 3, dieAge: 7, baseYield: 5)
-			buttonTitle = info.0
-			buttonAction = info.1
-		}
-		
-		if self.contents == .Carrot {
-			let info = self.getButtonInfoForPlant(growAge: 2, dieAge: 3, baseYield: 3)
-			buttonTitle = info.0
-			buttonAction = info.1
-		}
-		
-		if self.contents == .Wheat {
-			let info = self.getButtonInfoForPlant(growAge: 3, dieAge: 8, baseYield: 7)
-			buttonTitle = info.0
-			buttonAction = info.1
-		}
-		
-		if self.contents == .Pumpkin {
-			let info = self.getButtonInfoForPlant(growAge: 5, dieAge: 9, baseYield: 12)
+        
+        // If veggie
+		if self.contents == .Corn || self.contents == .Carrot || self.contents == .Wheat || self.contents == .Pumpkin  {
+			let info = self.getButtonInfoForPlant()
 			buttonTitle = info.0
 			buttonAction = info.1
 		}
 		
 		if self.contents == .Empty {
-			buttonTitle = "Plant"
+			buttonTitle = GameSettings.sharedInstance.plantButtonTitle
 			buttonAction = { (sender:AnyObject?) in
 				if let farmScene = sender as? FarmScene {
 					farmScene.setStoreLocks(true)
@@ -234,7 +217,7 @@ class Plot: SKNode, Touchable {
 			}
 		}
 		if self.contents == .House {
-			buttonTitle = "Sleep"
+			buttonTitle = GameSettings.sharedInstance.houseButtonTitle
 			buttonAction = { (sender:AnyObject?) in
 				//progress the FarmScene (the sender) by one turn:
 				if let farmScene = sender as? FarmScene {
@@ -245,7 +228,7 @@ class Plot: SKNode, Touchable {
 			}
 		}
 		if self.contents == .Tractor {
-			buttonTitle = "Expand"
+			buttonTitle = GameSettings.sharedInstance.tractorButtonTitle
                 buttonAction = { (sender:AnyObject?) in
                     if GameProfile.sharedInstance.money >= 20 {
                         if let farmScene = sender as? FarmScene {
@@ -287,28 +270,37 @@ class Plot: SKNode, Touchable {
 		return (buttonTitle, buttonAction)
 	}
 	
-	func getButtonInfoForPlant(#growAge:Int, dieAge:Int, baseYield: Int) -> (String, AnyObject?->()) {
+    func getButtonInfoForPlant() -> (String, AnyObject?->()) {
+        
+        var plantInfo = getInfoForCurrentPlant()
+        
+        let growAge = plantInfo["growAge"] as! Int
+        let dieAge = plantInfo["dieAge"] as! Int
+        
 		var buttonTitle : String = ""
 		var buttonAction : AnyObject?->Void = {(sender: AnyObject?)->() in return}
 		
 		if age >= growAge && age <= dieAge {
-			//harvestable corn:
-			buttonTitle = "Harvest"
+			//harvestable:
+			buttonTitle = GameSettings.sharedInstance.harvestButtonTitle
 			buttonAction = { (sender:AnyObject?) in
 				//harvest the corn:
-				GameProfile.sharedInstance.money += baseYield + self.getBonus()
-				self.contents = .Empty
-				self.age = 0
-				self.updateNodeContent()
-				
-				// Gettin money
-				if let farmScene = sender as? FarmScene {
-					farmScene.updateMoney()
-				}
+                if let yield = plantInfo["baseYield"] as? Int {
+                    GameProfile.sharedInstance.money += yield + self.getBonus()
+                    self.contents = .Empty
+                    self.age = 0
+                    self.updateNodeContent()
+                    
+                    // Gettin money
+                    if let farmScene = sender as? FarmScene {
+                        farmScene.updateMoney()
+                    }
+                }
+
 			}
 		} else {
-			//dead or not grown corn:
-			buttonTitle = "Remove"
+			//dead or not grown:
+			buttonTitle = GameSettings.sharedInstance.removeButtonTitle
 			buttonAction = { (sender:AnyObject?) in
 				//remove the corn:
 				self.contents = .Empty
@@ -371,7 +363,7 @@ class Plot: SKNode, Touchable {
 			}
 		}
 		
-		//vegies
+		//veggies
 		if contents == .Corn || contents == .Carrot || contents == .Wheat || contents == .Pumpkin {
 			//Windmill check
 			var nearWindmill = false
@@ -405,106 +397,114 @@ class Plot: SKNode, Touchable {
 	func getStore() -> StoreMenu {
         let currentFunds = GameProfile.sharedInstance.money
         let currentGhosts = GameProfile.sharedInstance.ghostPoints
-		let cornBag = StoreItem(imageNamed: "CornBag", cost: 3, time: 3) { (sender: AnyObject?) in
-            if currentFunds < 3 {
-                if let farmScene = sender as? FarmScene {
-                    farmScene.moneyWarning()
-                }
-            } else {
-                //onAction:
-                //add some corn:
-                self.contents = .Corn
-                self.age = 0
-                self.updateNodeContent()
-                
-                // Costs $3
-                GameProfile.sharedInstance.money -= 3
-                if let farmScene = sender as? FarmScene {
-                    farmScene.updateMoney()
-                }
-                
-                // reset locking
-                if let farmScene = sender as? FarmScene {
-                    farmScene.setStoreLocks(false)
-                }
-            }
-		}
-		
-		let wheatBag = StoreItem(imageNamed: "WheatBag", cost: 5, time: 3) { (sender: AnyObject?) in
-			if currentFunds < 5 {
-				if let farmScene = sender as? FarmScene {
-					farmScene.moneyWarning()
-				}
-			} else {
-				//onAction:
-				//add some wheat:
-				self.contents = .Wheat
-				self.age = 0
-				self.updateNodeContent()
-				
-				// costs 1
-				GameProfile.sharedInstance.money -= 5
-				if let farmScene = sender as? FarmScene {
-					farmScene.updateMoney()
-				}
-				
-				// reset locking
-				if let farmScene = sender as? FarmScene {
-					farmScene.setStoreLocks(false)
-				}
-			}
-		}
-		
-		let pumpkinBag = StoreItem(imageNamed: "PumpkinBag", cost: 8, time: 5) { (sender: AnyObject?) in
-			if currentFunds < 5 {
-				if let farmScene = sender as? FarmScene {
-					farmScene.moneyWarning()
-				}
-			} else {
-				//onAction:
-				//add some pumpkins:
-				self.contents = .Pumpkin
-				self.age = 0
-				self.updateNodeContent()
-				
-				// costs 8
-				GameProfile.sharedInstance.money -= 8
-				if let farmScene = sender as? FarmScene {
-					farmScene.updateMoney()
-				}
-				
-				// reset locking
-				if let farmScene = sender as? FarmScene {
-					farmScene.setStoreLocks(false)
-				}
-			}
-		}
-
-		
-		let carrotBag = StoreItem(imageNamed: "CarrotBag", cost: 1, time: 2) { (sender: AnyObject?) in
-            if currentFunds < 1 {
-                if let farmScene = sender as? FarmScene {
-                    farmScene.moneyWarning()
-                }
-            } else {
-                //onAction:
-                //add some corn:
-                self.contents = .Carrot
-                self.age = 0
-                self.updateNodeContent()
-                
-                // Costs $1
-                GameProfile.sharedInstance.money -= 1
-                if let farmScene = sender as? FarmScene {
-                    farmScene.updateMoney()
-                }
-                
-                // reset locking
-                if let farmScene = sender as? FarmScene {
-                    farmScene.setStoreLocks(false)
-                }
-            }
-		}
+        
+        var seedArray = [StoreItem]()
+        
+        seedArray.append(generateSeedButtonForPlant(.Corn))
+        seedArray.append(generateSeedButtonForPlant(.Carrot))
+        seedArray.append(generateSeedButtonForPlant(.Wheat))
+        seedArray.append(generateSeedButtonForPlant(.Pumpkin))
+        
+//		let cornBag = StoreItem(imageNamed: "CornBag", cost: 3, time: 3) { (sender: AnyObject?) in
+//            if currentFunds < 3 {
+//                if let farmScene = sender as? FarmScene {
+//                    farmScene.moneyWarning()
+//                }
+//            } else {
+//                //onAction:
+//                //add some corn:
+//                self.contents = .Corn
+//                self.age = 0
+//                self.updateNodeContent()
+//                
+//                // Costs $3
+//                GameProfile.sharedInstance.money -= 3
+//                if let farmScene = sender as? FarmScene {
+//                    farmScene.updateMoney()
+//                }
+//                
+//                // reset locking
+//                if let farmScene = sender as? FarmScene {
+//                    farmScene.setStoreLocks(false)
+//                }
+//            }
+//		}
+//		
+//		let wheatBag = StoreItem(imageNamed: "WheatBag", cost: 5, time: 3) { (sender: AnyObject?) in
+//			if currentFunds < 5 {
+//				if let farmScene = sender as? FarmScene {
+//					farmScene.moneyWarning()
+//				}
+//			} else {
+//				//onAction:
+//				//add some wheat:
+//				self.contents = .Wheat
+//				self.age = 0
+//				self.updateNodeContent()
+//				
+//				// costs 1
+//				GameProfile.sharedInstance.money -= 5
+//				if let farmScene = sender as? FarmScene {
+//					farmScene.updateMoney()
+//				}
+//				
+//				// reset locking
+//				if let farmScene = sender as? FarmScene {
+//					farmScene.setStoreLocks(false)
+//				}
+//			}
+//		}
+//		
+//		let pumpkinBag = StoreItem(imageNamed: "PumpkinBag", cost: 8, time: 5) { (sender: AnyObject?) in
+//			if currentFunds < 5 {
+//				if let farmScene = sender as? FarmScene {
+//					farmScene.moneyWarning()
+//				}
+//			} else {
+//				//onAction:
+//				//add some pumpkins:
+//				self.contents = .Pumpkin
+//				self.age = 0
+//				self.updateNodeContent()
+//				
+//				// costs 8
+//				GameProfile.sharedInstance.money -= 8
+//				if let farmScene = sender as? FarmScene {
+//					farmScene.updateMoney()
+//				}
+//				
+//				// reset locking
+//				if let farmScene = sender as? FarmScene {
+//					farmScene.setStoreLocks(false)
+//				}
+//			}
+//		}
+//
+//		
+//		let carrotBag = StoreItem(imageNamed: "CarrotBag", cost: 1, time: 2) { (sender: AnyObject?) in
+//            if currentFunds < 1 {
+//                if let farmScene = sender as? FarmScene {
+//                    farmScene.moneyWarning()
+//                }
+//            } else {
+//                //onAction:
+//                //add some corn:
+//                self.contents = .Carrot
+//                self.age = 0
+//                self.updateNodeContent()
+//                
+//                // Costs $1
+//                GameProfile.sharedInstance.money -= 1
+//                if let farmScene = sender as? FarmScene {
+//                    farmScene.updateMoney()
+//                }
+//                
+//                // reset locking
+//                if let farmScene = sender as? FarmScene {
+//                    farmScene.setStoreLocks(false)
+//                }
+//            }
+//		}
 		
         let windmill = StoreItem(imageNamed: "windturbinebase", ghosts: 3, time: 8, scale: 1.85)  { (sender: AnyObject?) in
             if currentGhosts < 3 {
@@ -533,15 +533,80 @@ class Plot: SKNode, Touchable {
 		}
 
 		let menuSize = CGSize(width: size.width * 1, height: size.height * 0.8)
-		let seedPage = StorePage(buttons: [cornBag,carrotBag,wheatBag,pumpkinBag], size: menuSize)
+		let seedPage = StorePage(buttons: seedArray, size: menuSize)
 		let buildingPage = StorePage(buttons: [windmill], size: menuSize)
 		
 		let storeMenu = StoreMenu(pages: [seedPage,buildingPage], size: menuSize)
 		return storeMenu
 	}
+    
+    func generateSeedButtonForPlant(plant: PlotContent) -> (StoreItem) {
+        
+        var info = [String : AnyObject]()
+        
+        switch (plant) {
+            case .Corn:
+                info = GameSettings.sharedInstance.cornInfo
+                break
+            case .Carrot:
+                info = GameSettings.sharedInstance.carrotInfo
+                break
+            case .Wheat:
+                info = GameSettings.sharedInstance.wheatInfo
+                break
+            case .Pumpkin:
+                info = GameSettings.sharedInstance.pumpkinInfo
+                break
+            default:
+                // This should NEVER HAPPEn
+                break
+        }
+    
+        let currentFunds = GameProfile.sharedInstance.money
+    
+        let growAge = info["growAge"] as! Int
+        let cost = info["cost"] as! Int
+        let asset = info["storeAssetName"] as! String
+    
+        let item = StoreItem(imageNamed: asset, cost: cost, time: growAge) { (sender: AnyObject?) in
+            if currentFunds < cost {
+                if let farmScene = sender as? FarmScene {
+                    farmScene.moneyWarning()
+                }
+            } else {
+                //onAction:
+                //add some corn:
+                self.contents = plant
+                self.age = 0
+                self.updateNodeContent()
+
+                // Costs $3
+                GameProfile.sharedInstance.money -= cost
+                if let farmScene = sender as? FarmScene {
+                    farmScene.updateMoney()
+                }
+
+                // reset locking
+                if let farmScene = sender as? FarmScene {
+                    farmScene.setStoreLocks(false)
+                }
+            }
+        }
+    
+        return item
+    }
 	
-	func addContentForVegitable(#growTime: Int, deathTime: Int, amount: Int, imageAssetNamed: String) {
-		srand(10)
+	func addContentForVegetable() {
+        
+        var plantInfo = getInfoForCurrentPlant()
+    
+        let growTime = plantInfo["growAge"] as! Int
+        let deathTime = plantInfo["dieAge"] as! Int
+        let amount = plantInfo["amount"] as! Int
+        let assetName = plantInfo["assetName"] as! String
+        
+        // Seed the generator! It's a pun!
+        srand(10)
 		let density = Int(amount/2)
 		
 		for i in -density...density {
@@ -559,13 +624,13 @@ class Plot: SKNode, Touchable {
 				self.fieldNodes.append(seed)
 				
 			} else {
-				var vegi = SKSpriteNode(imageNamed: imageAssetNamed)
+				var vegi = SKSpriteNode(imageNamed: assetName)
 				
 				let randomYOffset = CGFloat (rand() % 20)
 				
 				var maxHeight = (size.height / 4) - 10 + randomYOffset
 				if self.contents == .Wheat {
-					maxHeight *= 2
+					maxHeight *= 1.5
 				}
 				let maxWidth = size.width / 2
 				
@@ -589,7 +654,7 @@ class Plot: SKNode, Touchable {
 				
 				let progress = CGFloat(min(1, Float(age) / Float(growTime)))
 				vegi.size = CGSize(width: maxWidth * progress, height: maxHeight * progress)
-				vegi.name = imageAssetNamed.lowercaseString
+				vegi.name = assetName.lowercaseString
 				
 				let randomXOffset = Int (rand() % 20)
 				vegi.position = CGPoint(x: CGFloat((i * 40) - 10 + randomXOffset), y: ((-self.size.height * 0.32) + vegi.size.height/2))
@@ -633,6 +698,31 @@ class Plot: SKNode, Touchable {
 		plot.age = age
 		return plot
 	}
+    
+    ///Helper
+    func getInfoForCurrentPlant() -> [String:AnyObject] {
+        var info = [String : AnyObject]()
+        
+        switch (self.contents) {
+        case .Corn:
+            info = GameSettings.sharedInstance.cornInfo
+            break
+        case .Carrot:
+            info = GameSettings.sharedInstance.carrotInfo
+            break
+        case .Wheat:
+            info = GameSettings.sharedInstance.wheatInfo
+            break
+        case .Pumpkin:
+            info = GameSettings.sharedInstance.pumpkinInfo
+            break
+        default:
+            // This should NEVER HAPPEn
+            break
+        }
+
+        return info
+    }
 	
 	
 }

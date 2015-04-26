@@ -16,6 +16,7 @@ class FarmScene: SKScene {
 	
 	var currentPlotIndex : Int = 0
 	var profile : GameProfile
+    var gameSettings : GameSettings
 	
 	var scrollLock : Bool = false
 	
@@ -25,6 +26,7 @@ class FarmScene: SKScene {
 		self.spaceSize = CGSize(width: size.width-100, height: size.height)
 		
 		profile = GameProfile.sharedInstance
+        gameSettings = GameSettings.sharedInstance
 		
 		super.init(size: size)
 		
@@ -269,7 +271,7 @@ class FarmScene: SKScene {
 			blackover.runAction(SKAction.sequence([fadeOut,SKAction.removeFromParent()]))
 		}
 		
-		if profile.turn > 20 {
+		if profile.turn > gameSettings.lifespan {
 			//you die. sucks to suck
 			
 			let ghosts = profile.ghostPoints	//preserve ghosts
