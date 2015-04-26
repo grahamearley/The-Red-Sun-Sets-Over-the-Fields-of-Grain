@@ -405,8 +405,23 @@ class MurderScene: SKScene {
 			self.addChild(faderCurtain)
 		}
 		
-		if stabs >= 7 {
+		if stabs >= 5 {
+            
+            // ghost icon
+            let ghostIcon = SKSpriteNode(imageNamed: "Ghost")
+            ghostIcon.position = CGPoint(x: self.size.width - ghostIcon.size.width/2 - 230, y: self.size.height - 30)
+            self.addChild(ghostIcon)
+            
+            // ghost label
+            let ghostLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
+            ghostLabel.text = "+1"
+            ghostLabel.fontColor = UIColor.whiteColor()
+            ghostLabel.fontSize = 25
+            ghostLabel.position = CGPoint(x: size.width - 215, y: size.height - 40)
+            self.addChild(ghostLabel)
+            
 			GameProfile.sharedInstance.committedMurder = true
+            GameProfile.sharedInstance.ghostPoints += 1
 			GameProfile.sharedInstance.saveToFile()
 			let transition = SKTransition.crossFadeWithDuration(5)
 			self.view?.presentScene(FarmScene(size: size), transition: transition)

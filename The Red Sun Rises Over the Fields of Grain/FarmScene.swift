@@ -81,7 +81,7 @@ class FarmScene: SKScene {
         
         // time label
         let timeLabel = SKLabelNode(fontNamed: "FreePixel-Regular")
-        timeLabel.text = "0 days"
+        timeLabel.text = "\(profile.turn) days"
         timeLabel.name = "Time Label"
         timeLabel.fontColor = UIColor.blackColor()
         timeLabel.fontSize = 25
@@ -175,16 +175,16 @@ class FarmScene: SKScene {
     
     private func shiftBackground() {
     
-    // Move background with parallax black magic
-    if let background = self.childNodeWithName("Background") as? SKSpriteNode {
-        
-        let difference = ((background.size.width) - screenSize.width)
-        let width = difference / CGFloat(profile.plots.count)
-        let offset = (-1 * width * CGFloat(currentPlotIndex)) + background.size.width / 2
-        let destinationPoint = CGPoint(x: offset, y: background.position.y)
-        let moveTo = SKAction.moveTo(destinationPoint, duration: 0.175)
-        background.runAction(moveTo);
-    }
+        // Move background with parallax black magic
+        if let background = self.childNodeWithName("Background") as? SKSpriteNode {
+            
+            let difference = ((background.size.width) - screenSize.width)
+            let width = difference / CGFloat(profile.plots.count)
+            let offset = (-1 * width * CGFloat(currentPlotIndex)) + background.size.width / 2
+            let destinationPoint = CGPoint(x: offset, y: background.position.y)
+            let moveTo = SKAction.moveTo(destinationPoint, duration: 0.175)
+            background.runAction(moveTo);
+        }
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -245,13 +245,14 @@ class FarmScene: SKScene {
 			blackover.runAction(SKAction.sequence([fadeOut,SKAction.removeFromParent()]))
 		}
 		
-		if profile.turn > 100 {
+		if profile.turn > 20 {
 			//you die. sucks to suck
 			
 			let ghosts = profile.ghostPoints	//preserve ghosts
 			profile.clearAllData()	//reset all data
-			profile.ghostPoints = ghosts + 2	//reinstall ghosts and add one for you and one for him
-			
+			profile.ghostPoints = ghosts + 1	//reinstall ghosts and add one for you
+            let transition = SKTransition.crossFadeWithDuration(3)
+            self.view?.presentScene(DeathScene(size: size), transition: transition)
 			
 		}
 	}
