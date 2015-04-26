@@ -17,7 +17,7 @@ class GameSettings {
     
     // Starting conditions
     let startingMoney : Int = 25
-    let startingPlots : [Plot] = [Plot(contents: .House, index: 0), Plot(contents: .Empty, index: 1),Plot(contents: .Empty, index: 2),Plot(contents: .Empty, index: 3), Plot(contents: .Empty, index: 4),Plot(contents: .Empty, index: 5), Plot(contents: .Tractor, index: 6)]
+    let startingPlots : [Plot] = [Plot(contents: .House, index: 0), Plot(contents: .Empty, index: 1),Plot(contents: .Empty, index: 2), Plot(contents: .Tractor, index: 3)]
     
     
     // Button titles
