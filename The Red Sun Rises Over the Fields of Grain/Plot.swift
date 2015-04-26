@@ -69,15 +69,16 @@ class Plot: SKNode, Touchable {
 		button.name = "button"
 		self.addChild(button)
 		
-		//multiplier text
-		let label = SKLabelNode(text: "")
+		//bonus text
+		let label = SKLabelNode(fontNamed: "FreePixel-Regular")
+		label.text = ""
+		label.color = SKColor.orangeColor()
 		label.position = CGPoint(x: 0, y: size.height/3)
 		label.fontSize = 40
 		label.name = "bonusLabel"
 		self.addChild(label)
 		
 		updateNodeContent()
-
 	}
 	
 	///Replaces the current contents of the plot with a updated content.
@@ -130,24 +131,35 @@ class Plot: SKNode, Touchable {
 			self.fieldNodes.append(hull)
 			self.fieldNodes.append(wheel)
 		case .Windmill:
-			let millBase = SKSpriteNode(imageNamed: "windturbineturbine")	//image is named wrong...
-			millBase.name = "millBase"
-			millBase.setScale(7)
-			millBase.size = CGSize(width: millBase.size.width, height: millBase.size.height + 110)
-			millBase.position = CGPoint(x: 0, y: 60)
-			self.addChild(millBase)
-			self.fieldNodes.append(millBase)
-			
-			let millTurbine = SKSpriteNode(imageNamed: "windturbinebase") //image is named wrong...
-			millTurbine.name = "millTurbine"
-			millTurbine.setScale(7)
-			millTurbine.position = CGPoint(x: 0, y: size.height * 0.6)
-			self.addChild(millTurbine)
-			self.fieldNodes.append(millTurbine)
-			
-			//anim
-			let gentleRotate = SKAction.repeatActionForever(SKAction.rotateByAngle(6.28, duration: 6))
-			millTurbine.runAction(gentleRotate)
+			if self.age >= 8 {
+				//it's built
+				let millBase = SKSpriteNode(imageNamed: "windturbineturbine")	//image is named wrong...
+				millBase.name = "millBase"
+				millBase.setScale(7)
+				millBase.size = CGSize(width: millBase.size.width, height: millBase.size.height + 110)
+				millBase.position = CGPoint(x: 0, y: 60)
+				self.addChild(millBase)
+				self.fieldNodes.append(millBase)
+				
+				let millTurbine = SKSpriteNode(imageNamed: "windturbinebase") //image is named wrong...
+				millTurbine.name = "millTurbine"
+				millTurbine.setScale(7)
+				millTurbine.position = CGPoint(x: 0, y: size.height * 0.6)
+				self.addChild(millTurbine)
+				self.fieldNodes.append(millTurbine)
+				
+				//anim
+				let gentleRotate = SKAction.repeatActionForever(SKAction.rotateByAngle(6.28, duration: 6))
+				millTurbine.runAction(gentleRotate)
+			} else {
+				let trafficCone = SKSpriteNode(imageNamed: "pumpkin")
+				trafficCone.name = "trafficCone"
+				trafficCone.setScale(3)
+				trafficCone.position = CGPoint(x: 0, y: -self.size.height/5)
+
+				self.addChild(trafficCone)
+				self.fieldNodes.append(trafficCone)
+			}
 		}
 		
 		//update button
@@ -319,19 +331,19 @@ class Plot: SKNode, Touchable {
 		var totalBonus = 0
 		
 		if contents == .Corn {
-			if leftwardPlots[0].contents == .Carrot && rightwardPlots[0].contents == .Carrot {
+			if leftwardPlots[0].contents == .Carrot && leftwardPlots[0].age >= 2 && rightwardPlots[0].contents == .Carrot && rightwardPlots[0].age >= 2 {
 				totalBonus += 4
 			}
 		}
 		
 		if contents == .Carrot {
-			if leftwardPlots[0].contents == .Carrot && rightwardPlots[0].contents == .Carrot {
+			if leftwardPlots[0].contents == .Carrot && leftwardPlots[0].age >= 2 && rightwardPlots[0].contents == .Carrot && rightwardPlots[0].age >= 2 {
 				totalBonus += 1
 			}
 		}
 		
 		if contents == .Wheat {
-			if leftwardPlots[0].contents == .Corn && rightwardPlots[0].contents == .Corn {
+			if leftwardPlots[0].contents == .Corn && leftwardPlots[0].age >= 3 && rightwardPlots[0].contents == .Corn && rightwardPlots[0].age >= 3 {
 				totalBonus += 4
 			}
 		}
@@ -340,14 +352,14 @@ class Plot: SKNode, Touchable {
 			var conditionsSatisfied = false
 			if rightwardPlots.count > 1 {
 				//check far right
-				if leftwardPlots[0].contents == .Empty && rightwardPlots[0].contents == .Pumpkin && rightwardPlots[1].contents == .Empty {
+				if leftwardPlots[0].contents == .Empty && (rightwardPlots[0].contents == .Pumpkin && rightwardPlots[0].age >= 5) && rightwardPlots[1].contents == .Empty {
 					conditionsSatisfied = true
 				}
 			}
 			
 			if leftwardPlots.count > 1 {
 				//check far left
-				if rightwardPlots[0].contents == .Empty && leftwardPlots[0].contents == .Pumpkin && leftwardPlots[1].contents == .Empty {
+				if rightwardPlots[0].contents == .Empty && (leftwardPlots[0].contents == .Pumpkin && leftwardPlots[0].age >= 5) && leftwardPlots[1].contents == .Empty {
 					conditionsSatisfied = true
 				}
 			}
@@ -361,16 +373,16 @@ class Plot: SKNode, Touchable {
 		if contents == .Corn || contents == .Carrot || contents == .Wheat || contents == .Pumpkin {
 			//Windmill check
 			var nearWindmill = false
-			if leftwardPlots[0].contents == .Windmill || leftwardPlots[0].contents == .Windmill {
+			if (leftwardPlots[0].contents == .Windmill && leftwardPlots[0].age >= 8) || (rightwardPlots[0].contents == .Windmill && rightwardPlots[0].age >= 8) {
 				nearWindmill = true
 			}
 			if leftwardPlots.count > 1 {
-				if leftwardPlots[1].contents == .Windmill {
+				if leftwardPlots[1].contents == .Windmill && leftwardPlots[1].age >= 8 {
 					nearWindmill = true
 				}
 			}
 			if rightwardPlots.count > 1 {
-				if rightwardPlots[1].contents == .Windmill {
+				if rightwardPlots[1].contents == .Windmill && rightwardPlots[1].age >= 8 {
 					nearWindmill = true
 				}
 			}
