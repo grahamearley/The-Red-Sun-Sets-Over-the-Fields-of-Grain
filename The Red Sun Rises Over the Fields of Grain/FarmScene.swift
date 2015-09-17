@@ -140,7 +140,7 @@ class FarmScene: SKScene {
 		bigLightNode.lightColor = SKColor.redColor()
 		bigLightNode.ambientColor = SKColor.whiteColor()
 		bigLightNode.categoryBitMask = 1
-		self.enumerateChildNodesWithName("//*", usingBlock: { (node:SKNode!, cancel:UnsafeMutablePointer<ObjCBool>) -> Void in
+		self.enumerateChildNodesWithName("//*", usingBlock: { (node:SKNode, cancel:UnsafeMutablePointer<ObjCBool>) -> Void in
 			if let sprite = node as? SKSpriteNode {
 				sprite.lightingBitMask = 1
 			}
@@ -156,7 +156,7 @@ class FarmScene: SKScene {
 	}
     
     func updateDayCount() {
-        var label = self.childNodeWithName("Time Label") as? SKLabelNode
+        let label = self.childNodeWithName("Time Label") as? SKLabelNode
         let count = GameProfile.sharedInstance.turn
 		label!.text = "day \(count)"
         label?.zPosition = 99
@@ -232,7 +232,7 @@ class FarmScene: SKScene {
         }
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for thing: AnyObject in touches {
             if let touch = thing as? UITouch {
                 let touchLocation = touch.locationInNode(self)
@@ -314,7 +314,7 @@ class FarmScene: SKScene {
 		blackover.runAction(SKAction.fadeAlphaTo(1, duration: 0.3)) {
 			//on blackover covers whole screen:
 			for plot in self.profile.plots {
-				plot.ageContent(amount: amount)
+				plot.ageContent(amount)
 				plot.updateNodeContent()
 			}
 			let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.3)

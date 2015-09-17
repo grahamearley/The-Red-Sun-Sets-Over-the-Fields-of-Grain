@@ -300,7 +300,7 @@ class MurderScene: SKScene {
         background.position = CGPoint(x: size.width/2, y:size.height/2)
         background.size.height = size.height * 3
         background.size.width = size.width * 3
-        background.runAction(self.getBlinkAction(color: SKColor.blackColor()))
+        background.runAction(self.getBlinkAction(SKColor.blackColor()))
         pitchforkGrabMoment.addChild(background)
         
         let pitchfork = SKSpriteNode(imageNamed: "Pitchfork")
@@ -491,10 +491,10 @@ class MurderScene: SKScene {
     }
 
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         //touches
         for touch in touches {
-			let location = (touch as! UITouch).locationInNode(self)
+			let location = (touch ).locationInNode(self)
 			switch currentMoment {
 			case .HouseInDistance:
 				if let label = self.childNodeWithName("goHomeLabel") {

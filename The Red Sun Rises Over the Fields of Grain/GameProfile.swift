@@ -49,7 +49,7 @@ class GameProfile {
 	
     func saveToFile() {
         
-        var playerData = NSMutableDictionary()
+        let playerData = NSMutableDictionary()
         
         playerData.setValue(committedMurder, forKey: "committed murder")
         playerData.setValue(turn, forKey: "turn")

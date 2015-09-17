@@ -265,7 +265,7 @@ class Plot: SKNode, Touchable {
 			buttonAction = { (sender:AnyObject?) in
 				//progress the FarmScene (the sender) by one turn:
 				if let farmScene = sender as? FarmScene {
-					farmScene.ageByTurn(amount: 1)
+					farmScene.ageByTurn(1)
                     self.updateNodeContent()
                     farmScene.updateDayCount()
 				}
@@ -363,25 +363,25 @@ class Plot: SKNode, Touchable {
 		}
 		
 		let onlyLeftPlots = allPlots[0..<self.index]
-		var leftwardPlots = onlyLeftPlots.reverse() //0 is closest Plot to the left
+		var leftwardPlots = Array(onlyLeftPlots.reverse()) //0 is closest Plot to the left
 		var rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
 		
 		var totalBonus = 0
 		
 		if contents == .Corn {
-			if leftwardPlots[0].contents == .Carrot && leftwardPlots[0].age >= 2 && rightwardPlots[0].contents == .Carrot && rightwardPlots[0].age >= 2 {
+			if leftwardPlots[leftwardPlots.startIndex].contents == .Carrot && leftwardPlots[leftwardPlots.startIndex].age >= 2 && rightwardPlots[rightwardPlots.startIndex].contents == .Carrot && rightwardPlots[rightwardPlots.startIndex].age >= 2 {
 				totalBonus += 4
 			}
 		}
 		
 		if contents == .Carrot {
-			if leftwardPlots[0].contents == .Carrot && leftwardPlots[0].age >= 2 && rightwardPlots[0].contents == .Carrot && rightwardPlots[0].age >= 2 {
+			if leftwardPlots[leftwardPlots.startIndex].contents == .Carrot && leftwardPlots[leftwardPlots.startIndex].age >= 2 && rightwardPlots[rightwardPlots.startIndex].contents == .Carrot && rightwardPlots[rightwardPlots.startIndex].age >= 2 {
 				totalBonus += 1
 			}
 		}
 		
 		if contents == .Wheat {
-			if leftwardPlots[0].contents == .Corn && leftwardPlots[0].age >= 3 && rightwardPlots[0].contents == .Corn && rightwardPlots[0].age >= 3 {
+			if leftwardPlots[leftwardPlots.startIndex].contents == .Corn && leftwardPlots[leftwardPlots.startIndex].age >= 3 && rightwardPlots[rightwardPlots.startIndex].contents == .Corn && rightwardPlots[rightwardPlots.startIndex].age >= 3 {
 				totalBonus += 4
 			}
 		}
@@ -390,14 +390,14 @@ class Plot: SKNode, Touchable {
 			var conditionsSatisfied = false
 			if rightwardPlots.count > 1 {
 				//check far right
-				if leftwardPlots[0].contents == .Empty && (rightwardPlots[0].contents == .Pumpkin && rightwardPlots[0].age >= 5) && rightwardPlots[1].contents == .Empty {
+				if leftwardPlots[leftwardPlots.startIndex].contents == .Empty && (rightwardPlots[rightwardPlots.startIndex].contents == .Pumpkin && rightwardPlots[rightwardPlots.startIndex].age >= 5) && rightwardPlots[rightwardPlots.startIndex + 1].contents == .Empty {
 					conditionsSatisfied = true
 				}
 			}
 			
 			if leftwardPlots.count > 1 {
 				//check far left
-				if rightwardPlots[0].contents == .Empty && (leftwardPlots[0].contents == .Pumpkin && leftwardPlots[0].age >= 5) && leftwardPlots[1].contents == .Empty {
+				if rightwardPlots[rightwardPlots.startIndex].contents == .Empty && (leftwardPlots[leftwardPlots.startIndex].contents == .Pumpkin && leftwardPlots[leftwardPlots.startIndex].age >= 5) && leftwardPlots[leftwardPlots.startIndex + 1].contents == .Empty {
 					conditionsSatisfied = true
 				}
 			}
@@ -411,16 +411,16 @@ class Plot: SKNode, Touchable {
 		if contents == .Corn || contents == .Carrot || contents == .Wheat || contents == .Pumpkin {
 			//Windmill check
 			var nearWindmill = false
-			if (leftwardPlots[0].contents == .Windmill && leftwardPlots[0].age >= 8) || (rightwardPlots[0].contents == .Windmill && rightwardPlots[0].age >= 8) {
+			if (leftwardPlots[leftwardPlots.startIndex].contents == .Windmill && leftwardPlots[leftwardPlots.startIndex].age >= 8) || (rightwardPlots[rightwardPlots.startIndex].contents == .Windmill && rightwardPlots[rightwardPlots.startIndex].age >= 8) {
 				nearWindmill = true
 			}
 			if leftwardPlots.count > 1 {
-				if leftwardPlots[1].contents == .Windmill && leftwardPlots[1].age >= 8 {
+				if leftwardPlots[leftwardPlots.startIndex + 1].contents == .Windmill && leftwardPlots[leftwardPlots.startIndex + 1].age >= 8 {
 					nearWindmill = true
 				}
 			}
 			if rightwardPlots.count > 1 {
-				if rightwardPlots[1].contents == .Windmill && rightwardPlots[1].age >= 8 {
+				if rightwardPlots[rightwardPlots.startIndex + 1].contents == .Windmill && rightwardPlots[rightwardPlots.startIndex + 1].age >= 8 {
 					nearWindmill = true
 				}
 			}
@@ -442,20 +442,20 @@ class Plot: SKNode, Touchable {
 		}
 		
 		let onlyLeftPlots = allPlots[0..<self.index]
-		var leftwardPlots = onlyLeftPlots.reverse() //0 is closest Plot to the left
+		var leftwardPlots = Array(onlyLeftPlots.reverse()) //0 is closest Plot to the left
 		var rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
 		
 		var foundGoldWindmill = false
-		if leftwardPlots[0].contents == .GoldWindmill || rightwardPlots[0].contents == .GoldWindmill {
+		if leftwardPlots[leftwardPlots.startIndex].contents == .GoldWindmill || rightwardPlots[rightwardPlots.startIndex].contents == .GoldWindmill {
 			foundGoldWindmill = true
 		}
 		if leftwardPlots.count > 1 {
-			if leftwardPlots[1].contents == .GoldWindmill {
+			if leftwardPlots[leftwardPlots.startIndex + 1].contents == .GoldWindmill {
 				foundGoldWindmill = true
 			}
 		}
 		if rightwardPlots.count > 1 {
-			if rightwardPlots[1].contents == .GoldWindmill {
+			if rightwardPlots[rightwardPlots.startIndex + 1].contents == .GoldWindmill {
 				foundGoldWindmill = true
 			}
 		}
@@ -609,7 +609,7 @@ class Plot: SKNode, Touchable {
 		
 		for i in -density...density {
 			if age == 0 {
-				var seed = SKShapeNode(circleOfRadius: 2)
+				let seed = SKShapeNode(circleOfRadius: 2)
 				seed.zPosition = 1
 				seed.fillColor = SKColor.brownColor()
 				seed.lineWidth = 0
@@ -620,7 +620,7 @@ class Plot: SKNode, Touchable {
 				self.fieldNodes.append(seed)
 				
 			} else {
-				var vegi = SKSpriteNode(imageNamed: assetName)
+				let vegi = SKSpriteNode(imageNamed: assetName)
 				vegi.lightingBitMask = 1
 				
 				let randomYOffset = CGFloat (rand() % 20)

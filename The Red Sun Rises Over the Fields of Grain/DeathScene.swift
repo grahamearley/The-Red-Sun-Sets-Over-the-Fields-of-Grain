@@ -71,7 +71,7 @@ class DeathScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         let transition = SKTransition.crossFadeWithDuration(3)
         self.view?.presentScene(MurderScene(size: size), transition: transition)
     }
