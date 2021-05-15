@@ -13,9 +13,9 @@ import SpriteKit
 class Button: SKNode, Touchable {
 	
 	var enabled : Bool = true
-	var action : AnyObject? -> Void
+    var action : (AnyObject?) -> Void
 	
-	init(imageNamed: String, action: AnyObject? -> ()) {
+    init(imageNamed: String, action: @escaping (AnyObject?) -> ()) {
 		self.action = action
 		super.init()
 		let sprite = SKSpriteNode(imageNamed: imageNamed)
@@ -42,7 +42,7 @@ class Button: SKNode, Touchable {
         return self.childNodeWithName("sprite") as? SKSpriteNode
     }
 	
-	func setTitle(text: String) {
+	func setTitle(_ text: String) {
 		if let label = self.childNodeWithName("label") as? SKLabelNode {
 			label.text = text
 		}

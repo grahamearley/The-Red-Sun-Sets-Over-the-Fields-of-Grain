@@ -40,7 +40,7 @@ class FarmScene: SKScene {
 			space.position = CGPoint(x: currentXPos, y: size.height/2)
 			currentXPos += spaceSize.width
 			space.addChild(plot)
-			plot.initializeNodeContents(spaceSize)
+            plot.initializeNodeContents(size: spaceSize)
 			self.addChild(space)
 		}
 		
@@ -168,12 +168,12 @@ class FarmScene: SKScene {
 	
 	var gestures = [UIGestureRecognizer]()
 	//Create Gesture Recognizers Here
-	override func didMoveToView(view: SKView) {
-		let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeLeft")
+	override func didMove(to view: SKView) {
+        let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.didSwipeLeft))
 		swipeLeftGestureRecognizer.direction = .Left
 		self.view?.addGestureRecognizer(swipeLeftGestureRecognizer)
 		
-		let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "didSwipeRight")
+        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.didSwipeRight))
 		swipeRightGestureRecognizer.direction = .Right
 		self.view?.addGestureRecognizer(swipeRightGestureRecognizer)
 
@@ -182,14 +182,14 @@ class FarmScene: SKScene {
 	}
 	
 	//Remove Gesture Recognizers
-	override func willMoveFromView(view: SKView) {
+	override func willMove(from view: SKView) {
 		for gesture in gestures {
 			view.removeGestureRecognizer(gesture)
 		}
 	}
 	
 	///On Swipes left, find all PanNodes and shift them left
-	func didSwipeLeft() {
+    @objc func didSwipeLeft() {
 		if currentPlotIndex < profile.plots.count-1 && !scrollLock {
 			currentPlotIndex++
 			profile.plots[currentPlotIndex].lightUpdate()
@@ -204,7 +204,7 @@ class FarmScene: SKScene {
 	}
 	
 	///On Swipes right, find all PanNodes and shift them right
-	func didSwipeRight() {
+    @objc func didSwipeRight() {
 		if currentPlotIndex > 0 && !scrollLock {
 			currentPlotIndex--
 			profile.plots[currentPlotIndex].lightUpdate()
@@ -232,13 +232,13 @@ class FarmScene: SKScene {
         }
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for thing: AnyObject in touches {
             if let touch = thing as? UITouch {
                 let touchLocation = touch.locationInNode(self)
 				for touched in self.nodesAtPoint(touchLocation) {
 					if let responder = touched as? Touchable {
-						responder.onTouchDownInside?(touch, sender: self)
+						responder.onTouchDownInside(touch, sender: self)
 					}
 				}
             }
@@ -293,7 +293,7 @@ class FarmScene: SKScene {
         }
     }
 	 
-	func ageByTurn(amount: Int = 1) {
+	func ageByTurn(_ amount: Int = 1) {
         profile.turn += amount
 		if profile.turn % 5 == 0 {
 			profile.money--
@@ -362,7 +362,7 @@ class FarmScene: SKScene {
 	
 	///locks interaction to solely the open store window
 	///and also is in charge of unlocking this on store window close
-	func setStoreLocks(locksOn: Bool) {
+	func setStoreLocks(_ locksOn: Bool) {
 		self.scrollLock = locksOn
 		
 		let currentPlot = GameProfile.sharedInstance.plots[self.currentPlotIndex]
@@ -386,14 +386,14 @@ class FarmScene: SKScene {
 		let newXPos = originPos.x + spaceSize.width*CGFloat(newPlot.index)
 		newSpace.position = CGPoint(x: newXPos, y: screenSize.height/2)
 		newSpace.addChild(newPlot)
-		newPlot.initializeNodeContents(spaceSize)
+        newPlot.initializeNodeContents(size: spaceSize)
 		self.addChild(newSpace)
 		
 		profile.plots.append(newPlot)
 		profile.saveToFile()
 	}
 	
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: CFTimeInterval) {
 		//called every 60 seconds
     }
 }

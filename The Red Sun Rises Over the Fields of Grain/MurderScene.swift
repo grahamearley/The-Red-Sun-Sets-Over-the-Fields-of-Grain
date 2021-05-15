@@ -34,7 +34,7 @@ class MurderScene: SKScene {
 		self.addChild(currentMomentNode!)
     }
 	
-	func transitionToMoment(nextMoment: MurderMoment) {
+	func transitionToMoment(_ nextMoment: MurderMoment) {
 		if inTransition {
 			return	//wait your damn turn
 		}
@@ -147,7 +147,7 @@ class MurderScene: SKScene {
 		return rainLayer
 	}
 	
-	func getSparkLayerForSparkedBackground(backing:SKNode?) -> SKNode {
+	func getSparkLayerForSparkedBackground(_ backing:SKNode?) -> SKNode {
 		let spark = SKLightNode()
 		spark.lightColor = SKColor.whiteColor()
 		spark.categoryBitMask = worldLightingBitmask
@@ -188,7 +188,7 @@ class MurderScene: SKScene {
 		return spark
 	}
 	
-    func getBlinkAction(color: SKColor = SKColor.grayColor()) -> SKAction {
+    func getBlinkAction(_ color: SKColor = SKColor.grayColor()) -> SKAction {
         let colorize = SKAction.colorizeWithColor(color, colorBlendFactor: 0.5, duration: 0.6)
         let colorizeReturn = SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.6)
         let blink = SKAction.repeatActionForever(SKAction.sequence([colorize, colorizeReturn]))
@@ -489,9 +489,8 @@ class MurderScene: SKScene {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //touches
         for touch in touches {
 			let location = (touch ).locationInNode(self)
@@ -503,21 +502,19 @@ class MurderScene: SKScene {
 				self.transitionToMoment(.HouseUpClose)
 			case .HouseUpClose:
 				for touched in self.nodesAtPoint(location) {
-					if let node = touched as? SKNode {
-						if node.name == "closer house" {
-							self.transitionToMoment(.Window)
-						}
-					}
+					let node = touched
+                    if node.name == "closer house" {
+                        self.transitionToMoment(.Window)
+                    }
 				}
 			case .Window:
 				self.transitionToMoment(.Pitchfork)
 			case .Pitchfork:
 				for touched in self.nodesAtPoint(location) {
-					if let node = touched as? SKNode {
-						if node.name == "pitchfork" {
-							self.grabPitchfork()
-						}
-					}
+					let node = touched
+                    if node.name == "pitchfork" {
+                        self.grabPitchfork()
+                    }
 				}
 			case .DoorClosed:
 				self.transitionToMoment(.DoorOpened)
