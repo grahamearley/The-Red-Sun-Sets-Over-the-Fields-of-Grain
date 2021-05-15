@@ -18,7 +18,7 @@ class GameViewController: UIViewController {
 		
 		if GameProfile.sharedInstance.committedMurder {
 			let scene = FarmScene(size: skView.bounds.size)
-			scene.scaleMode = .AspectFill
+            scene.scaleMode = .AspectFill
 			skView.presentScene(scene)
 		} else {
 			let scene = MurderScene(size: skView.bounds.size)
@@ -26,13 +26,12 @@ class GameViewController: UIViewController {
 			skView.presentScene(scene)
 		}
     }
-
-    override func shouldAutorotate() -> Bool {
-        return false
-    }
-
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+    
+    override var shouldAutorotate: Bool { false }
+    override var prefersStatusBarHidden: Bool { true }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
             return UIInterfaceOrientationMask.Portrait
         } else {
             return UIInterfaceOrientationMask.All
@@ -42,9 +41,5 @@ class GameViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
-    }
-
-    override func prefersStatusBarHidden() -> Bool {
-        return true
     }
 }

@@ -20,7 +20,7 @@ Unfortunately, this app violates several of Apple's [app approval guidelines](ht
 
 Thus, the app will never make it onto the app store in its current state.
 
-If you wish to play the app, clone this repository, open it in Xcode, and run it on your iPhone (or in the emulator, although the experience is much better on iPhone).
+If you wish to play the app, clone this repository, open it in Xcode, and run it on an iPhone, Simulator, or natively on a Mac with an M1 chip. You will need to provide your own code signing via an Apple Developer account; a free account should work.
 
 ## Praise
 "I don't get it, but it sounds interesting." - Peter Imhoff

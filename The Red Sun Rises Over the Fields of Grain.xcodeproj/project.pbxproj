@@ -15,6 +15,7 @@
 		CB303E291AEB43060060242C /* PanNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB303E281AEB43060060242C /* PanNode.swift */; };
 		CB449E061AEBC7C400010ECF /* PressStart2P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB449E051AEBC7C400010ECF /* PressStart2P.ttf */; };
 		CB449E091AEBC98500010ECF /* FreePixel.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB449E081AEBC93C00010ECF /* FreePixel.ttf */; };
+		CB6E6ECD26502B9F0025B87B /* BackwardsCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6E6ECC26502B9F0025B87B /* BackwardsCompatibility.swift */; };
 		CBF0BA691AEB4D8200318937 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA681AEB4D8200318937 /* Button.swift */; };
 		CBF0BA6B1AEB4E0B00318937 /* Touchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA6A1AEB4E0B00318937 /* Touchable.swift */; };
 		CBF0BA6D1AEB573A00318937 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0BA6C1AEB573A00318937 /* Plot.swift */; };
@@ -24,18 +25,7 @@
 		D205ADFD1AEB349F00F27ABD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D205ADFB1AEB349F00F27ABD /* Main.storyboard */; };
 		D205ADFF1AEB349F00F27ABD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D205ADFE1AEB349F00F27ABD /* Images.xcassets */; };
 		D205AE021AEB349F00F27ABD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D205AE001AEB349F00F27ABD /* LaunchScreen.xib */; };
-		D205AE0E1AEB349F00F27ABD /* The_Red_Sun_Rises_Over_the_Fields_of_GrainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D205AE0D1AEB349F00F27ABD /* The_Red_Sun_Rises_Over_the_Fields_of_GrainTests.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		D205AE081AEB349F00F27ABD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D205ADE61AEB349F00F27ABD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D205ADED1AEB349F00F27ABD;
-			remoteInfo = "The Red Sun Rises Over the Fields of Grain";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		BF93539D1AEB542B00FC17C2 /* GameProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameProfile.swift; sourceTree = "<group>"; };
@@ -46,6 +36,7 @@
 		CB303E281AEB43060060242C /* PanNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanNode.swift; sourceTree = "<group>"; };
 		CB449E051AEBC7C400010ECF /* PressStart2P.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = PressStart2P.ttf; path = Fonts/PressStart2P.ttf; sourceTree = "<group>"; };
 		CB449E081AEBC93C00010ECF /* FreePixel.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FreePixel.ttf; sourceTree = "<group>"; };
+		CB6E6ECC26502B9F0025B87B /* BackwardsCompatibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackwardsCompatibility.swift; sourceTree = "<group>"; };
 		CBF0BA681AEB4D8200318937 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		CBF0BA6A1AEB4E0B00318937 /* Touchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Touchable.swift; sourceTree = "<group>"; };
 		CBF0BA6C1AEB573A00318937 /* Plot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
@@ -57,20 +48,10 @@
 		D205ADFC1AEB349F00F27ABD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D205ADFE1AEB349F00F27ABD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D205AE011AEB349F00F27ABD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		D205AE071AEB349F00F27ABD /* The Red Sun Rises Over the Fields of GrainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "The Red Sun Rises Over the Fields of GrainTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D205AE0C1AEB349F00F27ABD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D205AE0D1AEB349F00F27ABD /* The_Red_Sun_Rises_Over_the_Fields_of_GrainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = The_Red_Sun_Rises_Over_the_Fields_of_GrainTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D205ADEB1AEB349F00F27ABD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D205AE041AEB349F00F27ABD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -93,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				D205ADF01AEB349F00F27ABD /* The Red Sun Rises Over the Fields of Grain */,
-				D205AE0A1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of GrainTests */,
 				D205ADEF1AEB349F00F27ABD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -102,7 +82,6 @@
 			isa = PBXGroup;
 			children = (
 				D205ADEE1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of Grain.app */,
-				D205AE071AEB349F00F27ABD /* The Red Sun Rises Over the Fields of GrainTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,6 +106,7 @@
 				D205AE001AEB349F00F27ABD /* LaunchScreen.xib */,
 				CB449E071AEBC7CF00010ECF /* Misc Files */,
 				D205ADF11AEB349F00F27ABD /* Supporting Files */,
+				CB6E6ECC26502B9F0025B87B /* BackwardsCompatibility.swift */,
 			);
 			path = "The Red Sun Rises Over the Fields of Grain";
 			sourceTree = "<group>";
@@ -135,23 +115,6 @@
 			isa = PBXGroup;
 			children = (
 				D205ADF21AEB349F00F27ABD /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		D205AE0A1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of GrainTests */ = {
-			isa = PBXGroup;
-			children = (
-				D205AE0D1AEB349F00F27ABD /* The_Red_Sun_Rises_Over_the_Fields_of_GrainTests.swift */,
-				D205AE0B1AEB349F00F27ABD /* Supporting Files */,
-			);
-			path = "The Red Sun Rises Over the Fields of GrainTests";
-			sourceTree = "<group>";
-		};
-		D205AE0B1AEB349F00F27ABD /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				D205AE0C1AEB349F00F27ABD /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -176,24 +139,6 @@
 			productReference = D205ADEE1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of Grain.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D205AE061AEB349F00F27ABD /* The Red Sun Rises Over the Fields of GrainTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D205AE141AEB349F00F27ABD /* Build configuration list for PBXNativeTarget "The Red Sun Rises Over the Fields of GrainTests" */;
-			buildPhases = (
-				D205AE031AEB349F00F27ABD /* Sources */,
-				D205AE041AEB349F00F27ABD /* Frameworks */,
-				D205AE051AEB349F00F27ABD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D205AE091AEB349F00F27ABD /* PBXTargetDependency */,
-			);
-			name = "The Red Sun Rises Over the Fields of GrainTests";
-			productName = "The Red Sun Rises Over the Fields of GrainTests";
-			productReference = D205AE071AEB349F00F27ABD /* The Red Sun Rises Over the Fields of GrainTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -202,21 +147,17 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = "Silo Games";
 				TargetAttributes = {
 					D205ADED1AEB349F00F27ABD = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
-					D205AE061AEB349F00F27ABD = {
-						CreatedOnToolsVersion = 6.3.1;
-						TestTargetID = D205ADED1AEB349F00F27ABD;
-					};
 				};
 			};
 			buildConfigurationList = D205ADE91AEB349F00F27ABD /* Build configuration list for PBXProject "The Red Sun Rises Over the Fields of Grain" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -228,7 +169,6 @@
 			projectRoot = "";
 			targets = (
 				D205ADED1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of Grain */,
-				D205AE061AEB349F00F27ABD /* The Red Sun Rises Over the Fields of GrainTests */,
 			);
 		};
 /* End PBXProject section */
@@ -246,13 +186,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D205AE051AEB349F00F27ABD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -266,6 +199,7 @@
 				D205ADF81AEB349F00F27ABD /* FarmScene.swift in Sources */,
 				CBF0BA6D1AEB573A00318937 /* Plot.swift in Sources */,
 				CB303E271AEB41CB0060242C /* MurderScene.swift in Sources */,
+				CB6E6ECD26502B9F0025B87B /* BackwardsCompatibility.swift in Sources */,
 				BF93539E1AEB542B00FC17C2 /* GameProfile.swift in Sources */,
 				D205ADFA1AEB349F00F27ABD /* GameViewController.swift in Sources */,
 				BF9353A21AEC834300FC17C2 /* GameSettings.swift in Sources */,
@@ -275,23 +209,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D205AE031AEB349F00F27ABD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D205AE0E1AEB349F00F27ABD /* The_Red_Sun_Rises_Over_the_Fields_of_GrainTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D205AE091AEB349F00F27ABD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D205ADED1AEB349F00F27ABD /* The Red Sun Rises Over the Fields of Grain */;
-			targetProxy = D205AE081AEB349F00F27ABD /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D205ADFB1AEB349F00F27ABD /* Main.storyboard */ = {
@@ -317,23 +235,36 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -349,11 +280,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -361,17 +293,29 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -387,9 +331,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -399,8 +345,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "The Red Sun Rises Over the Fields of Grain/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "edu.carleton.earleyg.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -410,43 +358,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "The Red Sun Rises Over the Fields of Grain/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "edu.carleton.earleyg.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		D205AE151AEB349F00F27ABD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "The Red Sun Rises Over the Fields of GrainTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Red Sun Rises Over the Fields of Grain.app/The Red Sun Rises Over the Fields of Grain";
-			};
-			name = Debug;
-		};
-		D205AE161AEB349F00F27ABD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "The Red Sun Rises Over the Fields of GrainTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Red Sun Rises Over the Fields of Grain.app/The Red Sun Rises Over the Fields of Grain";
 			};
 			name = Release;
 		};
@@ -467,15 +383,6 @@
 			buildConfigurations = (
 				D205AE121AEB349F00F27ABD /* Debug */,
 				D205AE131AEB349F00F27ABD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D205AE141AEB349F00F27ABD /* Build configuration list for PBXNativeTarget "The Red Sun Rises Over the Fields of GrainTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D205AE151AEB349F00F27ABD /* Debug */,
-				D205AE161AEB349F00F27ABD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

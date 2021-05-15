@@ -123,7 +123,7 @@ class StorePage: SKNode, Touchable {
 		}
 	}
 	
-	func setEnabledForAllButtons(setting:Bool) {
+	func setEnabledForAllButtons(_ setting:Bool) {
 		for butt in buttons {
 			butt.enabled = setting
 		}
@@ -141,7 +141,7 @@ class StoreItem: Button {
 	let time : Int
 	
     // cost and ghost are preset so that you can set the price in ghosts or in gold
-    init(imageNamed: String, cost: Int = -1, ghosts: Int = -1, time: Int, scale: CGFloat = 4.0, action: AnyObject? -> ()) {
+    init(imageNamed: String, cost: Int = -1, ghosts: Int = -1, time: Int, scale: CGFloat = 4.0, action: @escaping (AnyObject?) -> ()) {
         var priceInGhosts = false
         if cost < 0 {
             priceInGhosts = true

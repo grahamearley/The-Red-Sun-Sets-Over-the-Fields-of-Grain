@@ -67,37 +67,37 @@ class GameProfile {
         playerData.setValue(plotDictArray, forKey: "plots")
         
         if let url = GameProfile.getPlayerFileURL() {
-            playerData.writeToURL(url, atomically: true)
+            playerData.write(to: url as URL, atomically: true)
         }
     }
     
     func loadDataFromFile() {
         
         if let url = GameProfile.getPlayerFileURL() {
-            if let loadedPlayerData = NSMutableDictionary(contentsOfURL: url) {
+            if let loadedPlayerData = NSMutableDictionary(contentsOf: url as URL) {
                 
-                if let newCommittedMurder = loadedPlayerData.valueForKey("committed murder") as? Bool {
+                if let newCommittedMurder = loadedPlayerData.value(forKey: "committed murder") as? Bool {
                     committedMurder = newCommittedMurder
                 }
                 
-                if let newTurn = loadedPlayerData.valueForKey("turn") as? Int {
+                if let newTurn = loadedPlayerData.value(forKey: "turn") as? Int {
                     turn = newTurn
                 }
                 
-                if let newMoney = loadedPlayerData.valueForKey("money") as? Int {
+                if let newMoney = loadedPlayerData.value(forKey: "money") as? Int {
                     money = newMoney
                 }
                 
-                if let newGhostPoints = loadedPlayerData.valueForKey("ghost points") as? Int {
+                if let newGhostPoints = loadedPlayerData.value(forKey: "ghost points") as? Int {
                     ghostPoints = newGhostPoints
                 }
                 
-                if let newSoundOn = loadedPlayerData.valueForKey("sound on") as? Bool {
+                if let newSoundOn = loadedPlayerData.value(forKey: "sound on") as? Bool {
                     soundOn = newSoundOn
                 }
                 
                 
-                if let plotDictArray = loadedPlayerData.valueForKey("plots") as? [[String:AnyObject]]
+                if let plotDictArray = loadedPlayerData.value(forKey: "plots") as? [[String:AnyObject]]
                 {
                     var newPlots = [Plot]()
                     for plotDict in plotDictArray {
@@ -114,13 +114,10 @@ class GameProfile {
     ///Returns the URL for the .txt file which holds the players data. Stolen from Charlie Imhoff.
     private class func getPlayerFileURL() -> NSURL? {
         let fileName = "RedSunProfileData.plist"
-        let directories = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: NSSearchPathDomainMask.AllDomainsMask)
-        if let selectedDirectory = directories[0] as? NSURL {
-            let filePath = selectedDirectory.URLByAppendingPathComponent(fileName)
-            return filePath
-        } else {
-            return nil
-        }
+        let directories = FileManager.default.urls(for: FileManager.SearchPathDirectory.libraryDirectory, in: FileManager.SearchPathDomainMask.allDomainsMask)
+        let selectedDirectory = directories[0] as NSURL
+        let filePath = selectedDirectory.appendingPathComponent(fileName)
+        return filePath as NSURL?
     }
     
 }

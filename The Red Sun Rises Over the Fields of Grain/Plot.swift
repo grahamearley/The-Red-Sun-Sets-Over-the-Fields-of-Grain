@@ -238,9 +238,9 @@ class Plot: SKNode, Touchable {
 	}
 	
 	///Returns the title and action that the current plot's button should display
-	private func getButtonActionForCurrentPlot() -> (String, AnyObject?->()) {
+    private func getButtonActionForCurrentPlot() -> (String, (AnyObject?)->()) {
 		var buttonTitle : String = ""
-		var buttonAction : AnyObject?->Void = {(sender: AnyObject?)->() in return}
+        var buttonAction : (AnyObject?)->Void = {(sender: AnyObject?)->() in return}
         
         // If veggie
 		if self.contents == .Corn || self.contents == .Carrot || self.contents == .Wheat || self.contents == .Pumpkin  {
@@ -279,7 +279,7 @@ class Plot: SKNode, Touchable {
                             farmScene.scrollLock = true
                             //expand the farm by one plot, essentially adding another tractor plot
                             //and setting this plot to be empty
-                            if let wheel = self.childNodeWithName("wheel"), hull = self.childNodeWithName("hull") {
+                            if let wheel = self.childNodeWithName("wheel"), let hull = self.childNodeWithName("hull") {
                                 let rotate = SKAction.rotateByAngle(-6.28, duration: 2.2)
                                 let move = SKAction.moveByX(self.size.width, y: 0, duration: 2.2)
                                 let group = SKAction.group([rotate,move])
@@ -314,15 +314,15 @@ class Plot: SKNode, Touchable {
 		return (buttonTitle, buttonAction)
 	}
 	
-    func getButtonInfoForPlant() -> (String, AnyObject?->()) {
+    func getButtonInfoForPlant() -> (String, (AnyObject?)->()) {
         
-        var plantInfo = getInfoForCurrentPlant()
+        let plantInfo = getInfoForCurrentPlant()
         
         let growAge = plantInfo["growAge"] as! Int
         let dieAge = plantInfo["dieAge"] as! Int
         
 		var buttonTitle : String = ""
-		var buttonAction : AnyObject?->Void = {(sender: AnyObject?)->() in return}
+        var buttonAction : (AnyObject?)->Void = {(sender: AnyObject?)->() in return}
 		
 		if age >= growAge && age <= dieAge {
 			//harvestable:
@@ -363,8 +363,8 @@ class Plot: SKNode, Touchable {
 		}
 		
 		let onlyLeftPlots = allPlots[0..<self.index]
-		var leftwardPlots = Array(onlyLeftPlots.reverse()) //0 is closest Plot to the left
-		var rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
+        let leftwardPlots = Array(onlyLeftPlots.reversed()) //0 is closest Plot to the left
+        let rightwardPlots = Array(allPlots[self.index+1..<allPlots.count]) //0 is closest Plot to the right
 		
 		var totalBonus = 0
 		
@@ -434,7 +434,7 @@ class Plot: SKNode, Touchable {
 		return totalBonus
 	}
 
-	func ageContent(amount:Int = 1) {
+	func ageContent(_ amount:Int = 1) {
 		let allPlots = GameProfile.sharedInstance.plots
 		if index == 0 || index >= allPlots.count-1 {
 			age+=amount	//will cause errors, and only applies to edge plots which don't need multipliers
@@ -442,8 +442,8 @@ class Plot: SKNode, Touchable {
 		}
 		
 		let onlyLeftPlots = allPlots[0..<self.index]
-		var leftwardPlots = Array(onlyLeftPlots.reverse()) //0 is closest Plot to the left
-		var rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
+        let leftwardPlots = Array(onlyLeftPlots.reversed()) //0 is closest Plot to the left
+		let rightwardPlots = allPlots[self.index+1..<allPlots.count] //0 is closest Plot to the right
 		
 		var foundGoldWindmill = false
 		if leftwardPlots[leftwardPlots.startIndex].contents == .GoldWindmill || rightwardPlots[rightwardPlots.startIndex].contents == .GoldWindmill {
@@ -468,7 +468,7 @@ class Plot: SKNode, Touchable {
 	}
 	
 	func getStore() -> StoreMenu {
-        let currentFunds = GameProfile.sharedInstance.money
+        // let currentFunds = GameProfile.sharedInstance.money
         let currentGhosts = GameProfile.sharedInstance.ghostPoints
         
         var seedArray = [StoreItem]()
@@ -538,9 +538,9 @@ class Plot: SKNode, Touchable {
 		return storeMenu
 	}
     
-    func generateSeedButtonForPlant(plant: PlotContent) -> (StoreItem) {
+    func generateSeedButtonForPlant(_ plant: PlotContent) -> (StoreItem) {
         
-        var info = [String : AnyObject]()
+        var info = [String : Any]()
         
         switch (plant) {
             case .Corn:
@@ -596,7 +596,7 @@ class Plot: SKNode, Touchable {
 	
 	func addContentForVegetable() {
         
-        var plantInfo = getInfoForCurrentPlant()
+        let plantInfo = getInfoForCurrentPlant()
     
         let growTime = plantInfo["growAge"] as! Int
         let deathTime = plantInfo["dieAge"] as! Int
@@ -667,14 +667,14 @@ class Plot: SKNode, Touchable {
 	func toDictionary() -> [String:AnyObject] {
 		var dict = [String:AnyObject]()
 		
-		dict["contents"] = self.contents.rawValue
-		dict["age"] = self.age
-		dict["index"] = self.index
+        dict["contents"] = self.contents.rawValue as AnyObject
+        dict["age"] = self.age as AnyObject
+        dict["index"] = self.index as AnyObject
 		
 		return dict
 	}
 	
-	class func fromDictionary(dictionary: [String:AnyObject]) -> Plot {
+	class func fromDictionary(_ dictionary: [String:AnyObject]) -> Plot {
 		var contents : PlotContent = .Empty
 		var age = 0
 		var index = 0
@@ -697,8 +697,8 @@ class Plot: SKNode, Touchable {
 	}
     
     ///Helper
-    func getInfoForCurrentPlant() -> [String:AnyObject] {
-        var info = [String : AnyObject]()
+    func getInfoForCurrentPlant() -> [String:Any] {
+        var info = [String : Any]()
         
         switch (self.contents) {
         case .Corn:
